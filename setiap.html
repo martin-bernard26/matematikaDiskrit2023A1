@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposisi Universal & Eksistensial — Matematika Diskrit</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+  :root {
+    --ink: #1a1208;
+    --cream: #f5efe2;
+    --parchment: #ede3cc;
+    --gold: #c8922a;
+    --gold-light: #e8b84b;
+    --rust: #b84c1e;
+    --teal: #1e6b6b;
+    --teal-light: #2a9090;
+    --shadow: rgba(26,18,8,0.18);
+    --accent-blue: #2a4a8c;
+    --accent-green: #2a6e3f;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background-color: var(--cream);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.75;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 31px,
+        rgba(200,146,42,0.07) 31px,
+        rgba(200,146,42,0.07) 32px
+      );
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 4px solid var(--gold);
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent, transparent 18px,
+      rgba(200,146,42,0.06) 18px,
+      rgba(200,146,42,0.06) 19px
+    );
+  }
+  .header-badge {
+    display: inline-block;
+    border: 1.5px solid var(--gold);
+    color: var(--gold-light);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .75rem;
+    letter-spacing: .18em;
+    padding: .3rem 1.1rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: .5rem;
+    position: relative;
+  }
+  header h1 span { color: var(--gold-light); }
+  header p {
+    color: rgba(245,239,226,.7);
+    font-size: .95rem;
+    position: relative;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--parchment);
+    border-bottom: 2px solid var(--gold);
+    display: flex;
+    gap: .25rem;
+    padding: .5rem 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 12px var(--shadow);
+  }
+  nav button {
+    font-family: 'Source Serif 4', serif;
+    font-size: .82rem;
+    font-weight: 600;
+    background: transparent;
+    border: 1.5px solid transparent;
+    color: var(--ink);
+    padding: .4rem 1rem;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all .2s;
+    letter-spacing: .02em;
+  }
+  nav button:hover { border-color: var(--gold); background: rgba(200,146,42,.1); }
+  nav button.active { background: var(--ink); color: var(--gold-light); border-color: var(--ink); }
+
+  /* ── MAIN ── */
+  main { max-width: 860px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+  .section { display: none; animation: fadeIn .4s ease; }
+  .section.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
+
+  /* ── TYPOGRAPHY HELPERS ── */
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--ink);
+    border-left: 5px solid var(--gold);
+    padding-left: 1rem;
+    margin: 2rem 0 1rem;
+    line-height: 1.2;
+  }
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--teal);
+    margin: 1.5rem 0 .5rem;
+  }
+  p { margin-bottom: .85rem; }
+
+  /* ── CALLOUT BOXES ── */
+  .box {
+    border-radius: 3px;
+    padding: 1.2rem 1.5rem;
+    margin: 1.25rem 0;
+    position: relative;
+  }
+  .box-def {
+    background: rgba(30,107,107,.08);
+    border: 1.5px solid var(--teal);
+    border-left: 5px solid var(--teal);
+  }
+  .box-def::before {
+    content: 'Definisi';
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .68rem;
+    letter-spacing: .12em;
+    color: var(--teal);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: .4rem;
+    font-weight: 600;
+  }
+  .box-example {
+    background: rgba(200,146,42,.07);
+    border: 1.5px solid var(--gold);
+    border-left: 5px solid var(--gold);
+  }
+  .box-example::before {
+    content: 'Contoh';
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .68rem;
+    letter-spacing: .12em;
+    color: var(--gold);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: .4rem;
+    font-weight: 600;
+  }
+  .box-rule {
+    background: rgba(42,74,140,.08);
+    border: 1.5px solid var(--accent-blue);
+    border-left: 5px solid var(--accent-blue);
+  }
+  .box-rule::before {
+    content: 'Aturan';
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .68rem;
+    letter-spacing: .12em;
+    color: var(--accent-blue);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: .4rem;
+    font-weight: 600;
+  }
+  .box-warn {
+    background: rgba(184,76,30,.07);
+    border: 1.5px solid var(--rust);
+    border-left: 5px solid var(--rust);
+  }
+  .box-warn::before {
+    content: '⚠ Perhatian';
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .68rem;
+    letter-spacing: .12em;
+    color: var(--rust);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: .4rem;
+    font-weight: 600;
+  }
+
+  /* ── FORMULA DISPLAY ── */
+  .formula {
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'JetBrains Mono', monospace;
+    padding: .9rem 1.4rem;
+    border-radius: 3px;
+    margin: .75rem 0;
+    font-size: 1.05rem;
+    letter-spacing: .04em;
+    overflow-x: auto;
+  }
+  .formula .sym-all { color: #e8b84b; }
+  .formula .sym-some { color: #6ec8c8; }
+  .formula .sym-impl { color: #e88c5a; }
+  .formula .sym-neg { color: #e85a5a; }
+
+  /* ── TABLE ── */
+  .tbl-wrap { overflow-x: auto; margin: 1.25rem 0; }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: .9rem;
+  }
+  thead tr { background: var(--ink); color: var(--gold-light); }
+  thead th { padding: .7rem 1rem; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: .78rem; letter-spacing: .08em; }
+  tbody tr { border-bottom: 1px solid rgba(200,146,42,.2); }
+  tbody tr:nth-child(even) { background: rgba(200,146,42,.05); }
+  tbody td { padding: .65rem 1rem; vertical-align: top; }
+  td .label { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: .85rem; }
+  td.true { color: var(--accent-green); font-weight: 700; }
+  td.false { color: var(--rust); font-weight: 700; }
+
+  /* ── ARGUMENT DIAGRAM ── */
+  .arg-diagram {
+    background: var(--ink);
+    color: var(--cream);
+    border-radius: 4px;
+    padding: 1.5rem;
+    margin: 1.25rem 0;
+    font-family: 'Source Serif 4', serif;
+  }
+  .arg-premise {
+    border-bottom: 1px solid rgba(245,239,226,.2);
+    padding: .3rem 0;
+    display: flex;
+    gap: .75rem;
+  }
+  .arg-num {
+    font-family: 'JetBrains Mono', monospace;
+    color: rgba(245,239,226,.4);
+    font-size: .8rem;
+    min-width: 1.8rem;
+    padding-top: .1rem;
+  }
+  .arg-divider {
+    border-top: 2px solid var(--gold);
+    margin: .5rem 0;
+    position: relative;
+  }
+  .arg-divider::after {
+    content: '∴';
+    position: absolute; right: 0; top: -1.1rem;
+    color: var(--gold);
+    font-size: 1.2rem;
+  }
+  .arg-conclusion { color: var(--gold-light); font-weight: 600; display: flex; gap: .75rem; padding: .3rem 0; }
+
+  /* ── SIMULATOR ── */
+  .sim-card {
+    background: var(--parchment);
+    border: 1.5px solid var(--gold);
+    border-radius: 4px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    box-shadow: 4px 4px 0 var(--gold);
+  }
+  .sim-card h3 { margin-top: 0; }
+
+  .input-group { margin-bottom: 1rem; }
+  .input-group label {
+    display: block;
+    font-weight: 600;
+    font-size: .85rem;
+    margin-bottom: .3rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--teal);
+    letter-spacing: .05em;
+  }
+  .input-group input, .input-group select, .input-group textarea {
+    width: 100%;
+    padding: .55rem .9rem;
+    border: 1.5px solid rgba(26,18,8,.25);
+    border-radius: 2px;
+    background: var(--cream);
+    font-family: 'Source Serif 4', serif;
+    font-size: .95rem;
+    color: var(--ink);
+    transition: border-color .2s;
+    resize: vertical;
+  }
+  .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(200,146,42,.15);
+  }
+
+  .btn {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    padding: .65rem 1.6rem;
+    border: 2px solid var(--ink);
+    background: var(--ink);
+    color: var(--gold-light);
+    cursor: pointer;
+    border-radius: 2px;
+    font-size: .95rem;
+    transition: all .2s;
+    letter-spacing: .03em;
+  }
+  .btn:hover { background: var(--gold); border-color: var(--gold); color: var(--ink); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--ink);
+    margin-left: .5rem;
+  }
+  .btn-secondary:hover { background: var(--ink); color: var(--cream); }
+
+  .result-panel {
+    margin-top: 1.25rem;
+    padding: 1.2rem 1.5rem;
+    border-radius: 3px;
+    display: none;
+    animation: fadeIn .3s ease;
+  }
+  .result-panel.show { display: block; }
+  .result-valid { background: rgba(42,110,63,.1); border: 2px solid var(--accent-green); }
+  .result-invalid { background: rgba(184,76,30,.1); border: 2px solid var(--rust); }
+  .result-panel h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    margin-bottom: .5rem;
+  }
+  .result-valid h4 { color: var(--accent-green); }
+  .result-invalid h4 { color: var(--rust); }
+  .result-steps { font-size: .88rem; margin-top: .75rem; line-height: 1.9; }
+  .step-item { display: flex; gap: .6rem; align-items: flex-start; margin-bottom: .2rem; }
+  .step-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); margin-top: .55rem; flex-shrink: 0; }
+
+  /* ── VENN ── */
+  .venn-container { display: flex; justify-content: center; margin: 1.5rem 0; }
+  svg.venn text { font-family: 'Source Serif 4', serif; }
+
+  /* ── QUIZ ── */
+  .quiz-q {
+    background: var(--parchment);
+    border: 1.5px solid rgba(200,146,42,.4);
+    border-left: 5px solid var(--gold);
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 1.25rem;
+    border-radius: 2px;
+  }
+  .quiz-q p { font-weight: 600; margin-bottom: .85rem; }
+  .quiz-options { display: flex; flex-direction: column; gap: .5rem; }
+  .quiz-option {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    cursor: pointer;
+    padding: .6rem .9rem;
+    border: 1.5px solid rgba(26,18,8,.15);
+    border-radius: 2px;
+    transition: all .2s;
+    background: var(--cream);
+  }
+  .quiz-option:hover { border-color: var(--gold); background: rgba(200,146,42,.05); }
+  .quiz-option input[type=radio] { accent-color: var(--gold); width:16px;height:16px; }
+  .quiz-option.correct { background: rgba(42,110,63,.12); border-color: var(--accent-green); }
+  .quiz-option.wrong { background: rgba(184,76,30,.1); border-color: var(--rust); }
+  .quiz-feedback { font-size: .88rem; margin-top: .6rem; padding: .6rem .9rem; border-radius: 2px; display: none; }
+  .feedback-ok { background: rgba(42,110,63,.1); color: var(--accent-green); font-weight: 600; }
+  .feedback-no { background: rgba(184,76,30,.1); color: var(--rust); font-weight: 600; }
+
+  #quiz-score-display {
+    text-align: center;
+    background: var(--ink);
+    color: var(--cream);
+    padding: 2rem;
+    border-radius: 4px;
+    margin-top: 1.5rem;
+    display: none;
+  }
+  #quiz-score-display .score-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    color: var(--gold-light);
+  }
+
+  /* ── ARGUMENT BUILDER ── */
+  .ab-premise-list { list-style: none; margin-bottom: .75rem; }
+  .ab-premise-list li {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .35rem 0;
+    border-bottom: 1px dashed rgba(200,146,42,.3);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .9rem;
+  }
+  .ab-premise-list li .rm-btn {
+    background: none;
+    border: none;
+    color: var(--rust);
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 0 .3rem;
+    line-height: 1;
+  }
+  .premises-num-badge {
+    background: var(--ink);
+    color: var(--gold-light);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .72rem;
+    padding: .15rem .5rem;
+    border-radius: 2px;
+    margin-left: .4rem;
+  }
+
+  /* ── NEGATION TABLE ── */
+  .neg-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  @media(max-width:540px){ .neg-grid { grid-template-columns: 1fr; } }
+  .neg-card {
+    background: var(--parchment);
+    border: 1.5px solid var(--gold);
+    padding: 1rem 1.2rem;
+    border-radius: 3px;
+  }
+  .neg-card .from { font-size: .82rem; color: rgba(26,18,8,.5); margin-bottom: .2rem; }
+  .neg-card .original { font-family: 'JetBrains Mono', monospace; font-size:.9rem; margin-bottom:.5rem; font-weight:600; }
+  .neg-card .to { font-size: .82rem; color: rgba(26,18,8,.5); margin-bottom: .2rem; }
+  .neg-card .negated { font-family: 'JetBrains Mono', monospace; font-size:.9rem; color: var(--rust); font-weight:600; }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar-wrap { background: rgba(26,18,8,.1); border-radius: 99px; height: 6px; margin-bottom: 2rem; }
+  .progress-bar { height: 6px; border-radius: 99px; background: linear-gradient(90deg, var(--teal), var(--gold)); transition: width .4s; }
+
+  /* ── SECTION INDEX ── */
+  .toc {
+    background: var(--parchment);
+    border: 1.5px solid var(--gold);
+    padding: 1.25rem 1.5rem;
+    border-radius: 3px;
+    margin-bottom: 2rem;
+  }
+  .toc h3 { margin-top:0; color: var(--ink); font-size:1rem; }
+  .toc ol { padding-left: 1.4rem; }
+  .toc li { margin-bottom: .3rem; font-size: .9rem; }
+  .toc a { color: var(--teal); text-decoration: none; font-weight: 600; }
+  .toc a:hover { color: var(--gold); }
+
+  /* ── QUANTIFIER TOGGLE ── */
+  .q-toggle-wrap { display: flex; gap: .75rem; margin: 1rem 0; flex-wrap: wrap; }
+  .q-toggle {
+    flex: 1;
+    min-width: 200px;
+    border: 2px solid var(--ink);
+    padding: 1rem;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all .25s;
+    background: var(--cream);
+  }
+  .q-toggle:hover, .q-toggle.active { background: var(--ink); color: var(--cream); }
+  .q-toggle .q-sym {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    color: var(--gold);
+    display: block;
+    line-height: 1;
+    margin-bottom: .3rem;
+  }
+  .q-toggle .q-name { font-weight: 700; font-size: .95rem; }
+  .q-toggle .q-read { font-size: .82rem; opacity: .7; font-family: 'JetBrains Mono', monospace; }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:600px){
+    header { padding: 2rem 1rem 1.5rem; }
+    main { padding: 1.5rem 1rem 3rem; }
+    h2 { font-size: 1.35rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">Matematika Diskrit · Bab 4</div>
+  <h1>Proposisi <span>Setiap & Beberapa</span><br>dan Kesimpulan Logika</h1>
+  <p>Kuantifikasi Universal &amp; Eksistensial · Argumen &amp; Inferensi</p>
+</header>
+
+<nav id="main-nav">
+  <button class="active" onclick="showSection('materi1')">① Kuantifier</button>
+  <button onclick="showSection('materi2')">② Negasi</button>
+  <button onclick="showSection('materi3')">③ Kesimpulan</button>
+  <button onclick="showSection('materi4')">④ Aturan Inferensi</button>
+  <button onclick="showSection('simulasi')">⑤ Simulasi</button>
+  <button onclick="showSection('kuis')">⑥ Kuis</button>
+</nav>
+
+<main>
+
+<!-- ══════════════════════════════
+     BAGIAN 1 : KUANTIFIER
+══════════════════════════════ -->
+<section id="materi1" class="section active">
+  <div class="progress-bar-wrap"><div class="progress-bar" style="width:17%"></div></div>
+
+  <div class="toc">
+    <h3>📚 Peta Materi</h3>
+    <ol>
+      <li><a href="#" onclick="showSection('materi1')">Kuantifikasi Universal &amp; Eksistensial</a></li>
+      <li><a href="#" onclick="showSection('materi2')">Negasi Proposisi Berkuantifier</a></li>
+      <li><a href="#" onclick="showSection('materi3')">Menentukan Nilai Kebenaran Kesimpulan</a></li>
+      <li><a href="#" onclick="showSection('materi4')">Aturan Inferensi Logika</a></li>
+      <li><a href="#" onclick="showSection('simulasi')">Simulator Argumen</a></li>
+      <li><a href="#" onclick="showSection('kuis')">Kuis Evaluasi</a></li>
+    </ol>
+  </div>
+
+  <h2>1. Kuantifikasi Proposisi</h2>
+  <p>Dalam logika predikat, kita sering membuat pernyataan tentang <em>semua</em> anggota suatu himpunan atau tentang <em>keberadaan</em> setidaknya satu anggota. Dua jenis kuantifier utama adalah:</p>
+
+  <div class="q-toggle-wrap">
+    <div class="q-toggle active" id="qt-all" onclick="toggleQuantifier('all')">
+      <span class="q-sym">∀</span>
+      <div class="q-name">Kuantifier Universal</div>
+      <div class="q-read">"untuk setiap" / "semua"</div>
+    </div>
+    <div class="q-toggle" id="qt-some" onclick="toggleQuantifier('some')">
+      <span class="q-sym">∃</span>
+      <div class="q-name">Kuantifier Eksistensial</div>
+      <div class="q-read">"ada" / "terdapat" / "beberapa"</div>
+    </div>
+  </div>
+
+  <div id="info-all">
+    <h3>∀ — Kuantifier Universal</h3>
+    <div class="box box-def">
+      Pernyataan <strong>∀x P(x)</strong> bernilai <strong>BENAR</strong> jika dan hanya jika P(x) bernilai benar untuk <em>setiap</em> elemen x di domain pembicaraan.
+    </div>
+    <div class="formula">
+      <span class="sym-all">∀</span>x P(x) &nbsp;≡&nbsp; P(x₁) <span class="sym-impl">∧</span> P(x₂) <span class="sym-impl">∧</span> ··· <span class="sym-impl">∧</span> P(xₙ)
+    </div>
+    <div class="box box-example">
+      <strong>Contoh 1.</strong> Domain: bilangan bulat positif.<br>
+      P(x) = "x² ≥ 0"<br>
+      ∀x P(x) bernilai <strong>BENAR</strong> karena kuadrat setiap bilangan bulat ≥ 0.
+      <br><br>
+      <strong>Contoh 2.</strong> "Semua burung bisa terbang"<br>
+      Misalkan domain = semua burung. Ini <strong>SALAH</strong> karena ada penguin (kontracontoh!).
+    </div>
+    <div class="box box-warn">
+      Untuk membuktikan ∀x P(x) SALAH, cukup temukan <strong>satu kontracontoh</strong> (elemen x₀ di mana P(x₀) salah).
+    </div>
+    <div class="venn-container">
+      <svg class="venn" width="320" height="160" viewBox="0 0 320 160">
+        <rect width="320" height="160" rx="8" fill="#1a1208"/>
+        <ellipse cx="160" cy="80" rx="130" ry="60" fill="rgba(200,146,42,.15)" stroke="#c8922a" stroke-width="1.5"/>
+        <circle cx="120" cy="85" r="18" fill="rgba(200,146,42,.6)"/>
+        <circle cx="160" cy="65" r="18" fill="rgba(200,146,42,.6)"/>
+        <circle cx="200" cy="85" r="18" fill="rgba(200,146,42,.6)"/>
+        <circle cx="140" cy="105" r="18" fill="rgba(200,146,42,.6)"/>
+        <circle cx="180" cy="105" r="18" fill="rgba(200,146,42,.6)"/>
+        <text x="160" cy="85" fill="#e8b84b" font-size="13" text-anchor="middle" y="21">Domain</text>
+        <text x="120" y="89" fill="#1a1208" font-size="12" text-anchor="middle">✓</text>
+        <text x="160" y="69" fill="#1a1208" font-size="12" text-anchor="middle">✓</text>
+        <text x="200" y="89" fill="#1a1208" font-size="12" text-anchor="middle">✓</text>
+        <text x="140" y="109" fill="#1a1208" font-size="12" text-anchor="middle">✓</text>
+        <text x="180" y="109" fill="#1a1208" font-size="12" text-anchor="middle">✓</text>
+        <text x="160" y="148" fill="rgba(245,239,226,.6)" font-size="11" text-anchor="middle">∀x P(x) = BENAR jika semua ✓</text>
+      </svg>
+    </div>
+  </div>
+
+  <div id="info-some" style="display:none">
+    <h3>∃ — Kuantifier Eksistensial</h3>
+    <div class="box box-def">
+      Pernyataan <strong>∃x P(x)</strong> bernilai <strong>BENAR</strong> jika dan hanya jika P(x) bernilai benar untuk <em>setidaknya satu</em> elemen x di domain.
+    </div>
+    <div class="formula">
+      <span class="sym-some">∃</span>x P(x) &nbsp;≡&nbsp; P(x₁) <span class="sym-impl">∨</span> P(x₂) <span class="sym-impl">∨</span> ··· <span class="sym-impl">∨</span> P(xₙ)
+    </div>
+    <div class="box box-example">
+      <strong>Contoh 1.</strong> Domain: bilangan bulat.<br>
+      P(x) = "x² = 4"<br>
+      ∃x P(x) bernilai <strong>BENAR</strong> karena x = 2 (atau x = −2) memenuhi.
+      <br><br>
+      <strong>Contoh 2.</strong> "Ada bilangan prima yang genap"<br>
+      <strong>BENAR</strong>: x = 2 adalah bilangan prima yang genap.
+    </div>
+    <div class="box box-warn">
+      Untuk membuktikan ∃x P(x) SALAH, harus tunjukkan <strong>tidak ada satu pun</strong> elemen di domain yang memenuhi P(x).
+    </div>
+    <div class="venn-container">
+      <svg class="venn" width="320" height="160" viewBox="0 0 320 160">
+        <rect width="320" height="160" rx="8" fill="#1a1208"/>
+        <ellipse cx="160" cy="80" rx="130" ry="60" fill="rgba(30,107,107,.15)" stroke="#2a9090" stroke-width="1.5"/>
+        <circle cx="120" cy="85" r="18" fill="rgba(30,107,107,.2)" stroke="rgba(42,144,144,.5)" stroke-width="1"/>
+        <circle cx="160" cy="65" r="18" fill="rgba(42,144,144,.8)"/>
+        <circle cx="200" cy="85" r="18" fill="rgba(30,107,107,.2)" stroke="rgba(42,144,144,.5)" stroke-width="1"/>
+        <circle cx="140" cy="105" r="18" fill="rgba(30,107,107,.2)" stroke="rgba(42,144,144,.5)" stroke-width="1"/>
+        <circle cx="180" cy="105" r="18" fill="rgba(30,107,107,.2)" stroke="rgba(42,144,144,.5)" stroke-width="1"/>
+        <text x="160" y="21" fill="#6ec8c8" font-size="13" text-anchor="middle">Domain</text>
+        <text x="160" y="69" fill="#1a1208" font-size="12" text-anchor="middle">✓</text>
+        <text x="160" y="148" fill="rgba(245,239,226,.6)" font-size="11" text-anchor="middle">∃x P(x) = BENAR jika minimal 1 ✓</text>
+      </svg>
+    </div>
+  </div>
+
+  <h3>Perbandingan Ringkas</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Notasi</th><th>Dibaca</th><th>BENAR jika…</th><th>SALAH jika…</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="label">∀x P(x)</span></td>
+          <td>Untuk setiap x, P(x)</td>
+          <td class="true">P(x) benar untuk SEMUA x</td>
+          <td class="false">Ada setidaknya SATU x yang membuat P(x) salah</td>
+        </tr>
+        <tr>
+          <td><span class="label">∃x P(x)</span></td>
+          <td>Terdapat x, P(x)</td>
+          <td class="true">Ada SETIDAKNYA SATU x yang membuat P(x) benar</td>
+          <td class="false">P(x) salah untuk SEMUA x di domain</td>
+        </tr>
+        <tr>
+          <td><span class="label">∃! x P(x)</span></td>
+          <td>Terdapat tepat satu x, P(x)</td>
+          <td class="true">Tepat SATU x yang memenuhi P(x)</td>
+          <td class="false">Nol atau lebih dari satu x yang memenuhi</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Kuantifier Berlapis (Nested Quantifiers)</h3>
+  <div class="box box-def">
+    Jika dua kuantifier berbeda, urutan penulisan sangat berpengaruh pada makna!
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Pernyataan</th><th>Makna</th><th>Contoh (ℝ × ℝ)</th></tr></thead>
+      <tbody>
+        <tr><td><span class="label">∀x ∀y P(x,y)</span></td><td>Semua pasangan (x,y) memenuhi P</td><td class="true">x+y = y+x → BENAR</td></tr>
+        <tr><td><span class="label">∀x ∃y P(x,y)</span></td><td>Untuk tiap x, ada y yang memenuhi P</td><td class="true">∀x ∃y (x+y=0) → BENAR (y=−x)</td></tr>
+        <tr><td><span class="label">∃x ∀y P(x,y)</span></td><td>Ada x tertentu yang untuk semua y memenuhi P</td><td class="false">∃x ∀y (x+y=0) → SALAH</td></tr>
+        <tr><td><span class="label">∃x ∃y P(x,y)</span></td><td>Ada setidaknya satu pasangan (x,y) yang memenuhi</td><td class="true">x²+y²=1 → BENAR</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="text-align:right;margin-top:2rem">
+    <button class="btn" onclick="showSection('materi2')">Lanjut: Negasi →</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     BAGIAN 2 : NEGASI
+══════════════════════════════ -->
+<section id="materi2" class="section">
+  <div class="progress-bar-wrap"><div class="progress-bar" style="width:34%"></div></div>
+  <h2>2. Negasi Proposisi Berkuantifier</h2>
+  <p>Hukum De Morgan untuk kuantifier menyatakan bahwa negasi dari pernyataan berkuantifier membalik kuantifier dan meniadakan predikat.</p>
+
+  <div class="formula">
+    <span class="sym-neg">¬</span>(<span class="sym-all">∀</span>x P(x)) &nbsp;≡&nbsp; <span class="sym-some">∃</span>x (<span class="sym-neg">¬</span>P(x))<br>
+    <span class="sym-neg">¬</span>(<span class="sym-some">∃</span>x P(x)) &nbsp;≡&nbsp; <span class="sym-all">∀</span>x (<span class="sym-neg">¬</span>P(x))
+  </div>
+
+  <div class="box box-rule">
+    <strong>Hukum De Morgan untuk Kuantifier:</strong>
+    <ul style="margin-top:.5rem;padding-left:1.4rem">
+      <li>Negasi dari "SEMUA" menjadi "ADA YANG TIDAK"</li>
+      <li>Negasi dari "ADA" menjadi "SEMUA TIDAK"</li>
+    </ul>
+  </div>
+
+  <h3>Contoh Negasi</h3>
+  <div class="neg-grid">
+    <div class="neg-card">
+      <div class="from">Pernyataan asli:</div>
+      <div class="original">∀x (x² ≥ 0)</div>
+      <div class="from">Artinya: "Semua bilangan kuadratnya ≥ 0"</div>
+      <hr style="border:none;border-top:1px dashed #c8922a;margin:.6rem 0">
+      <div class="to">Negasinya:</div>
+      <div class="negated">∃x ¬(x² ≥ 0)</div>
+      <div class="from">Artinya: "Ada bilangan yang kuadratnya &lt; 0"</div>
+    </div>
+    <div class="neg-card">
+      <div class="from">Pernyataan asli:</div>
+      <div class="original">∃x (x adalah prima ∧ x genap)</div>
+      <div class="from">Artinya: "Ada prima yang genap"</div>
+      <hr style="border:none;border-top:1px dashed #c8922a;margin:.6rem 0">
+      <div class="to">Negasinya:</div>
+      <div class="negated">∀x ¬(prima(x) ∧ genap(x))</div>
+      <div class="from">Artinya: "Semua prima tidak genap"</div>
+    </div>
+    <div class="neg-card">
+      <div class="from">Pernyataan asli:</div>
+      <div class="original">∀x (Manusia(x) → Fana(x))</div>
+      <div class="from">Artinya: "Semua manusia adalah fana"</div>
+      <hr style="border:none;border-top:1px dashed #c8922a;margin:.6rem 0">
+      <div class="to">Negasinya:</div>
+      <div class="negated">∃x (Manusia(x) ∧ ¬Fana(x))</div>
+      <div class="from">Artinya: "Ada manusia yang tidak fana"</div>
+    </div>
+    <div class="neg-card">
+      <div class="from">Pernyataan asli:</div>
+      <div class="original">∀x ∃y (x + y = 0)</div>
+      <div class="from">Artinya: "Tiap x punya invers"</div>
+      <hr style="border:none;border-top:1px dashed #c8922a;margin:.6rem 0">
+      <div class="to">Negasinya:</div>
+      <div class="negated">∃x ∀y (x + y ≠ 0)</div>
+      <div class="from">Artinya: "Ada x yang tidak punya invers"</div>
+    </div>
+  </div>
+
+  <h3>Simulator Negasi Interaktif</h3>
+  <div class="sim-card">
+    <h3>🔀 Negasi Otomatis</h3>
+    <div class="input-group">
+      <label>Pilih bentuk proposisi:</label>
+      <select id="neg-type">
+        <option value="all">∀x P(x) — Universal</option>
+        <option value="some">∃x P(x) — Eksistensial</option>
+        <option value="all-imp">∀x (P(x) → Q(x)) — Universal Implikasi</option>
+        <option value="some-and">∃x (P(x) ∧ Q(x)) — Eksistensial Konjungsi</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label>Isi predikat P(x):</label>
+      <input id="neg-px" type="text" placeholder="contoh: x adalah mahasiswa" value="x adalah mahasiswa">
+    </div>
+    <div id="neg-qx-wrap" style="display:none" class="input-group">
+      <label>Isi predikat Q(x):</label>
+      <input id="neg-qx" type="text" placeholder="contoh: x lulus ujian" value="x lulus ujian">
+    </div>
+    <button class="btn" onclick="doNegation()">Negasikan</button>
+    <div id="neg-result" class="result-panel"></div>
+  </div>
+
+  <div style="text-align:right;margin-top:2rem">
+    <button class="btn" onclick="showSection('materi3')">Lanjut: Kesimpulan →</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     BAGIAN 3 : KESIMPULAN
+══════════════════════════════ -->
+<section id="materi3" class="section">
+  <div class="progress-bar-wrap"><div class="progress-bar" style="width:51%"></div></div>
+  <h2>3. Menentukan Nilai Kebenaran Kesimpulan</h2>
+
+  <p>Sebuah <strong>argumen</strong> terdiri dari sekumpulan premis (pernyataan yang diasumsikan benar) dan sebuah kesimpulan. Argumen dikatakan <strong>valid</strong> jika: bilamana semua premis benar, maka kesimpulan <em>pasti</em> benar.</p>
+
+  <div class="box box-def">
+    Argumen: P₁ ∧ P₂ ∧ ··· ∧ Pₙ → C &nbsp;(tautologi)<br>
+    Valid jika tidak mungkin semua premis benar dan kesimpulan salah.
+  </div>
+
+  <h3>Tiga Kondisi Argumen</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Kondisi</th><th>Premis-premis</th><th>Kesimpulan</th><th>Argumen</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>① Valid &amp; Sehat</td>
+          <td class="true">Semua BENAR</td>
+          <td class="true">BENAR</td>
+          <td class="true">✓ VALID &amp; SOUND</td>
+        </tr>
+        <tr>
+          <td>② Valid tapi Tidak Sehat</td>
+          <td class="false">Ada yang SALAH</td>
+          <td>—</td>
+          <td class="true">✓ VALID (struktur logis benar)</td>
+        </tr>
+        <tr>
+          <td>③ Tidak Valid (Fallacy)</td>
+          <td class="true">Semua BENAR</td>
+          <td class="false">SALAH</td>
+          <td class="false">✗ TIDAK VALID</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Contoh Argumen Berkuantifier</h3>
+
+  <p><strong>Silogisme Universal (Modus Ponens Universal):</strong></p>
+  <div class="arg-diagram">
+    <div class="arg-premise"><span class="arg-num">P1</span><span>∀x (Manusia(x) → Fana(x))</span></div>
+    <div class="arg-premise"><span class="arg-num">P2</span><span>Manusia(Socrates)</span></div>
+    <div class="arg-divider"></div>
+    <div class="arg-conclusion"><span class="arg-num">∴</span><span>Fana(Socrates)</span></div>
+  </div>
+  <div class="box box-rule">Struktur: ∀x (P(x)→Q(x)), P(a) ∴ Q(a) — <strong>VALID</strong></div>
+
+  <p><strong>Silogisme Eksistensial:</strong></p>
+  <div class="arg-diagram">
+    <div class="arg-premise"><span class="arg-num">P1</span><span>∃x (Mahasiswa(x) ∧ Pandai(x))</span></div>
+    <div class="arg-divider"></div>
+    <div class="arg-conclusion"><span class="arg-num">∴</span><span>Ada mahasiswa yang pandai</span></div>
+  </div>
+  <div class="box box-rule">Dari pernyataan eksistensial, kita bisa menyimpulkan keberadaan — <strong>VALID</strong></div>
+
+  <p><strong>Contoh Argumen Tidak Valid (Fallacy):</strong></p>
+  <div class="arg-diagram">
+    <div class="arg-premise"><span class="arg-num">P1</span><span>∀x (Burung(x) → BisaTerbang(x))</span></div>
+    <div class="arg-premise"><span class="arg-num">P2</span><span>BisaTerbang(Lebah)</span></div>
+    <div class="arg-divider"></div>
+    <div class="arg-conclusion"><span class="arg-num">∴</span><span style="color:#e85a5a">Burung(Lebah)</span></div>
+  </div>
+  <div class="box box-warn">Ini adalah <strong>Fallacy of Affirming the Consequent</strong>. Dari P(a)→Q(a) dan Q(a), kita TIDAK bisa menyimpulkan P(a).</div>
+
+  <div style="text-align:right;margin-top:2rem">
+    <button class="btn" onclick="showSection('materi4')">Lanjut: Aturan Inferensi →</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     BAGIAN 4 : ATURAN INFERENSI
+══════════════════════════════ -->
+<section id="materi4" class="section">
+  <div class="progress-bar-wrap"><div class="progress-bar" style="width:68%"></div></div>
+  <h2>4. Aturan Inferensi Logika</h2>
+  <p>Aturan inferensi adalah pola argumen valid yang sudah dikenal dan dapat langsung digunakan dalam pembuktian.</p>
+
+  <h3>Aturan Inferensi Proposisional</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Nama</th><th>Bentuk</th><th>Contoh</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Modus Ponens</strong></td>
+          <td><span class="label">p, p→q ∴ q</span></td>
+          <td>Hujan; Jika hujan maka banjir → Banjir</td>
+        </tr>
+        <tr>
+          <td><strong>Modus Tollens</strong></td>
+          <td><span class="label">¬q, p→q ∴ ¬p</span></td>
+          <td>Tidak banjir; Jika hujan maka banjir → Tidak hujan</td>
+        </tr>
+        <tr>
+          <td><strong>Silogisme Hipotetis</strong></td>
+          <td><span class="label">p→q, q→r ∴ p→r</span></td>
+          <td>Belajar→Lulus; Lulus→Kerja → Belajar→Kerja</td>
+        </tr>
+        <tr>
+          <td><strong>Silogisme Disjungtif</strong></td>
+          <td><span class="label">p∨q, ¬p ∴ q</span></td>
+          <td>Kucing atau Anjing; Bukan Kucing → Anjing</td>
+        </tr>
+        <tr>
+          <td><strong>Penambahan (Addition)</strong></td>
+          <td><span class="label">p ∴ p∨q</span></td>
+          <td>Hujan → Hujan atau Angin</td>
+        </tr>
+        <tr>
+          <td><strong>Penyederhanaan (Simplification)</strong></td>
+          <td><span class="label">p∧q ∴ p</span></td>
+          <td>Hujan dan Dingin → Hujan</td>
+        </tr>
+        <tr>
+          <td><strong>Konjungsi (Conjunction)</strong></td>
+          <td><span class="label">p, q ∴ p∧q</span></td>
+          <td>Hujan; Dingin → Hujan dan Dingin</td>
+        </tr>
+        <tr>
+          <td><strong>Resolusi</strong></td>
+          <td><span class="label">p∨q, ¬p∨r ∴ q∨r</span></td>
+          <td>A atau B; ¬A atau C → B atau C</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Aturan Inferensi untuk Kuantifier</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Nama</th><th>Bentuk</th><th>Penjelasan</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Universal Instantiation (UI)</strong></td>
+          <td><span class="label">∀x P(x) ∴ P(c)</span></td>
+          <td>Dari "semua x memenuhi P", pilih elemen spesifik c → P(c) benar</td>
+        </tr>
+        <tr>
+          <td><strong>Universal Generalization (UG)</strong></td>
+          <td><span class="label">P(c) (sembarang c) ∴ ∀x P(x)</span></td>
+          <td>Jika P berlaku untuk elemen sembarang c (tidak khusus), simpulkan ∀x P(x)</td>
+        </tr>
+        <tr>
+          <td><strong>Existential Instantiation (EI)</strong></td>
+          <td><span class="label">∃x P(x) ∴ P(c) (untuk c baru)</span></td>
+          <td>Dari "ada x yang memenuhi P", beri nama c pada elemen tersebut</td>
+        </tr>
+        <tr>
+          <td><strong>Existential Generalization (EG)</strong></td>
+          <td><span class="label">P(c) ∴ ∃x P(x)</span></td>
+          <td>Jika P(c) benar untuk elemen c tertentu, maka ∃x P(x) pasti benar</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Contoh Pembuktian Bertahap</h3>
+  <div class="box box-example">
+    <strong>Premis:</strong><br>
+    P1: ∀x (Mahasiswa(x) → Belajar(x))<br>
+    P2: ∀x (Belajar(x) → Lulus(x))<br>
+    P3: Mahasiswa(Andi)<br>
+    <strong>Buktikan:</strong> Lulus(Andi)
+    <hr style="border:none;border-top:1px dashed rgba(200,146,42,.4);margin:.6rem 0">
+    <ol style="padding-left:1.4rem;line-height:2">
+      <li>Mahasiswa(Andi) → Belajar(Andi) &emsp;[UI dari P1, c = Andi]</li>
+      <li>Belajar(Andi) &emsp;[Modus Ponens: langkah 1 + P3]</li>
+      <li>Belajar(Andi) → Lulus(Andi) &emsp;[UI dari P2, c = Andi]</li>
+      <li><strong>Lulus(Andi)</strong> &emsp;[Modus Ponens: langkah 3 + langkah 2] ∴ QED</li>
+    </ol>
+  </div>
+
+  <div style="text-align:right;margin-top:2rem">
+    <button class="btn" onclick="showSection('simulasi')">Lanjut: Simulasi →</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     BAGIAN 5 : SIMULASI
+══════════════════════════════ -->
+<section id="simulasi" class="section">
+  <div class="progress-bar-wrap"><div class="progress-bar" style="width:85%"></div></div>
+  <h2>5. Simulator Argumen Logika</h2>
+  <p>Gunakan simulator di bawah untuk memeriksa validitas berbagai jenis argumen logika secara interaktif.</p>
+
+  <!-- SIM A: Silogisme Universal -->
+  <div class="sim-card">
+    <h3>🔵 Simulator A — Silogisme Universal</h3>
+    <p style="font-size:.88rem;opacity:.7;margin-bottom:1rem">Periksa apakah argumen ∀x (P(x)→Q(x)), P(a) ∴ Q(a) valid.</p>
+    <div class="input-group">
+      <label>Predikat P(x) — contoh: "adalah manusia"</label>
+      <input id="sA-px" type="text" value="adalah manusia" placeholder="adalah manusia">
+    </div>
+    <div class="input-group">
+      <label>Predikat Q(x) — contoh: "adalah fana"</label>
+      <input id="sA-qx" type="text" value="adalah fana" placeholder="adalah fana">
+    </div>
+    <div class="input-group">
+      <label>Konstanta a — contoh: "Socrates"</label>
+      <input id="sA-a" type="text" value="Socrates" placeholder="Socrates">
+    </div>
+    <div class="input-group">
+      <label>Apakah P(a) benar? (premis kedua)</label>
+      <select id="sA-pa">
+        <option value="true">Ya, P(a) benar</option>
+        <option value="false">Tidak, P(a) salah</option>
+      </select>
+    </div>
+    <button class="btn" onclick="simA()">Periksa Argumen</button>
+    <div id="sA-result" class="result-panel"></div>
+  </div>
+
+  <!-- SIM B: Modus Ponens / Tollens -->
+  <div class="sim-card">
+    <h3>🟡 Simulator B — Modus Ponens &amp; Tollens</h3>
+    <p style="font-size:.88rem;opacity:.7;margin-bottom:1rem">Masukkan dua premis dan kesimpulan untuk diperiksa.</p>
+    <div class="input-group">
+      <label>Aturan inferensi:</label>
+      <select id="sB-rule">
+        <option value="mp">Modus Ponens: p, p→q ∴ q</option>
+        <option value="mt">Modus Tollens: ¬q, p→q ∴ ¬p</option>
+        <option value="hs">Silogisme Hipotetis: p→q, q→r ∴ p→r</option>
+        <option value="ds">Silogisme Disjungtif: p∨q, ¬p ∴ q</option>
+        <option value="ac">Affirming the Consequent (FALLACY): p→q, q ∴ p</option>
+        <option value="dc">Denying the Antecedent (FALLACY): p→q, ¬p ∴ ¬q</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label>Pernyataan p:</label>
+      <input id="sB-p" type="text" value="Hujan deras" placeholder="Hujan deras">
+    </div>
+    <div class="input-group">
+      <label>Pernyataan q:</label>
+      <input id="sB-q" type="text" value="Jalan banjir" placeholder="Jalan banjir">
+    </div>
+    <div id="sB-r-wrap" style="display:none" class="input-group">
+      <label>Pernyataan r:</label>
+      <input id="sB-r" type="text" value="Mobil mogok" placeholder="Mobil mogok">
+    </div>
+    <button class="btn" onclick="simB()">Periksa</button>
+    <div id="sB-result" class="result-panel"></div>
+  </div>
+
+  <!-- SIM C: Argument Builder -->
+  <div class="sim-card">
+    <h3>🟢 Simulator C — Rantai Inferensi</h3>
+    <p style="font-size:.88rem;opacity:.7;margin-bottom:1rem">Bangun rantai argumen dengan kuantifier dan periksa apakah kesimpulan dapat ditarik.</p>
+    <div class="input-group">
+      <label>Template argumen:</label>
+      <select id="sC-template" onchange="loadTemplate()">
+        <option value="t1">Contoh 1: Mahasiswa → Belajar → Lulus</option>
+        <option value="t2">Contoh 2: Hewan → Bernafas (dengan kontracontoh)</option>
+        <option value="t3">Contoh 3: Modus Ponens Universal + Existential</option>
+        <option value="t4">Contoh 4: Silogisme Hipotetis Universal</option>
+      </select>
+    </div>
+    <button class="btn" onclick="runTemplate()">Jalankan &amp; Tampilkan Pembuktian</button>
+    <div id="sC-result" class="result-panel"></div>
+  </div>
+
+  <div style="text-align:right;margin-top:2rem">
+    <button class="btn" onclick="showSection('kuis')">Lanjut: Kuis →</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     BAGIAN 6 : KUIS
+══════════════════════════════ -->
+<section id="kuis" class="section">
+  <div class="progress-bar-wrap"><div class="progress-bar" style="width:100%"></div></div>
+  <h2>6. Kuis Evaluasi</h2>
+  <p>Jawab pertanyaan berikut untuk menguji pemahaman Anda. Pilih jawaban kemudian klik "Periksa" di setiap soal.</p>
+
+  <!-- Q1 -->
+  <div class="quiz-q" id="q1">
+    <p>1. Pernyataan "∀x (x² ≥ 0)" dengan domain bilangan real bernilai…</p>
+    <div class="quiz-options">
+      <label class="quiz-option"><input type="radio" name="q1" value="a"> Salah, karena ada bilangan negatif</label>
+      <label class="quiz-option"><input type="radio" name="q1" value="b"> Benar, karena kuadrat selalu non-negatif</label>
+      <label class="quiz-option"><input type="radio" name="q1" value="c"> Tidak dapat ditentukan</label>
+      <label class="quiz-option"><input type="radio" name="q1" value="d"> Benar hanya untuk bilangan positif</label>
+    </div>
+    <button class="btn btn-secondary" style="margin-top:.75rem" onclick="checkQ(1,'b','Kuadrat setiap bilangan real selalu ≥ 0 (hasilnya adalah 0 atau positif).')">Periksa</button>
+    <div class="quiz-feedback" id="q1-fb"></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-q" id="q2">
+    <p>2. Negasi dari "∀x (Burung(x) → BisaTerbang(x))" adalah…</p>
+    <div class="quiz-options">
+      <label class="quiz-option"><input type="radio" name="q2" value="a"> ∀x (Burung(x) ∧ BisaTerbang(x))</label>
+      <label class="quiz-option"><input type="radio" name="q2" value="b"> ∃x (Burung(x) → ¬BisaTerbang(x))</label>
+      <label class="quiz-option"><input type="radio" name="q2" value="c"> ∃x (Burung(x) ∧ ¬BisaTerbang(x))</label>
+      <label class="quiz-option"><input type="radio" name="q2" value="d"> ∀x (¬Burung(x) ∨ BisaTerbang(x))</label>
+    </div>
+    <button class="btn btn-secondary" style="margin-top:.75rem" onclick="checkQ(2,'c','¬(∀x (P→Q)) ≡ ∃x ¬(P→Q) ≡ ∃x (P ∧ ¬Q). Jadi negasinya adalah: ada burung yang tidak bisa terbang.')">Periksa</button>
+    <div class="quiz-feedback" id="q2-fb"></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-q" id="q3">
+    <p>3. Argumen berikut valid atau tidak?<br>
+    P1: ∀x (Kucing(x) → Berkaki4(x))<br>
+    P2: Berkaki4(Tom)<br>
+    Kesimpulan: Kucing(Tom)</p>
+    <div class="quiz-options">
+      <label class="quiz-option"><input type="radio" name="q3" value="a"> Valid — Tom adalah kucing</label>
+      <label class="quiz-option"><input type="radio" name="q3" value="b"> Tidak valid — Affirming the Consequent (Fallacy)</label>
+      <label class="quiz-option"><input type="radio" name="q3" value="c"> Valid jika Tom adalah hewan</label>
+      <label class="quiz-option"><input type="radio" name="q3" value="d"> Tidak valid — premis tidak lengkap</label>
+    </div>
+    <button class="btn btn-secondary" style="margin-top:.75rem" onclick="checkQ(3,'b','Dari P→Q dan Q, tidak dapat disimpulkan P. Ini adalah fallacy Affirming the Consequent. Tom bisa saja anjing yang juga berkaki 4.')">Periksa</button>
+    <div class="quiz-feedback" id="q3-fb"></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-q" id="q4">
+    <p>4. Aturan inferensi "∀x P(x) ∴ P(c)" disebut…</p>
+    <div class="quiz-options">
+      <label class="quiz-option"><input type="radio" name="q4" value="a"> Universal Generalization</label>
+      <label class="quiz-option"><input type="radio" name="q4" value="b"> Existential Instantiation</label>
+      <label class="quiz-option"><input type="radio" name="q4" value="c"> Universal Instantiation</label>
+      <label class="quiz-option"><input type="radio" name="q4" value="d"> Modus Tollens</label>
+    </div>
+    <button class="btn btn-secondary" style="margin-top:.75rem" onclick="checkQ(4,'c','Universal Instantiation: dari pernyataan yang berlaku untuk semua x, kita boleh mengambil elemen spesifik c dan menyimpulkan P(c).')">Periksa</button>
+    <div class="quiz-feedback" id="q4-fb"></div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="quiz-q" id="q5">
+    <p>5. "∀x ∃y (x + y = 0)" dengan domain bilangan real menyatakan…</p>
+    <div class="quiz-options">
+      <label class="quiz-option"><input type="radio" name="q5" value="a"> Ada satu y yang menjadi invers semua x</label>
+      <label class="quiz-option"><input type="radio" name="q5" value="b"> Untuk setiap x, terdapat y sehingga x + y = 0</label>
+      <label class="quiz-option"><input type="radio" name="q5" value="c"> Semua x dan y memenuhi x + y = 0</label>
+      <label class="quiz-option"><input type="radio" name="q5" value="d"> Ada x yang tidak memiliki invers</label>
+    </div>
+    <button class="btn btn-secondary" style="margin-top:.75rem" onclick="checkQ(5,'b','∀x ∃y berarti: untuk tiap x yang kita pilih, ada y yang bergantung pada x tersebut (y = −x), sehingga x + y = 0. Ini menyatakan eksistensi invers aditif untuk setiap bilangan real.')">Periksa</button>
+    <div class="quiz-feedback" id="q5-fb"></div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="quiz-q" id="q6">
+    <p>6. Manakah yang merupakan contoh Modus Tollens yang benar?</p>
+    <div class="quiz-options">
+      <label class="quiz-option"><input type="radio" name="q6" value="a"> p → q, p ∴ q</label>
+      <label class="quiz-option"><input type="radio" name="q6" value="b"> p → q, q ∴ p</label>
+      <label class="quiz-option"><input type="radio" name="q6" value="c"> p → q, ¬q ∴ ¬p</label>
+      <label class="quiz-option"><input type="radio" name="q6" value="d"> ¬p → q, ¬q ∴ p</label>
+    </div>
+    <button class="btn btn-secondary" style="margin-top:.75rem" onclick="checkQ(6,'c','Modus Tollens: jika p→q benar dan q salah (¬q), maka p harus salah (¬p). Ini valid karena jika p benar maka q benar, tetapi q ternyata salah, jadi p tidak mungkin benar.')">Periksa</button>
+    <div class="quiz-feedback" id="q6-fb"></div>
+  </div>
+
+  <div style="text-align:center;margin-top:1.5rem">
+    <button class="btn" onclick="showFinalScore()">Lihat Nilai Akhir</button>
+    <button class="btn btn-secondary" onclick="resetQuiz()">Reset Kuis</button>
+  </div>
+  <div id="quiz-score-display">
+    <div class="score-num" id="score-num">0/6</div>
+    <div style="font-size:1.1rem;margin-top:.5rem" id="score-msg">Hitung dulu...</div>
+    <div style="font-size:.85rem;opacity:.6;margin-top:.5rem">Ulangi bagian yang masih kurang dipahami</div>
+  </div>
+</section>
+
+</main>
+
+<script>
+// ── NAVIGATION ──
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const navBtns = document.querySelectorAll('nav button');
+  const idx = ['materi1','materi2','materi3','materi4','simulasi','kuis'].indexOf(id);
+  navBtns.forEach((b,i) => b.classList.toggle('active', i===idx));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ── QUANTIFIER TOGGLE ──
+function toggleQuantifier(type) {
+  document.getElementById('qt-all').classList.toggle('active', type==='all');
+  document.getElementById('qt-some').classList.toggle('active', type==='some');
+  document.getElementById('info-all').style.display = type==='all' ? '' : 'none';
+  document.getElementById('info-some').style.display = type==='some' ? '' : 'none';
+}
+
+// ── NEGATION SIMULATOR ──
+document.getElementById('neg-type').addEventListener('change', function() {
+  const needQ = ['all-imp','some-and'].includes(this.value);
+  document.getElementById('neg-qx-wrap').style.display = needQ ? '' : 'none';
+});
+
+function doNegation() {
+  const type = document.getElementById('neg-type').value;
+  const px = document.getElementById('neg-px').value || 'P(x)';
+  const qx = document.getElementById('neg-qx').value || 'Q(x)';
+  let original = '', negated = '', explanation = '';
+  switch(type) {
+    case 'all':
+      original = `∀x (${px})`;
+      negated  = `∃x ¬(${px})`;
+      explanation = `Negasi dari "untuk semua x berlaku ${px}" adalah "ada x yang tidak memenuhi ${px}".`;
+      break;
+    case 'some':
+      original = `∃x (${px})`;
+      negated  = `∀x ¬(${px})`;
+      explanation = `Negasi dari "ada x yang memenuhi ${px}" adalah "untuk semua x, ${px} tidak berlaku".`;
+      break;
+    case 'all-imp':
+      original = `∀x (${px} → ${qx})`;
+      negated  = `∃x (${px} ∧ ¬(${qx}))`;
+      explanation = `Gunakan: ¬(∀x(P→Q)) ≡ ∃x(P ∧ ¬Q). Ada x yang memenuhi ${px} tetapi tidak memenuhi ${qx}.`;
+      break;
+    case 'some-and':
+      original = `∃x (${px} ∧ ${qx})`;
+      negated  = `∀x (¬(${px}) ∨ ¬(${qx}))`;
+      explanation = `Gunakan: ¬(∃x(P∧Q)) ≡ ∀x(¬P∨¬Q). Untuk semua x, tidak berlaku keduanya sekaligus.`;
+      break;
+  }
+  const el = document.getElementById('neg-result');
+  el.className = 'result-panel show result-valid';
+  el.innerHTML = `
+    <h4>Hasil Negasi</h4>
+    <div style="margin:.5rem 0">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.82rem;opacity:.6">Asli:</span><br>
+      <code style="font-family:'JetBrains Mono',monospace;font-size:.95rem;font-weight:600">${original}</code>
+    </div>
+    <div style="margin:.5rem 0">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--rust)">Negasi:</span><br>
+      <code style="font-family:'JetBrains Mono',monospace;font-size:.95rem;font-weight:600;color:var(--rust)">${negated}</code>
+    </div>
+    <div class="result-steps" style="margin-top:.75rem;background:rgba(200,146,42,.1);padding:.75rem;border-radius:2px">
+      📝 ${explanation}
+    </div>`;
+}
+
+// ── SIMULATOR A ──
+function simA() {
+  const px = document.getElementById('sA-px').value || 'P(x)';
+  const qx = document.getElementById('sA-qx').value || 'Q(x)';
+  const a  = document.getElementById('sA-a').value  || 'a';
+  const pa = document.getElementById('sA-pa').value === 'true';
+  const el = document.getElementById('sA-result');
+
+  if (pa) {
+    el.className = 'result-panel show result-valid';
+    el.innerHTML = `
+      <h4>✓ Argumen VALID</h4>
+      <div class="result-steps">
+        <div class="step-item"><div class="step-dot"></div><div>Premis 1: <code>∀x (${px} → ${qx})</code> — diasumsikan benar</div></div>
+        <div class="step-item"><div class="step-dot"></div><div>Premis 2: <code>${a} adalah ${px}</code> — benar (diberikan)</div></div>
+        <div class="step-item"><div class="step-dot"></div><div>Langkah 1 (Universal Instantiation): <code>${px.replace('x',a)} → ${qx.replace('x',a)}</code></div></div>
+        <div class="step-item"><div class="step-dot"></div><div>Langkah 2 (Modus Ponens): dari L1 + P2 → <strong>${qx.replace('x',a)}</strong></div></div>
+        <div class="step-item"><div class="step-dot"></div><div>∴ Kesimpulan: <strong>${a} adalah ${qx}</strong> ✓</div></div>
+      </div>`;
+  } else {
+    el.className = 'result-panel show result-invalid';
+    el.innerHTML = `
+      <h4>⚠ Kesimpulan Tidak Dapat Ditarik</h4>
+      <div class="result-steps">
+        <div class="step-item"><div class="step-dot"></div><div>Premis 2 menyatakan <code>${a}</code> bukan ${px}</div></div>
+        <div class="step-item"><div class="step-dot"></div><div>Universal Instantiation menghasilkan: <code>${px.replace('x',a)} → ${qx.replace('x',a)}</code></div></div>
+        <div class="step-item"><div class="step-dot"></div><div>Karena anteseden salah, kita tidak dapat menyimpulkan apapun tentang ${qx.replace('x',a)}</div></div>
+        <div class="step-item"><div class="step-dot"></div><div>Implikasi dengan anteseden salah bernilai BENAR secara vakum (vacuously true), tapi tidak informatif</div></div>
+      </div>`;
+  }
+}
+
+// ── SIMULATOR B ──
+document.getElementById('sB-rule').addEventListener('change', function() {
+  document.getElementById('sB-r-wrap').style.display = this.value === 'hs' ? '' : 'none';
+});
+
+const ruleData = {
+  mp:  { valid:true,  name:'Modus Ponens',          form:'p, p→q ∴ q' },
+  mt:  { valid:true,  name:'Modus Tollens',          form:'¬q, p→q ∴ ¬p' },
+  hs:  { valid:true,  name:'Silogisme Hipotetis',    form:'p→q, q→r ∴ p→r' },
+  ds:  { valid:true,  name:'Silogisme Disjungtif',   form:'p∨q, ¬p ∴ q' },
+  ac:  { valid:false, name:'Affirming the Consequent (FALLACY)', form:'p→q, q ∴ p' },
+  dc:  { valid:false, name:'Denying the Antecedent (FALLACY)',   form:'p→q, ¬p ∴ ¬q' },
+};
+
+function simB() {
+  const rule = document.getElementById('sB-rule').value;
+  const p = document.getElementById('sB-p').value || 'p';
+  const q = document.getElementById('sB-q').value || 'q';
+  const r = document.getElementById('sB-r').value || 'r';
+  const rd = ruleData[rule];
+  const el = document.getElementById('sB-result');
+
+  let steps = [];
+  if (rule==='mp')  steps = [`Premis 1: ${p}`, `Premis 2: Jika ${p} maka ${q}`, `Modus Ponens: dari P1+P2 → Kesimpulan: ${q}`];
+  if (rule==='mt')  steps = [`Premis 1: Tidak ${q}`, `Premis 2: Jika ${p} maka ${q}`, `Modus Tollens: dari P1+P2 → Kesimpulan: Tidak ${p}`];
+  if (rule==='hs')  steps = [`Premis 1: Jika ${p} maka ${q}`, `Premis 2: Jika ${q} maka ${r}`, `Silogisme Hipotetis → Kesimpulan: Jika ${p} maka ${r}`];
+  if (rule==='ds')  steps = [`Premis 1: ${p} atau ${q}`, `Premis 2: Tidak ${p}`, `Silogisme Disjungtif → Kesimpulan: ${q}`];
+  if (rule==='ac')  steps = [`Premis 1: Jika ${p} maka ${q}`, `Premis 2: ${q} (mengafirmasi konsekuen)`, `❌ TIDAK valid! ${p} belum tentu benar. (Kontracontoh: bisa ada penyebab lain yang membuat ${q} benar tanpa ${p})`];
+  if (rule==='dc')  steps = [`Premis 1: Jika ${p} maka ${q}`, `Premis 2: Tidak ${p} (menyangkal anteseden)`, `❌ TIDAK valid! Belum tentu tidak ${q}. (Kontracontoh: mungkin ada cara lain untuk ${q} benar)`];
+
+  const cls = rd.valid ? 'result-valid' : 'result-invalid';
+  const icon = rd.valid ? '✓' : '✗';
+  el.className = `result-panel show ${cls}`;
+  el.innerHTML = `
+    <h4>${icon} ${rd.name} — ${rd.valid ? 'VALID' : 'TIDAK VALID (Fallacy)'}</h4>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.82rem;opacity:.7;margin-bottom:.75rem">Bentuk: ${rd.form}</div>
+    <div class="result-steps">
+      ${steps.map(s=>`<div class="step-item"><div class="step-dot"></div><div>${s}</div></div>`).join('')}
+    </div>`;
+}
+
+// ── SIMULATOR C ──
+const templates = {
+  t1: {
+    title: 'Rantai Inferensi: Mahasiswa → Lulus',
+    valid: true,
+    steps: [
+      { step:'P1', text:'∀x (Mahasiswa(x) → Belajar(x))', rule:'Premis' },
+      { step:'P2', text:'∀x (Belajar(x) → NilaiTinggi(x))', rule:'Premis' },
+      { step:'P3', text:'∀x (NilaiTinggi(x) → Lulus(x))', rule:'Premis' },
+      { step:'P4', text:'Mahasiswa(Budi)', rule:'Premis' },
+      { step:'1',  text:'Mahasiswa(Budi) → Belajar(Budi)', rule:'Universal Instantiation dari P1' },
+      { step:'2',  text:'Belajar(Budi)', rule:'Modus Ponens: langkah 1 + P4' },
+      { step:'3',  text:'Belajar(Budi) → NilaiTinggi(Budi)', rule:'Universal Instantiation dari P2' },
+      { step:'4',  text:'NilaiTinggi(Budi)', rule:'Modus Ponens: langkah 3 + 2' },
+      { step:'5',  text:'NilaiTinggi(Budi) → Lulus(Budi)', rule:'Universal Instantiation dari P3' },
+      { step:'∴',  text:'<strong>Lulus(Budi)</strong>', rule:'Modus Ponens: langkah 5 + 4 — QED ✓' },
+    ]
+  },
+  t2: {
+    title: 'Penyangkalan: Kontracontoh Hewan Terbang',
+    valid: false,
+    steps: [
+      { step:'P1', text:'∀x (Burung(x) → BisaTerbang(x))', rule:'Premis (SALAH! kontracontoh ada)' },
+      { step:'P2', text:'Burung(Penguin)', rule:'Premis' },
+      { step:'1',  text:'Burung(Penguin) → BisaTerbang(Penguin)', rule:'Universal Instantiation dari P1' },
+      { step:'2',  text:'BisaTerbang(Penguin)', rule:'Modus Ponens: langkah 1 + P2' },
+      { step:'⚠',  text:'BisaTerbang(Penguin) = <strong>SALAH</strong> di dunia nyata!', rule:'Kontracontoh ditemukan → P1 SALAH' },
+      { step:'∴',  text:'Argumen tidak sehat (Unsound) karena premis P1 salah', rule:'Premis mengandung pernyataan yang tidak sesuai fakta' },
+    ]
+  },
+  t3: {
+    title: 'Existential Generalization',
+    valid: true,
+    steps: [
+      { step:'P1', text:'∀x (BilanganPrima(x) ∧ Genap(x) → x = 2)', rule:'Premis (fakta matematika)' },
+      { step:'P2', text:'BilanganPrima(2) ∧ Genap(2)', rule:'Premis (2 adalah prima dan genap)' },
+      { step:'1',  text:'BilanganPrima(2) ∧ Genap(2) → 2 = 2', rule:'Universal Instantiation dari P1, c = 2' },
+      { step:'2',  text:'2 = 2', rule:'Modus Ponens: langkah 1 + P2' },
+      { step:'3',  text:'∃x (BilanganPrima(x) ∧ Genap(x))', rule:'Existential Generalization dari P2' },
+      { step:'∴',  text:'<strong>Ada tepat satu bilangan prima genap, yaitu 2</strong>', rule:'QED ✓' },
+    ]
+  },
+  t4: {
+    title: 'Silogisme Hipotetis Universal',
+    valid: true,
+    steps: [
+      { step:'P1', text:'∀x (A(x) → B(x))', rule:'Premis' },
+      { step:'P2', text:'∀x (B(x) → C(x))', rule:'Premis' },
+      { step:'1',  text:'A(c) → B(c)', rule:'Universal Instantiation dari P1 (c sembarang)' },
+      { step:'2',  text:'B(c) → C(c)', rule:'Universal Instantiation dari P2 (c sembarang)' },
+      { step:'3',  text:'A(c) → C(c)', rule:'Silogisme Hipotetis: langkah 1 + 2' },
+      { step:'∴',  text:'<strong>∀x (A(x) → C(x))</strong>', rule:'Universal Generalization dari langkah 3 (c sembarang) — QED ✓' },
+    ]
+  }
+};
+
+function loadTemplate() {} // just keeping for the select
+
+function runTemplate() {
+  const key = document.getElementById('sC-template').value;
+  const t = templates[key];
+  const el = document.getElementById('sC-result');
+  const cls = t.valid ? 'result-valid' : 'result-invalid';
+
+  const rows = t.steps.map(s => `
+    <div style="display:flex;gap:.75rem;padding:.4rem 0;border-bottom:1px solid rgba(200,146,42,.15);font-size:.88rem">
+      <div style="font-family:'JetBrains Mono',monospace;min-width:2.5rem;color:var(--gold-light);font-weight:600">${s.step}</div>
+      <div style="flex:1">${s.text}</div>
+      <div style="color:rgba(245,239,226,.45);font-size:.78rem;text-align:right;min-width:160px">${s.rule}</div>
+    </div>`).join('');
+
+  el.className = `result-panel show ${cls}`;
+  el.innerHTML = `
+    <h4>${t.valid ? '✓' : '⚠'} ${t.title}</h4>
+    <div style="background:rgba(26,18,8,.6);border-radius:3px;padding:1rem;margin-top:.75rem;color:var(--cream)">
+      ${rows}
+    </div>`;
+}
+
+// ── QUIZ ──
+let quizAnswers = {};
+
+function checkQ(n, correct, explanation) {
+  const sel = document.querySelector(`input[name=q${n}]:checked`);
+  if (!sel) { alert('Pilih salah satu jawaban terlebih dahulu!'); return; }
+  const val = sel.value;
+  quizAnswers[n] = val === correct;
+
+  // highlight options
+  document.querySelectorAll(`#q${n} .quiz-option`).forEach(opt => {
+    const radio = opt.querySelector('input');
+    opt.classList.remove('correct','wrong');
+    if (radio.value === correct) opt.classList.add('correct');
+    else if (radio.value === val && val !== correct) opt.classList.add('wrong');
+    radio.disabled = true;
+  });
+
+  const fb = document.getElementById(`q${n}-fb`);
+  fb.style.display = 'block';
+  if (val === correct) {
+    fb.className = 'quiz-feedback feedback-ok';
+    fb.innerHTML = '✓ Benar! ' + explanation;
+  } else {
+    fb.className = 'quiz-feedback feedback-no';
+    fb.innerHTML = '✗ Kurang tepat. ' + explanation;
+  }
+}
+
+function showFinalScore() {
+  const answered = Object.keys(quizAnswers).length;
+  if (answered < 6) { alert(`Masih ada ${6-answered} soal yang belum dijawab!`); return; }
+  const score = Object.values(quizAnswers).filter(Boolean).length;
+  const pct = Math.round(score/6*100);
+  const msgs = [
+    [6, '🏆 Sempurna! Penguasaan materi sangat baik.'],
+    [5, '🌟 Luar biasa! Hampir sempurna.'],
+    [4, '👍 Bagus! Sedikit lagi untuk sempurna.'],
+    [3, '📖 Cukup baik. Ulangi bagian yang kurang.'],
+    [0, '💪 Perlu belajar lebih lanjut. Ayo ulangi materinya!'],
+  ];
+  const msg = msgs.find(([min]) => score >= min)[1];
+  const disp = document.getElementById('quiz-score-display');
+  document.getElementById('score-num').textContent = `${score}/6 (${pct}%)`;
+  document.getElementById('score-msg').textContent = msg;
+  disp.style.display = 'block';
+  disp.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function resetQuiz() {
+  quizAnswers = {};
+  document.querySelectorAll('.quiz-option').forEach(o => {
+    o.classList.remove('correct','wrong');
+    o.querySelector('input').disabled = false;
+    o.querySelector('input').checked = false;
+  });
+  document.querySelectorAll('.quiz-feedback').forEach(f => f.style.display='none');
+  document.getElementById('quiz-score-display').style.display = 'none';
+}
+</script>
+</body>
+</html>
