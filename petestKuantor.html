@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuis Logika & Kuantor</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0d0d0d;
+    --paper: #f5f0e8;
+    --accent: #c8102e;
+    --gold: #b8860b;
+    --steel: #2c3e50;
+    --muted: #7a7060;
+    --correct: #1a6b3a;
+    --wrong: #c8102e;
+    --line: #d4c9b0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 18px;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 31px,
+        var(--line) 31px,
+        var(--line) 32px
+      );
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page-wrap {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── HEADER ── */
+  header {
+    border-top: 4px double var(--ink);
+    border-bottom: 4px double var(--ink);
+    padding: 20px 0;
+    margin-bottom: 40px;
+    text-align: center;
+  }
+
+  .kicker {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--ink);
+  }
+
+  h1 em {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .subtitle {
+    margin-top: 8px;
+    color: var(--muted);
+    font-style: italic;
+    font-size: 16px;
+  }
+
+  /* ── PROGRESS ── */
+  .progress-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 36px;
+  }
+
+  .progress-track {
+    flex: 1;
+    height: 6px;
+    background: var(--line);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+    width: 0%;
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+  }
+
+  .progress-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* ── QUESTION CARD ── */
+  .question-card {
+    background: rgba(255,255,255,0.6);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--ink);
+    padding: 28px 32px 24px;
+    margin-bottom: 28px;
+    position: relative;
+    animation: cardIn 0.4s ease both;
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  .q-text {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--ink);
+    margin-bottom: 20px;
+  }
+
+  .q-text .formula {
+    font-family: 'DM Mono', monospace;
+    background: rgba(0,0,0,0.05);
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-size: 15px;
+    color: var(--steel);
+  }
+
+  /* ── OPTIONS ── */
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .option-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    cursor: pointer;
+    padding: 12px 16px;
+    border: 1.5px solid var(--line);
+    background: rgba(255,255,255,0.5);
+    transition: all 0.18s ease;
+    position: relative;
+  }
+
+  .option-label:hover {
+    border-color: var(--steel);
+    background: rgba(255,255,255,0.9);
+  }
+
+  .option-label input[type="radio"] {
+    display: none;
+  }
+
+  .option-bullet {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--muted);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.18s;
+  }
+
+  .option-label input:checked ~ .option-bullet {
+    border-color: var(--ink);
+    background: var(--ink);
+  }
+
+  .option-label input:checked ~ .option-bullet::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--paper);
+    border-radius: 50%;
+  }
+
+  .option-text {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink);
+    flex: 1;
+  }
+
+  /* Feedback states */
+  .option-label.correct {
+    border-color: var(--correct);
+    background: rgba(26,107,58,0.07);
+  }
+
+  .option-label.wrong {
+    border-color: var(--wrong);
+    background: rgba(200,16,46,0.06);
+  }
+
+  .option-label.correct .option-bullet {
+    border-color: var(--correct);
+    background: var(--correct);
+  }
+
+  .option-label.wrong .option-bullet {
+    border-color: var(--wrong);
+    background: var(--wrong);
+  }
+
+  .feedback-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-top: 4px;
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  .badge-correct { background: var(--correct); color: #fff; }
+  .badge-wrong   { background: var(--wrong);   color: #fff; }
+
+  /* ── EXPLANATION ── */
+  .explanation {
+    display: none;
+    margin-top: 18px;
+    padding: 16px 18px;
+    border-left: 3px solid var(--gold);
+    background: rgba(184,134,11,0.06);
+    font-style: italic;
+    font-size: 15px;
+    color: var(--steel);
+    line-height: 1.65;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .explanation.show { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+
+  .explanation strong {
+    font-style: normal;
+    color: var(--gold);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  /* ── BUTTONS ── */
+  .btn-row {
+    display: flex;
+    gap: 14px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 14px 32px;
+    border: 2px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  .btn.primary:hover {
+    background: #a00d26;
+    border-color: #a00d26;
+  }
+
+  .btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* ── SCORE PANEL ── */
+  #score-panel {
+    display: none;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 48px 40px;
+    text-align: center;
+    animation: cardIn 0.5s ease;
+    margin-top: 32px;
+  }
+
+  #score-panel h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    margin-bottom: 8px;
+  }
+
+  #score-panel .score-big {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 10vw, 5rem);
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    margin: 16px 0;
+  }
+
+  #score-panel .score-sub {
+    font-style: italic;
+    color: #c8bfa8;
+    font-size: 16px;
+    margin-bottom: 24px;
+  }
+
+  .grade-badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    padding: 8px 20px;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    margin-bottom: 28px;
+  }
+
+  /* ── FORM STATUS ── */
+  #form-status {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 14px 20px;
+    margin-top: 20px;
+    letter-spacing: 0.06em;
+    display: none;
+  }
+
+  #form-status.sending { background: rgba(184,134,11,0.1); color: var(--gold); border: 1px solid var(--gold); display: block; }
+  #form-status.success { background: rgba(26,107,58,0.1); color: var(--correct); border: 1px solid var(--correct); display: block; }
+  #form-status.error   { background: rgba(200,16,46,0.1); color: var(--wrong); border: 1px solid var(--wrong); display: block; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    text-align: center;
+    margin: 36px 0;
+    position: relative;
+    color: var(--muted);
+    font-style: italic;
+    font-size: 14px;
+  }
+
+  .divider::before, .divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 35%;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .divider::before { left: 0; }
+  .divider::after  { right: 0; }
+
+  @media (max-width: 600px) {
+    .page-wrap { padding: 28px 16px 60px; }
+    .question-card { padding: 20px 18px; }
+    .btn { padding: 12px 20px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <header>
+    <p class="kicker">Matematika Logika · Tingkat Menengah</p>
+    <h1>Kuantor &amp; <em>Logika</em> Kesimpulan</h1>
+    <p class="subtitle">Sepuluh soal analisis — jawab dengan cermat, hasilnya otomatis dikirim.</p>
+  </header>
+
+  <div class="progress-bar-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <span class="progress-label" id="progress-label">0 / 10</span>
+  </div>
+
+  <div id="quiz-container"></div>
+
+  <div class="btn-row">
+    <button class="btn primary" id="submit-btn" onclick="submitQuiz()">Selesai &amp; Kirim Nilai</button>
+    <button class="btn" id="reset-btn" onclick="resetQuiz()">Ulangi</button>
+  </div>
+
+  <div id="score-panel">
+    <h2>Hasil Kuis</h2>
+    <div class="score-big" id="score-display">0/10</div>
+    <p class="score-sub" id="score-pct"></p>
+    <div class="grade-badge" id="grade-badge"></div>
+    <div id="form-status"></div>
+  </div>
+
+</div>
+
+<script>
+/* ════════════════════════════════════════════
+   DATA SOAL
+   ════════════════════════════════════════════ */
+const QUESTIONS = [
+  {
+    text: `Perhatikan pernyataan berikut: <span class="formula">∀x ∈ ℝ, x² ≥ 0</span>. Manakah nilai yang dapat menjadi <em>kontraposisi</em> dari pernyataan tersebut?`,
+    options: [
+      "Terdapat x ∈ ℝ sehingga x² < 0",
+      "Jika x² < 0 maka x ∉ ℝ",
+      "∃x ∈ ℝ, x² ≥ 0",
+      "Jika x ∈ ℝ maka x² = 0"
+    ],
+    answer: 1,
+    explanation: "Kontraposisi dari \"Jika P maka Q\" adalah \"Jika ¬Q maka ¬P\". Di sini P = x ∈ ℝ, Q = x² ≥ 0, sehingga kontraposinya: Jika x² < 0 maka x ∉ ℝ."
+  },
+  {
+    text: `Diberikan premis: (1) <span class="formula">∀x, P(x) → Q(x)</span> dan (2) <span class="formula">∃x, P(x)</span>. Apa kesimpulan yang sahih berdasarkan aturan inferensi?`,
+    options: [
+      "∀x, Q(x)",
+      "∃x, Q(x)",
+      "¬∃x, Q(x)",
+      "∀x, P(x)"
+    ],
+    answer: 1,
+    explanation: "Dari premis (2) terdapat x tertentu sehingga P(x) benar. Dengan premis (1), untuk x tersebut Q(x) juga benar. Maka kita hanya bisa menyimpulkan ∃x, Q(x) — bukan ∀x, Q(x)."
+  },
+  {
+    text: `Negasi dari <span class="formula">∀x ∈ A, P(x) ∧ Q(x)</span> adalah...`,
+    options: [
+      "∃x ∈ A, ¬P(x) ∨ ¬Q(x)",
+      "∀x ∈ A, ¬P(x) ∧ ¬Q(x)",
+      "∃x ∈ A, ¬P(x) ∧ ¬Q(x)",
+      "∀x ∈ A, ¬P(x) ∨ Q(x)"
+    ],
+    answer: 0,
+    explanation: "Negasi ∀ menjadi ∃, dan negasi (P ∧ Q) adalah (¬P ∨ ¬Q) sesuai Hukum De Morgan. Jadi hasilnya: ∃x ∈ A, ¬P(x) ∨ ¬Q(x)."
+  },
+  {
+    text: `Manakah argumen berikut yang merupakan contoh <em>Modus Tollens</em> yang valid?`,
+    options: [
+      "Jika hujan maka jalan basah. Jalan basah. Jadi hujan.",
+      "Jika hujan maka jalan basah. Tidak hujan. Jadi jalan tidak basah.",
+      "Jika hujan maka jalan basah. Jalan tidak basah. Jadi tidak hujan.",
+      "Jika hujan maka jalan basah. Hujan. Jadi jalan basah."
+    ],
+    answer: 2,
+    explanation: "Modus Tollens: \"Jika P → Q, dan ¬Q, maka ¬P\". Pilihan C: P→Q, ¬Q (jalan tidak basah), kesimpulan ¬P (tidak hujan) — ini tepat. Pilihan A adalah Penegasan Konsekuen (sesat pikir). Pilihan D adalah Modus Ponens."
+  },
+  {
+    text: `Diketahui: <span class="formula">∀x, Mamalia(x) → BerdarahPanas(x)</span>. Ikan paus adalah mamalia. Kesimpulan apa yang dapat ditarik dengan <em>Universal Instantiation</em>?`,
+    options: [
+      "Semua hewan berdarah panas adalah mamalia",
+      "Ikan paus berdarah panas",
+      "Terdapat mamalia yang tidak berdarah panas",
+      "Ikan paus bukan mamalia"
+    ],
+    answer: 1,
+    explanation: "Universal Instantiation: jika ∀x, P(x) berlaku, dan 'ikan paus' adalah anggota domain, maka P(ikan paus) berlaku. Dengan premis tambahan Mamalia(ikan paus), disimpulkan BerdarahPanas(ikan paus)."
+  },
+  {
+    text: `Perhatikan: <span class="formula">p → q</span>, <span class="formula">q → r</span>. Kesimpulan mana yang valid berdasarkan <em>Silogisme Hipotetis</em>?`,
+    options: [
+      "p ↔ r",
+      "r → p",
+      "p → r",
+      "¬p → ¬r"
+    ],
+    answer: 2,
+    explanation: "Silogisme Hipotetis: dari (p→q) dan (q→r), dapat disimpulkan p→r. Ini adalah rantai implikasi transitif yang valid."
+  },
+  {
+    text: `Tentukan nilai kebenaran dari <span class="formula">∃x ∈ ℤ, (x² = 2)</span>.`,
+    options: [
+      "Benar, karena x = √2 memenuhi",
+      "Salah, karena √2 bukan bilangan bulat",
+      "Benar, karena pernyataan eksistensial tidak bisa dibuktikan salah",
+      "Tak tentu, tergantung domain"
+    ],
+    answer: 1,
+    explanation: "Domain dinyatakan ℤ (bilangan bulat). √2 ≈ 1,414… bukan bilangan bulat, sehingga tidak ada anggota ℤ yang kuadratnya tepat 2. Pernyataan ini SALAH."
+  },
+  {
+    text: `Ekspresi <span class="formula">¬(∃x, P(x)) ↔ (∀x, ¬P(x))</span> merupakan...`,
+    options: [
+      "Kontradiksi (selalu salah)",
+      "Kontingen (kadang benar kadang salah)",
+      "Tautologi (selalu benar)",
+      "Hanya benar jika P(x) adalah predikat konstan"
+    ],
+    answer: 2,
+    explanation: "Ini adalah salah satu Hukum Kuantor De Morgan yang fundamental: ¬(∃x, P(x)) ≡ ∀x, ¬P(x). Biimplikasi dari dua ekspresi yang selalu ekuivalen adalah tautologi."
+  },
+  {
+    text: `Diberikan: Semua politisi adalah pembohong. Sebagian pembohong adalah selebriti. Kesimpulan apa yang <em>pasti</em> benar?`,
+    options: [
+      "Semua politisi adalah selebriti",
+      "Sebagian politisi adalah pembohong",
+      "Semua selebriti adalah politisi",
+      "Tidak ada selebriti yang bukan pembohong"
+    ],
+    answer: 1,
+    explanation: "Premis 1: ∀x, Politisi(x)→Pembohong(x). Maka setiap politisi pastilah pembohong, sehingga \"Sebagian politisi adalah pembohong\" benar (bahkan semua). Premis 2 tidak cukup untuk menghubungkan politisi dengan selebriti secara pasti."
+  },
+  {
+    text: `Manakah pernyataan yang merupakan <em>negasi</em> yang benar dari: <span class="formula">"Jika semua siswa lulus, maka sekolah mendapat penghargaan."</span>?`,
+    options: [
+      "Jika sekolah tidak mendapat penghargaan, maka ada siswa yang tidak lulus",
+      "Semua siswa lulus dan sekolah tidak mendapat penghargaan",
+      "Ada siswa yang tidak lulus atau sekolah mendapat penghargaan",
+      "Jika ada siswa yang tidak lulus, maka sekolah tidak mendapat penghargaan"
+    ],
+    answer: 1,
+    explanation: "Negasi dari (P → Q) adalah (P ∧ ¬Q). Di sini P = \"semua siswa lulus\", Q = \"sekolah mendapat penghargaan\". Negazinya: \"Semua siswa lulus DAN sekolah tidak mendapat penghargaan\"."
+  }
+];
+
+/* ════════════════════════════════════════════
+   GOOGLE FORM CONFIG
+   Ganti dengan URL & entry ID Google Form Anda
+   ════════════════════════════════════════════ */
+const FORM_CONFIG = {
+  // Contoh URL Google Form (ganti dengan milik Anda)
+  formUrl: "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfpcVkBoQExkZiOF8PXho4RJKOa9xwp6AztxZypO5PU5JNHwg/formResponse",
+  fields: {
+    nama   : "entry.742103191",   // ganti dengan entry ID kolom Nama
+    skor   : "entry.353250957",   // ganti dengan entry ID kolom Skor
+    persen : "entry.911488098",   // ganti dengan entry ID kolom Persentase
+    detail : "entry.1431501271"    // ganti dengan entry ID kolom Detail Jawaban
+  }
+};
+
+/* ════════════════════════════════════════════
+   STATE
+   ════════════════════════════════════════════ */
+let answered = new Array(QUESTIONS.length).fill(null);
+let submitted = false;
+
+/* ════════════════════════════════════════════
+   RENDER
+   ════════════════════════════════════════════ */
+function renderQuiz() {
+  const container = document.getElementById('quiz-container');
+  container.innerHTML = '';
+
+  QUESTIONS.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `q-${qi}`;
+    card.style.animationDelay = `${qi * 0.05}s`;
+
+    const optionsHtml = q.options.map((opt, oi) => `
+      <label class="option-label" id="opt-${qi}-${oi}">
+        <input type="radio" name="q${qi}" value="${oi}" onchange="selectOption(${qi}, ${oi})">
+        <span class="option-bullet"></span>
+        <span class="option-text">${opt}</span>
+      </label>
+    `).join('');
+
+    card.innerHTML = `
+      <div class="q-number">Soal ${qi + 1} dari ${QUESTIONS.length}</div>
+      <div class="q-text">${q.text}</div>
+      <div class="options">${optionsHtml}</div>
+      <div class="explanation" id="exp-${qi}">
+        <strong>✦ Pembahasan</strong>
+        ${q.explanation}
+      </div>
+    `;
+
+    container.appendChild(card);
+    if (qi < QUESTIONS.length - 1) {
+      const div = document.createElement('div');
+      div.className = 'divider';
+      div.innerHTML = '✦ ✦ ✦';
+      container.appendChild(div);
+    }
+  });
+
+  updateProgress();
+}
+
+/* ════════════════════════════════════════════
+   INTERACTION
+   ════════════════════════════════════════════ */
+function selectOption(qi, oi) {
+  if (submitted) return;
+  answered[qi] = oi;
+  updateProgress();
+}
+
+function updateProgress() {
+  const done = answered.filter(a => a !== null).length;
+  const pct  = (done / QUESTIONS.length) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = `${done} / ${QUESTIONS.length}`;
+}
+
+/* ════════════════════════════════════════════
+   SUBMIT
+   ════════════════════════════════════════════ */
+function submitQuiz() {
+  const unanswered = answered.filter(a => a === null).length;
+  if (unanswered > 0) {
+    alert(`Masih ada ${unanswered} soal yang belum dijawab. Selesaikan semua soal terlebih dahulu!`);
+    return;
+  }
+
+  submitted = true;
+  document.getElementById('submit-btn').disabled = true;
+
+  // Hitung skor
+  let correct = 0;
+  const detailParts = [];
+
+  QUESTIONS.forEach((q, qi) => {
+    const chosen = answered[qi];
+    const isRight = chosen === q.answer;
+    if (isRight) correct++;
+
+    detailParts.push(`S${qi+1}: ${isRight ? 'BENAR' : 'SALAH'} (dipilih: ${q.options[chosen]}, benar: ${q.options[q.answer]})`);
+
+    // Tampilkan feedback visual
+    q.options.forEach((_, oi) => {
+      const lbl = document.getElementById(`opt-${qi}-${oi}`);
+      lbl.style.pointerEvents = 'none';
+      if (oi === q.answer) {
+        lbl.classList.add('correct');
+        if (oi === chosen) {
+          const badge = document.createElement('span');
+          badge.className = 'feedback-badge badge-correct';
+          badge.textContent = 'BENAR';
+          lbl.appendChild(badge);
+        }
+      } else if (oi === chosen && chosen !== q.answer) {
+        lbl.classList.add('wrong');
+        const badge = document.createElement('span');
+        badge.className = 'feedback-badge badge-wrong';
+        badge.textContent = 'SALAH';
+        lbl.appendChild(badge);
+      }
+    });
+
+    // Tampilkan penjelasan
+    document.getElementById(`exp-${qi}`).classList.add('show');
+  });
+
+  const pct  = Math.round((correct / QUESTIONS.length) * 100);
+  const grade = pct >= 90 ? 'A — Istimewa' :
+                pct >= 75 ? 'B — Baik' :
+                pct >= 60 ? 'C — Cukup' :
+                pct >= 40 ? 'D — Kurang' : 'E — Perlu Remedial';
+
+  // Tampilkan score panel
+  const panel = document.getElementById('score-panel');
+  panel.style.display = 'block';
+  document.getElementById('score-display').textContent = `${correct}/10`;
+  document.getElementById('score-pct').textContent = `Persentase benar: ${pct}%`;
+  document.getElementById('grade-badge').textContent = grade;
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Kirim ke Google Form
+  sendToGoogleForm(correct, pct, detailParts.join(' | '));
+}
+
+/* ════════════════════════════════════════════
+   KIRIM KE GOOGLE FORM
+   ════════════════════════════════════════════ */
+function sendToGoogleForm(skor, persen, detail) {
+  const status = document.getElementById('form-status');
+  status.className = 'sending';
+  status.textContent = '⏳ Mengirim hasil ke Google Form...';
+
+  // Ambil nama dari prompt (opsional) atau gunakan timestamp
+  const nama = prompt('Masukkan nama Anda untuk rekap nilai (opsional, tekan Batal untuk anonim):') || `Anonim-${Date.now()}`;
+
+  const body = new URLSearchParams();
+  body.append(FORM_CONFIG.fields.nama,   nama);
+  body.append(FORM_CONFIG.fields.skor,   `${skor}/10`);
+  body.append(FORM_CONFIG.fields.persen, `${persen}%`);
+  body.append(FORM_CONFIG.fields.detail, detail);
+
+  // Kirim via no-cors (Google Form menerima ini)
+  fetch(FORM_CONFIG.formUrl, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString()
+  })
+  .then(() => {
+    status.className = 'success';
+    status.textContent = `✔ Berhasil dikirim! Nama: ${nama} · Skor: ${skor}/10 (${persen}%)`;
+  })
+  .catch(err => {
+    status.className = 'error';
+    status.textContent = `✘ Gagal kirim otomatis. Skor Anda: ${skor}/10 (${persen}%). Error: ${err.message}`;
+    console.warn('Google Form error:', err);
+  });
+}
+
+/* ════════════════════════════════════════════
+   RESET
+   ════════════════════════════════════════════ */
+function resetQuiz() {
+  answered  = new Array(QUESTIONS.length).fill(null);
+  submitted = false;
+  document.getElementById('submit-btn').disabled = false;
+  document.getElementById('score-panel').style.display = 'none';
+  document.getElementById('form-status').className = '';
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ════════════════════════════════════════════
+   INIT
+   ════════════════════════════════════════════ */
+renderQuiz();
+</script>
+</body>
+</html>
