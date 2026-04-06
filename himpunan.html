@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teorema Himpunan - Matematika Diskrit</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --ink: #1a1410;
+    --ink-soft: #3d3025;
+    --ink-faint: #6b5c4a;
+    --parchment: #f5f0e8;
+    --parchment-warm: #ede7d8;
+    --parchment-dark: #d8cebf;
+    --gold: #c8922a;
+    --gold-light: #e8b84b;
+    --gold-pale: #f7e8c8;
+    --crimson: #8b1a1a;
+    --teal: #1a5c5c;
+    --teal-light: #e8f5f5;
+    --accent-blue: #1a3a6b;
+    --accent-blue-light: #e8eef7;
+    --border: rgba(100, 80, 50, 0.25);
+    --shadow: rgba(50, 30, 10, 0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--parchment);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.75;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at 10% 20%, rgba(200,146,42,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 90% 80%, rgba(26,92,92,0.05) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  .page-header {
+    text-align: center;
+    padding: 3.5rem 0 2.5rem;
+    border-bottom: 1.5px solid var(--gold);
+    margin-bottom: 3rem;
+    position: relative;
+  }
+
+  .page-header::before {
+    content: '⬡';
+    display: block;
+    font-size: 28px;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    opacity: 0.7;
+  }
+
+  .subject-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    border: 1px solid var(--border);
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 1.2rem;
+    background: var(--parchment-warm);
+  }
+
+  h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--ink);
+    line-height: 1.15;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+  }
+
+  .subtitle {
+    font-size: 17px;
+    color: var(--ink-faint);
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .meta-info {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .meta-chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .meta-chip::before { content: '◆'; font-size: 8px; color: var(--gold); }
+
+  /* NAV */
+  .toc {
+    background: var(--parchment-warm);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--gold);
+    padding: 1.5rem 2rem;
+    margin-bottom: 3rem;
+    border-radius: 2px;
+  }
+
+  .toc-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+    margin-bottom: 1rem;
+  }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 6px 2rem;
+  }
+
+  .toc a {
+    color: var(--accent-blue);
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 2px 0;
+    transition: color 0.2s;
+  }
+
+  .toc a:hover { color: var(--gold); }
+  .toc-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    min-width: 20px;
+  }
+
+  /* SECTIONS */
+  .section {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    opacity: 0.6;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+    margin: 1.5rem 0 0.75rem;
+  }
+
+  p { margin-bottom: 1rem; color: var(--ink-soft); }
+
+  /* TEOREMA BOX */
+  .theorem-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--gold);
+    padding: 1.5rem 1.75rem;
+    margin: 1.5rem 0;
+    border-radius: 2px;
+    box-shadow: 0 2px 8px var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .theorem-card::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 60px; height: 60px;
+    background: linear-gradient(135deg, var(--gold-pale) 0%, transparent 100%);
+    opacity: 0.5;
+  }
+
+  .theorem-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--gold);
+    color: white;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 2px;
+    margin-bottom: 1rem;
+  }
+
+  .theorem-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+  }
+
+  .formula-block {
+    background: var(--parchment-warm);
+    border: 1px solid var(--parchment-dark);
+    border-radius: 4px;
+    padding: 1rem 1.25rem;
+    margin: 0.75rem 0;
+    font-size: 15px;
+    overflow-x: auto;
+    text-align: center;
+  }
+
+  .formula-row {
+    margin: 0.4rem 0;
+    color: var(--ink);
+  }
+
+  /* AXIOM / DEFINISI */
+  .axiom-card {
+    background: var(--accent-blue-light);
+    border: 1px solid rgba(26,58,107,0.2);
+    border-left: 4px solid var(--accent-blue);
+    padding: 1.25rem 1.5rem;
+    margin: 1.25rem 0;
+    border-radius: 2px;
+  }
+
+  .axiom-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-blue);
+    margin-bottom: 0.5rem;
+  }
+
+  .axiom-text {
+    color: var(--ink-soft);
+    font-size: 15px;
+  }
+
+  /* CONTOH */
+  .example-card {
+    background: var(--teal-light);
+    border: 1px solid rgba(26,92,92,0.2);
+    border-left: 4px solid var(--teal);
+    padding: 1.25rem 1.5rem;
+    margin: 1.25rem 0;
+    border-radius: 2px;
+  }
+
+  .example-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 0.5rem;
+  }
+
+  /* CATATAN */
+  .note-card {
+    background: var(--gold-pale);
+    border: 1px solid rgba(200,146,42,0.3);
+    border-left: 4px solid var(--gold);
+    padding: 1rem 1.5rem;
+    margin: 1.25rem 0;
+    border-radius: 2px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  .note-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+
+  /* TABEL */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.25rem 0;
+    font-size: 14px;
+  }
+
+  thead th {
+    background: var(--ink-soft);
+    color: var(--parchment);
+    padding: 10px 14px;
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    font-weight: 400;
+  }
+
+  tbody tr:nth-child(even) { background: var(--parchment-warm); }
+  tbody tr:nth-child(odd) { background: white; }
+  tbody td { padding: 9px 14px; border-bottom: 1px solid var(--border); color: var(--ink-soft); }
+  tbody td:first-child { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--ink); }
+
+  /* VENN DIAGRAM INTERACTIVE */
+  .venn-demo {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .venn-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 1rem;
+  }
+
+  .venn-controls {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+
+  .venn-btn {
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    background: var(--parchment-warm);
+    color: var(--ink-soft);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  .venn-btn:hover { background: var(--gold-pale); border-color: var(--gold); color: var(--ink); }
+  .venn-btn.active { background: var(--gold); border-color: var(--gold); color: white; }
+
+  .venn-svg-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  #venn-svg { flex: 0 0 auto; }
+
+  .venn-info {
+    flex: 1;
+    min-width: 200px;
+    font-size: 14px;
+  }
+
+  .venn-info-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+
+  .venn-info-formula {
+    background: var(--parchment-warm);
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    border-radius: 2px;
+    font-size: 13px;
+    margin-bottom: 0.5rem;
+  }
+
+  .venn-info-desc { color: var(--ink-faint); font-size: 13px; }
+
+  /* LIST */
+  ul, ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+  li { margin-bottom: 0.4rem; color: var(--ink-soft); }
+  li::marker { color: var(--gold); }
+
+  .pair-list { list-style: none; padding: 0; }
+  .pair-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .pair-list li:last-child { border-bottom: none; }
+  .pair-key {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--crimson);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+  .pair-val { font-size: 14px; color: var(--ink-soft); }
+
+  /* PROOF */
+  .proof-block {
+    border: 1px dashed var(--parchment-dark);
+    padding: 1.25rem 1.5rem;
+    margin: 1rem 0;
+    background: var(--parchment-warm);
+    border-radius: 2px;
+    position: relative;
+  }
+
+  .proof-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .proof-qed {
+    text-align: right;
+    font-size: 20px;
+    color: var(--ink-faint);
+    margin-top: 0.75rem;
+  }
+
+  .proof-step {
+    display: flex;
+    gap: 1rem;
+    margin: 0.4rem 0;
+    align-items: baseline;
+  }
+
+  .proof-step-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    min-width: 24px;
+    flex-shrink: 0;
+  }
+
+  /* DIVIDER */
+  .ornament {
+    text-align: center;
+    color: var(--gold);
+    font-size: 18px;
+    letter-spacing: 0.5em;
+    margin: 2.5rem 0;
+    opacity: 0.5;
+  }
+
+  /* FOOTER */
+  .page-footer {
+    border-top: 1px solid var(--border);
+    padding-top: 2rem;
+    margin-top: 3rem;
+    text-align: center;
+    font-size: 13px;
+    color: var(--ink-faint);
+    font-style: italic;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    background: var(--parchment-warm);
+    padding: 1px 6px;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+    color: var(--crimson);
+  }
+
+  .highlight-box {
+    background: var(--parchment-warm);
+    border: 1px solid var(--border);
+    padding: 1.25rem 1.5rem;
+    margin: 1.25rem 0;
+    border-radius: 2px;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+
+  @media (max-width: 640px) {
+    h1 { font-size: 2.1rem; }
+    .two-col { grid-template-columns: 1fr; }
+    .venn-svg-wrap { flex-direction: column; }
+    .meta-info { gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <header class="page-header">
+    <div class="subject-badge">Matematika Diskrit · IKIP Siliwangi</div>
+    <h1>Teorema Himpunan</h1>
+    <p class="subtitle">Kajian lengkap hukum-hukum fundamental dalam teori himpunan</p>
+    <div class="meta-info">
+      <span class="meta-chip">Martin Bernard, M.Pd.</span>
+      <span class="meta-chip">Pendidikan Matematika</span>
+      <span class="meta-chip">Semester Ganjil</span>
+    </div>
+  </header>
+
+  <!-- DAFTAR ISI -->
+  <nav class="toc">
+    <div class="toc-title">Daftar Isi</div>
+    <div class="toc-grid">
+      <a href="#s1"><span class="toc-num">01</span>Definisi Dasar Himpunan</a>
+      <a href="#s2"><span class="toc-num">02</span>Operasi Himpunan</a>
+      <a href="#s3"><span class="toc-num">03</span>Hukum Identitas</a>
+      <a href="#s4"><span class="toc-num">04</span>Hukum Dominasi</a>
+      <a href="#s5"><span class="toc-num">05</span>Hukum Idempoten</a>
+      <a href="#s6"><span class="toc-num">06</span>Hukum Komplemen</a>
+      <a href="#s7"><span class="toc-num">07</span>Hukum Komutatif</a>
+      <a href="#s8"><span class="toc-num">08</span>Hukum Asosiatif</a>
+      <a href="#s9"><span class="toc-num">09</span>Hukum Distributif</a>
+      <a href="#s10"><span class="toc-num">10</span>Hukum De Morgan</a>
+      <a href="#s11"><span class="toc-num">11</span>Hukum Absorpsi</a>
+      <a href="#s12"><span class="toc-num">12</span>Diagram Venn Interaktif</a>
+      <a href="#s13"><span class="toc-num">13</span>Bukti Teorema</a>
+      <a href="#s14"><span class="toc-num">14</span>Tabel Ringkasan</a>
+    </div>
+  </nav>
+
+  <!-- SECTION 1: DEFINISI DASAR -->
+  <section class="section" id="s1">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>Definisi Dasar Himpunan</h2>
+    </div>
+
+    <p>Sebuah <strong>himpunan</strong> adalah kumpulan objek yang terdefinisi dengan jelas (well-defined), yang disebut <em>elemen</em> atau <em>anggota</em>. Teori himpunan menjadi fondasi dari seluruh matematika modern.</p>
+
+    <div class="axiom-card">
+      <div class="axiom-label">Definisi 1.1 — Himpunan</div>
+      <div class="axiom-text">Himpunan \(A\) adalah koleksi benda-benda tertentu yang dianggap sebagai satu kesatuan. Jika \(x\) adalah elemen \(A\), maka ditulis \(x \in A\). Jika tidak, ditulis \(x \notin A\).</div>
+    </div>
+
+    <h3>Notasi Himpunan</h3>
+    <ul class="pair-list">
+      <li><span class="pair-key">Notasi Daftar</span><span class="pair-val">\(A = \{1, 2, 3, 4, 5\}\) — mendaftar semua anggota</span></li>
+      <li><span class="pair-key">Notasi Pembentuk</span><span class="pair-val">\(A = \{x \mid P(x)\}\) — menggunakan predikat</span></li>
+      <li><span class="pair-key">Kardinalitas</span><span class="pair-val">\(|A|\) atau \(n(A)\) — jumlah elemen dalam \(A\)</span></li>
+    </ul>
+
+    <h3>Himpunan-Himpunan Khusus</h3>
+    <ul class="pair-list">
+      <li><span class="pair-key">\(\emptyset\) atau \(\{\}\)</span><span class="pair-val">Himpunan kosong — tidak memiliki anggota, \(|\emptyset| = 0\)</span></li>
+      <li><span class="pair-key">\(U\) atau \(S\)</span><span class="pair-val">Himpunan semesta — memuat semua objek yang dibicarakan</span></li>
+      <li><span class="pair-key">\(\mathbb{N}\)</span><span class="pair-val">Himpunan bilangan asli: \(\{0, 1, 2, 3, \ldots\}\)</span></li>
+      <li><span class="pair-key">\(\mathbb{Z}\)</span><span class="pair-val">Himpunan bilangan bulat: \(\{\ldots, -2, -1, 0, 1, 2, \ldots\}\)</span></li>
+      <li><span class="pair-key">\(\mathbb{Q}\)</span><span class="pair-val">Himpunan bilangan rasional</span></li>
+      <li><span class="pair-key">\(\mathbb{R}\)</span><span class="pair-val">Himpunan bilangan real</span></li>
+    </ul>
+
+    <div class="axiom-card">
+      <div class="axiom-label">Definisi 1.2 — Kesamaan Himpunan</div>
+      <div class="axiom-text">Dua himpunan \(A\) dan \(B\) dikatakan <strong>sama</strong>, ditulis \(A = B\), jika dan hanya jika keduanya memiliki anggota yang persis sama. Secara formal: \(A = B \Leftrightarrow \forall x\, (x \in A \leftrightarrow x \in B)\).</div>
+    </div>
+
+    <div class="axiom-card">
+      <div class="axiom-label">Definisi 1.3 — Himpunan Bagian</div>
+      <div class="axiom-text">\(A \subseteq B\) (A adalah himpunan bagian dari B) jika dan hanya jika setiap anggota \(A\) juga merupakan anggota \(B\). Secara formal: \(A \subseteq B \Leftrightarrow \forall x\, (x \in A \rightarrow x \in B)\).</div>
+    </div>
+  </section>
+
+  <div class="ornament">◆ ◇ ◆</div>
+
+  <!-- SECTION 2: OPERASI -->
+  <section class="section" id="s2">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Operasi Himpunan</h2>
+    </div>
+
+    <p>Operasi pada himpunan menghasilkan himpunan baru dari himpunan yang ada. Ada empat operasi utama yang akan sering digunakan dalam teorema-teorema berikut.</p>
+
+    <div class="two-col">
+      <div class="axiom-card">
+        <div class="axiom-label">Gabungan (Union)</div>
+        <div class="axiom-text">\[A \cup B = \{x \mid x \in A \text{ atau } x \in B\}\]</div>
+      </div>
+      <div class="axiom-card">
+        <div class="axiom-label">Irisan (Intersection)</div>
+        <div class="axiom-text">\[A \cap B = \{x \mid x \in A \text{ dan } x \in B\}\]</div>
+      </div>
+      <div class="axiom-card">
+        <div class="axiom-label">Selisih (Difference)</div>
+        <div class="axiom-text">\[A - B = \{x \mid x \in A \text{ dan } x \notin B\}\]</div>
+      </div>
+      <div class="axiom-card">
+        <div class="axiom-label">Komplemen</div>
+        <div class="axiom-text">\[\bar{A} = A^c = U - A = \{x \in U \mid x \notin A\}\]</div>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-label">Contoh 2.1</div>
+      <p style="margin:0; font-size:15px;">Misalkan \(U = \{1,2,3,4,5,6,7,8\}\), \(A = \{1,2,3,4\}\), \(B = \{3,4,5,6\}\). Maka:</p>
+      <ul style="margin-top:0.5rem; font-size:15px;">
+        <li>\(A \cup B = \{1,2,3,4,5,6\}\)</li>
+        <li>\(A \cap B = \{3,4\}\)</li>
+        <li>\(A - B = \{1,2\}\)</li>
+        <li>\(\bar{A} = \{5,6,7,8\}\)</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="ornament">◆ ◇ ◆</div>
+
+  <!-- SECTION 3: HUKUM IDENTITAS -->
+  <section class="section" id="s3">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>Hukum Identitas</h2>
+    </div>
+
+    <p>Hukum identitas menyatakan bahwa operasi gabungan dengan himpunan kosong dan operasi irisan dengan semesta tidak mengubah himpunan asal.</p>
+
+    <div class="theorem-card">
+      <div class="theorem-label">Teorema 3.1</div>
+      <div class="theorem-name">Hukum Identitas (Identity Laws)</div>
+      <div class="formula-block">
+        <div class="formula-row">\(A \cup \emptyset = A\)</div>
+        <div class="formula-row">\(A \cap U = A\)</div>
+      </div>
+      <p style="font-size:14px; margin-bottom:0; color:var(--ink-faint);">Himpunan kosong \(\emptyset\) adalah elemen identitas untuk operasi gabungan, sedangkan semesta \(U\) adalah elemen identitas untuk operasi irisan.</p>
+    </div>
+
+    <div class="example-card">
+      <div class="example-label">Contoh 3.1</div>
+      <p style="font-size:15px; margin:0;">Jika \(A = \{2, 4, 6\}\) dan \(U = \{1,2,3,4,5,6,7,8\}\):<br>
+      \(A \cup \emptyset = \{2,4,6\} \cup \{\} = \{2,4,6\} = A\) ✓<br>
+      \(A \cap U = \{2,4,6\} \cap \{1,2,3,4,5,6,7,8\} = \{2,4,6\} = A\) ✓</p>
+    </div>
+
+    <div class="note-card">
+      <div class="note-label">Catatan</div>
+      Analogi dengan bilangan real: \(a + 0 = a\) (identitas penjumlahan) dan \(a \times 1 = a\) (identitas perkalian). Dalam himpunan, \(\emptyset\) berperan seperti 0 untuk \(\cup\), dan \(U\) berperan seperti 1 untuk \(\cap\).
+    </div>
+  </section>
+
+  <!-- SECTION 4: HUKUM DOMINASI -->
+  <section class="section" id="s4">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>Hukum Dominasi</h2>
+    </div>
+
+    <p>Hukum dominasi menyatakan bahwa operasi tertentu menghasilkan hasil yang "mendominasi" atau mengalahkan himpunan lainnya.</p>
+
+    <div class="theorem-card">
+      <div class="theorem-label">Teorema 4.1</div>
+      <div class="theorem-name">Hukum Dominasi (Domination Laws)</div>
+      <div class="formula-block">
+        <div class="formula-row">\(A \cup U = U\)</div>
+        <div class="formula-row">\(A \cap \emptyset = \emptyset\)</div>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-label">Contoh 4.1</div>
+      <p style="font-size:15px; margin:0;">Jika \(A = \{1,3,5\}\) dan \(U = \{1,2,3,4,5,6\}\):<br>
+      \(A \cup U = \{1,2,3,4,5,6\} = U\) — semesta mendominasi gabungan ✓<br>
+      \(A \cap \emptyset = \emptyset\) — kosong mendominasi irisan ✓</p>
+    </div>
+  </section>
+
+  <!-- SECTION 5: IDEMPOTEN -->
+  <section class="section" id="s5">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>Hukum Idempoten</h2>
+    </div>
+
+    <p>Operasi himpunan pada dirinya sendiri menghasilkan himpunan yang sama.</p>
+
+    <div class="theorem-card">
+      <div class="theorem-label">Teorema 5.1</div>
+      <div class="theorem-name">Hukum Idempoten (Idempotent Laws)</div>
+      <div class="formula-block">
+        <div class="formula-row">\(A \cup A = A\)</div>
+        <div class="formula-row">\(A \cap A = A\)</div>
+      </div>
+    </div>
+
+    <div class="note-card">
+      <div class="note-label">Perbandingan dengan Logika</div>
+      Hukum ini sejajar dengan hukum idempoten dalam logika proposisional: \(p \vee p \equiv p\) dan \(p \wedge p \equiv p\).
+    </div>
+  </section>
+
+  <!-- SECTION 6: KOMPLEMEN -->
+  <section class="section" id="s6">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2>Hukum Komplemen</h2>
+    </div>
+
+    <p>Hukum komplemen mengatur hubungan antara himpunan dengan komplemennya dan hubungan dengan semesta serta himpunan kosong.</p>
+
+    <div class="theorem-card">
+      <div class="theorem-label">Teorema 6.1</div>
+      <div class="theorem-name">Hukum Komplemen (Complement Laws)</div>
+      <div class="formula-block">
+        <div class="formula-row">\(A \cup \bar{A} = U\)</div>
+        <div class="formula-row">\(A \cap \bar{A} = \emptyset\)</div>
+        <div class="formula-row">\(\bar{\bar{A}} = A\) &nbsp;&nbsp; (Hukum Involusi)</div>
+        <div class="formula-row">\(\bar{U} = \emptyset\)</div>
+        <div class="formula-row">\(\bar{\emptyset} = U\)</div>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-label">Contoh 6.1</div>
+      <p style="font-size:15px; margin:0;">Misalkan \(U = \{1,2,3,4,5\}\), \(A = \{1,2,3\}\), maka \(\bar{A} = \{4,5\}\).<br>
+      \(A \cup \bar{A} = \{1,2,3,4,5\} = U\) ✓<br>
+      \(A \cap \bar{A} = \emptyset\) ✓<br>
+      \(\bar{\bar{A}} = \overline{\{4,5\}} = \{1,2,3\} = A\) ✓</p>
+    </div>
+  </section>
+
+  <!-- SECTION 7: KOMUTATIF -->
+  <section class="section" id="s7">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <h2>Hukum Komutatif</h2>
+    </div>
+
+    <p>Urutan himpunan dalam operasi gabungan dan irisan tidak memengaruhi hasilnya.</p>
+
+    <div class="theorem-card">
+      <div class="theorem-label">Teorema 7.1</div>
+      <div class="theorem-name">Hukum Komutatif (Commutative Laws)</div>
+      <div class="formula-block">
+        <div class="formula-row">\(A \cup B = B \cup A\)</div>
+        <div class="formula-row">\(A \cap B = B \cap A\)</div>
+      </div>
+    </div>
+
+    <div class="note-card">
+      <div class="note-label">Perhatian</div>
+      Hukum komutatif <strong>tidak berlaku</strong> untuk operasi selisih himpunan! Umumnya \(A - B \neq B - A\).
+      Contoh: \(A = \{1,2,3\}\), \(B = \{3,4,5\}\), maka \(A - B = \{1,2\}\) tetapi \(B - A = \{4,5\}\).
+    </div>
+  </section>
+
+  <!-- SECTION 8: ASOSIATIF -->
+  <section class="section" id="s8">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <h2>Hukum Asosiatif</h2>
+    </div>
+
+    <p>Pengelompokan himpunan dalam operasi gabungan dan irisan tidak memengaruhi hasilnya.</p>
+
+    <div class="theorem-card">
+      <div class="theorem-label">Teorema 8.1</div>
+      <div class="theorem-name">Hukum Asosiatif (Associative Laws)</div>
+      <div class="formula-block">
+        <div class="formula-row">\((A \cup B) \cup C = A \cup (B \cup C)\)</div>
+        <div class="formula-row">\((A \cap B) \cap C = A \cap (B \cap C)\)</div>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-label">Contoh 8.1</div>
+      <p style="font-size:15px; margin:0;">Misalkan \(A=\{1,2\}\), \(B=\{2,3\}\), \(C=\{3,4\}\):<br>
+      \((A \cup B) \cup C = \{1,2,3\} \cup \{3,4\} = \{1,2,3,4\}\)<br>
+      \(A \cup (B \cup C) = \{1,2\} \cup \{2,3,4\} = \{1,2,3,4\}\) ✓</p>
+    </div>
+  </section>
+
+  <!-- SECTION 9: DISTRIBUTIF -->
+  <section class="section" id="s9">
+    <div class="section-header">
+      <span class="section-num">09</span>
+      <h2>Hukum Distributif</h2>
+    </div>
+
+    <p>Hukum distributif adalah salah satu hukum terpenting dan sering digunakan dalam penyederhanaan ekspresi himpunan.</p>
+
+    <div class="theorem-card">
+      <div class="theorem-label">Teorema 9.1</div>
+      <div class="theorem-name">Hukum Distributif (Distributive Laws)</div>
+      <div class="formula-block">
+        <div class="formula-row">\(A \cup (B \cap C) = (A \cup B) \cap (A \cup C)\)</div>
+        <div class="formula-row">\(A \cap (B \cup C) = (A \cap B) \cup (A \cap C)\)</div>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-label">Contoh 9.1 — Verifikasi Distributif</div>
+      <p style="font-size:15px; margin:0 0 0.5rem;">Misalkan \(A=\{1,2,3\}\), \(B=\{2,4,6\}\), \(C=\{3,4,5\}\):<br>
+      <strong>Sisi kiri:</strong> \(B \cap C = \{4\}\), maka \(A \cup (B \cap C) = \{1,2,3,4\}\)<br>
+      <strong>Sisi kanan:</strong> \(A \cup B = \{1,2,3,4,6\}\), \(A \cup C = \{1,2,3,4,5\}\)<br>
+      \((A \cup B) \cap (A \cup C) = \{1,2,3,4\}\) ✓</p>
+    </div>
+
+    <div class="note-card">
+      <div class="note-label">Analogi Aljabar</div>
+      Hukum distributif himpunan analog dengan aljabar bilangan: \(a(b + c) = ab + ac\). Namun, di himpunan berlaku dua arah: \(\cup\) mendistribusikan atas \(\cap\) dan sebaliknya.
+    </div>
+  </section>
+
+  <!-- SECTION 10: DE MORGAN -->
+  <section class="section" id="s10">
+    <div class="section-header">
+      <span class="section-num">10</span>
+      <h2>Hukum De Morgan</h2>
+    </div>
+
+    <p>Hukum De Morgan adalah salah satu teorema paling terkenal dan berguna dalam teori himpunan. Dikemukakan oleh matematikawan Augustus De Morgan (1806–1871).</p>
+
+    <div class="theorem-card">
+      <div class="theorem-label">Teorema 10.1 — De Morgan</div>
+      <div class="theorem-name">Hukum De Morgan (De Morgan's Laws)</div>
+      <div class="formula-block">
+        <div class="formula-row">\(\overline{A \cup B} = \bar{A} \cap \bar{B}\)</div>
+        <div class="formula-row">\(\overline{A \cap B} = \bar{A} \cup \bar{B}\)</div>
+      </div>
+      <p style="font-size:14px; margin-bottom:0; margin-top:0.75rem; color:var(--ink-faint);">
+      <em>Komplemen dari gabungan sama dengan irisan komplemen. Komplemen dari irisan sama dengan gabungan komplemen.</em>
+      </p>
+    </div>
+
+    <div class="example-card">
+      <div class="example-label">Contoh 10.1 — Verifikasi De Morgan</div>
+      <p style="font-size:15px; margin:0 0 0.5rem;">Misalkan \(U=\{1,2,3,4,5,6\}\), \(A=\{1,2,3\}\), \(B=\{2,3,4\}\).<br>
+      <strong>Hukum pertama:</strong><br>
+      \(A \cup B = \{1,2,3,4\}\) → \(\overline{A \cup B} = \{5,6\}\)<br>
+      \(\bar{A} = \{4,5,6\}\), \(\bar{B} = \{1,5,6\}\) → \(\bar{A} \cap \bar{B} = \{5,6\}\) ✓<br><br>
+      <strong>Hukum kedua:</strong><br>
+      \(A \cap B = \{2,3\}\) → \(\overline{A \cap B} = \{1,4,5,6\}\)<br>
+      \(\bar{A} \cup \bar{B} = \{4,5,6\} \cup \{1,5,6\} = \{1,4,5,6\}\) ✓</p>
+    </div>
+
+    <h3>Generalisasi De Morgan</h3>
+    <p>Hukum De Morgan dapat digeneralisasi untuk \(n\) himpunan:</p>
+    <div class="formula-block">
+      <div class="formula-row">\(\overline{A_1 \cup A_2 \cup \cdots \cup A_n} = \bar{A}_1 \cap \bar{A}_2 \cap \cdots \cap \bar{A}_n\)</div>
+      <div class="formula-row">\(\overline{A_1 \cap A_2 \cap \cdots \cap A_n} = \bar{A}_1 \cup \bar{A}_2 \cup \cdots \cup \bar{A}_n\)</div>
+    </div>
+  </section>
+
+  <!-- SECTION 11: ABSORPSI -->
+  <section class="section" id="s11">
+    <div class="section-header">
+      <span class="section-num">11</span>
+      <h2>Hukum Absorpsi</h2>
+    </div>
+
+    <p>Hukum absorpsi (penyerapan) menyatakan bahwa ketika sebuah himpunan digabungkan atau diiriskan dengan ekspresi yang mengandung himpunan itu sendiri, hasilnya "diserap" menjadi himpunan tersebut.</p>
+
+    <div class="theorem-card">
+      <div class="theorem-label">Teorema 11.1</div>
+      <div class="theorem-name">Hukum Absorpsi (Absorption Laws)</div>
+      <div class="formula-block">
+        <div class="formula-row">\(A \cup (A \cap B) = A\)</div>
+        <div class="formula-row">\(A \cap (A \cup B) = A\)</div>
+      </div>
+    </div>
+
+    <div class="proof-block">
+      <div class="proof-label">Bukti — \(A \cup (A \cap B) = A\)</div>
+      <div class="proof-step"><span class="proof-step-num">(1)</span><span>\(A \cup (A \cap B)\)</span></div>
+      <div class="proof-step"><span class="proof-step-num">(2)</span><span>\(= (A \cup A) \cap (A \cup B)\) &emsp; [Hukum Distributif]</span></div>
+      <div class="proof-step"><span class="proof-step-num">(3)</span><span>\(= A \cap (A \cup B)\) &emsp; [Hukum Idempoten: \(A \cup A = A\)]</span></div>
+      <div class="proof-step"><span class="proof-step-num">(4)</span><span>\(= (A \cup \emptyset) \cap (A \cup B)\) &emsp; [Hukum Identitas: \(A = A \cup \emptyset\)]</span></div>
+      <div class="proof-step"><span class="proof-step-num">(5)</span><span>\(= A \cup (\emptyset \cap B)\) &emsp; [Hukum Distributif]</span></div>
+      <div class="proof-step"><span class="proof-step-num">(6)</span><span>\(= A \cup \emptyset\) &emsp; [Hukum Dominasi: \(\emptyset \cap B = \emptyset\)]</span></div>
+      <div class="proof-step"><span class="proof-step-num">(7)</span><span>\(= A\) &emsp; [Hukum Identitas] ∎</span></div>
+      <div class="proof-qed">□</div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-label">Contoh 11.1</div>
+      <p style="font-size:15px; margin:0;">Misalkan \(A = \{1,2,3\}\), \(B = \{2,3,4,5\}\):<br>
+      \(A \cap B = \{2,3\}\), maka \(A \cup (A \cap B) = \{1,2,3\} \cup \{2,3\} = \{1,2,3\} = A\) ✓</p>
+    </div>
+  </section>
+
+  <div class="ornament">◆ ◇ ◆</div>
+
+  <!-- SECTION 12: VENN INTERAKTIF -->
+  <section class="section" id="s12">
+    <div class="section-header">
+      <span class="section-num">12</span>
+      <h2>Diagram Venn Interaktif</h2>
+    </div>
+
+    <p>Gunakan diagram interaktif di bawah ini untuk memvisualisasikan berbagai operasi himpunan. Pilih operasi yang ingin ditampilkan:</p>
+
+    <div class="venn-demo">
+      <div class="venn-title">Visualisasi Operasi Himpunan</div>
+      <div class="venn-controls">
+        <button class="venn-btn active" onclick="setOp('union')">A ∪ B</button>
+        <button class="venn-btn" onclick="setOp('inter')">A ∩ B</button>
+        <button class="venn-btn" onclick="setOp('diff_ab')">A − B</button>
+        <button class="venn-btn" onclick="setOp('diff_ba')">B − A</button>
+        <button class="venn-btn" onclick="setOp('comp_a')">Ā (Komplemen A)</button>
+        <button class="venn-btn" onclick="setOp('comp_b')">B̄ (Komplemen B)</button>
+        <button class="venn-btn" onclick="setOp('sym_diff')">A △ B (Selisih Simetri)</button>
+      </div>
+      <div class="venn-svg-wrap">
+        <svg id="venn-svg" width="280" height="200" viewBox="0 0 280 200">
+          <defs>
+            <clipPath id="clipA">
+              <circle cx="110" cy="100" r="70"/>
+            </clipPath>
+            <clipPath id="clipB">
+              <circle cx="170" cy="100" r="70"/>
+            </clipPath>
+            <clipPath id="clipOutA">
+              <rect x="0" y="0" width="280" height="200"/>
+            </clipPath>
+          </defs>
+          <!-- Background rect (semesta) -->
+          <rect x="5" y="5" width="270" height="190" rx="4" fill="#f5f0e8" stroke="#c8922a" stroke-width="1.5"/>
+          <text x="255" y="22" font-size="12" fill="#c8922a" font-family="'JetBrains Mono',monospace" text-anchor="end">U</text>
+
+          <!-- Highlighted regions -->
+          <g id="highlight-layer"></g>
+
+          <!-- Circle A outline -->
+          <circle cx="110" cy="100" r="70" fill="none" stroke="#1a3a6b" stroke-width="1.5" opacity="0.8"/>
+          <!-- Circle B outline -->
+          <circle cx="170" cy="100" r="70" fill="none" stroke="#8b1a1a" stroke-width="1.5" opacity="0.8"/>
+
+          <!-- Labels -->
+          <text x="75" y="100" font-size="18" fill="#1a3a6b" font-family="'Playfair Display',serif" font-weight="700">A</text>
+          <text x="197" y="100" font-size="18" fill="#8b1a1a" font-family="'Playfair Display',serif" font-weight="700">B</text>
+        </svg>
+        <div class="venn-info">
+          <div class="venn-info-name" id="op-name">Gabungan: A ∪ B</div>
+          <div class="venn-info-formula" id="op-formula">\(A \cup B = \{x \mid x \in A \text{ atau } x \in B\}\)</div>
+          <div class="venn-info-desc" id="op-desc">Semua elemen yang termasuk dalam A, B, atau keduanya.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 13: BUKTI -->
+  <section class="section" id="s13">
+    <div class="section-header">
+      <span class="section-num">13</span>
+      <h2>Metode Pembuktian Teorema</h2>
+    </div>
+
+    <p>Ada beberapa metode yang lazim digunakan untuk membuktikan kesetaraan himpunan:</p>
+
+    <h3>1. Metode Keanggotaan (Membership Method)</h3>
+    <p>Tunjukkan bahwa setiap elemen pada sisi kiri juga ada di sisi kanan, dan sebaliknya. Gunakan jika dan hanya jika (\(\Leftrightarrow\)).</p>
+
+    <div class="proof-block">
+      <div class="proof-label">Contoh: Bukti Hukum De Morgan I — \(\overline{A \cup B} = \bar{A} \cap \bar{B}\)</div>
+      <p style="font-size:14px; margin-bottom:0.75rem;">Misalkan \(x\) sembarang elemen. Kita tunjukkan \(x \in \overline{A \cup B} \Leftrightarrow x \in \bar{A} \cap \bar{B}\).</p>
+      <div class="proof-step"><span class="proof-step-num">→</span><span>\(x \in \overline{A \cup B}\)</span></div>
+      <div class="proof-step"><span class="proof-step-num"></span><span>\(\Leftrightarrow x \notin (A \cup B)\) &emsp; [def. komplemen]</span></div>
+      <div class="proof-step"><span class="proof-step-num"></span><span>\(\Leftrightarrow \neg(x \in A \vee x \in B)\) &emsp; [def. gabungan]</span></div>
+      <div class="proof-step"><span class="proof-step-num"></span><span>\(\Leftrightarrow x \notin A \wedge x \notin B\) &emsp; [De Morgan Logika]</span></div>
+      <div class="proof-step"><span class="proof-step-num"></span><span>\(\Leftrightarrow x \in \bar{A} \wedge x \in \bar{B}\) &emsp; [def. komplemen]</span></div>
+      <div class="proof-step"><span class="proof-step-num"></span><span>\(\Leftrightarrow x \in \bar{A} \cap \bar{B}\) &emsp; [def. irisan] ∎</span></div>
+      <div class="proof-qed">□</div>
+    </div>
+
+    <h3>2. Metode Aljabar Himpunan</h3>
+    <p>Transformasikan satu sisi persamaan ke sisi lainnya dengan menggunakan hukum-hukum yang sudah terbukti, langkah demi langkah.</p>
+
+    <div class="proof-block">
+      <div class="proof-label">Contoh: Bukti \(A \cup (A \cap B) = A\) (Hukum Absorpsi)</div>
+      <div class="proof-step"><span class="proof-step-num"></span><span>\(A \cup (A \cap B) = (A \cap U) \cup (A \cap B)\) &emsp; [Identitas]</span></div>
+      <div class="proof-step"><span class="proof-step-num"></span><span>\(= A \cap (U \cup B)\) &emsp; [Distributif]</span></div>
+      <div class="proof-step"><span class="proof-step-num"></span><span>\(= A \cap U\) &emsp; [Dominasi: \(U \cup B = U\)]</span></div>
+      <div class="proof-step"><span class="proof-step-num"></span><span>\(= A\) &emsp; [Identitas] ∎</span></div>
+      <div class="proof-qed">□</div>
+    </div>
+
+    <h3>3. Metode Tabel Keanggotaan</h3>
+    <p>Buat tabel dengan semua kemungkinan keanggotaan dan verifikasi bahwa kedua sisi menghasilkan nilai yang sama.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>A</th><th>B</th>
+          <th>A ∪ B</th>
+          <th>Ā</th><th>B̄</th>
+          <th>Ā ∩ B̄</th>
+          <th>A∪B̄ (komplemen)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+        <tr><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:14px; color:var(--ink-faint);">Kolom ke-7 (komplemen \(A \cup B\)) sama dengan kolom ke-6 (\(\bar{A} \cap \bar{B}\)) — membuktikan Hukum De Morgan pertama. (1 = anggota, 0 = bukan anggota)</p>
+  </section>
+
+  <!-- SECTION 14: TABEL RINGKASAN -->
+  <section class="section" id="s14">
+    <div class="section-header">
+      <span class="section-num">14</span>
+      <h2>Tabel Ringkasan Teorema Himpunan</h2>
+    </div>
+
+    <table>
+      <thead>
+        <tr><th>No.</th><th>Nama Hukum</th><th>Untuk Gabungan (∪)</th><th>Untuk Irisan (∩)</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td><td>Identitas</td>
+          <td>\(A \cup \emptyset = A\)</td>
+          <td>\(A \cap U = A\)</td>
+        </tr>
+        <tr>
+          <td>2</td><td>Dominasi</td>
+          <td>\(A \cup U = U\)</td>
+          <td>\(A \cap \emptyset = \emptyset\)</td>
+        </tr>
+        <tr>
+          <td>3</td><td>Idempoten</td>
+          <td>\(A \cup A = A\)</td>
+          <td>\(A \cap A = A\)</td>
+        </tr>
+        <tr>
+          <td>4</td><td>Komplemen</td>
+          <td>\(A \cup \bar{A} = U\)</td>
+          <td>\(A \cap \bar{A} = \emptyset\)</td>
+        </tr>
+        <tr>
+          <td>5</td><td>Involusi</td>
+          <td colspan="2" style="text-align:center;">\(\bar{\bar{A}} = A\)</td>
+        </tr>
+        <tr>
+          <td>6</td><td>Komutatif</td>
+          <td>\(A \cup B = B \cup A\)</td>
+          <td>\(A \cap B = B \cap A\)</td>
+        </tr>
+        <tr>
+          <td>7</td><td>Asosiatif</td>
+          <td>\((A \cup B) \cup C = A \cup (B \cup C)\)</td>
+          <td>\((A \cap B) \cap C = A \cap (B \cap C)\)</td>
+        </tr>
+        <tr>
+          <td>8</td><td>Distributif</td>
+          <td>\(A \cup (B \cap C) = (A \cup B) \cap (A \cup C)\)</td>
+          <td>\(A \cap (B \cup C) = (A \cap B) \cup (A \cap C)\)</td>
+        </tr>
+        <tr>
+          <td>9</td><td>De Morgan</td>
+          <td>\(\overline{A \cup B} = \bar{A} \cap \bar{B}\)</td>
+          <td>\(\overline{A \cap B} = \bar{A} \cup \bar{B}\)</td>
+        </tr>
+        <tr>
+          <td>10</td><td>Absorpsi</td>
+          <td>\(A \cup (A \cap B) = A\)</td>
+          <td>\(A \cap (A \cup B) = A\)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="highlight-box">
+      <h3 style="margin-top:0;">Dualitas dalam Teori Himpunan</h3>
+      <p style="font-size:15px;">Perhatikan bahwa setiap teorema himpunan memiliki <em>dual</em>-nya, yang diperoleh dengan mengganti:<br>
+      \(\cup \leftrightarrow \cap\), &nbsp; \(\emptyset \leftrightarrow U\), &nbsp; \(\subseteq \leftrightarrow \supseteq\)<br>
+      Prinsip dualitas ini berarti: jika sebuah pernyataan tentang himpunan terbukti benar, maka pernyataan dualnya juga benar.</p>
+    </div>
+  </section>
+
+  <footer class="page-footer">
+    <p>Materi Kuliah Matematika Diskrit · IKIP Siliwangi</p>
+    <p style="margin-top:0.25rem;">Martin Bernard, M.Pd. · Program Studi Pendidikan Matematika</p>
+  </footer>
+</div>
+
+<script>
+const ops = {
+  union: {
+    name: 'Gabungan: A ∪ B',
+    formula: '\\(A \\cup B = \\{x \\mid x \\in A \\text{ atau } x \\in B\\}\\)',
+    desc: 'Semua elemen yang termasuk dalam A, B, atau keduanya.',
+    draw: (hl) => {
+      hl.innerHTML = `
+        <circle cx="110" cy="100" r="70" fill="#c8922a" opacity="0.25"/>
+        <circle cx="170" cy="100" r="70" fill="#c8922a" opacity="0.25"/>
+      `;
+    }
+  },
+  inter: {
+    name: 'Irisan: A ∩ B',
+    formula: '\\(A \\cap B = \\{x \\mid x \\in A \\text{ dan } x \\in B\\}\\)',
+    desc: 'Semua elemen yang termasuk dalam A sekaligus dalam B.',
+    draw: (hl) => {
+      hl.innerHTML = `
+        <circle cx="170" cy="100" r="70" fill="#c8922a" opacity="0.25" clip-path="url(#clipA)"/>
+      `;
+    }
+  },
+  diff_ab: {
+    name: 'Selisih: A − B',
+    formula: '\\(A - B = \\{x \\mid x \\in A \\text{ dan } x \\notin B\\}\\)',
+    desc: 'Elemen yang ada di A tetapi tidak ada di B.',
+    draw: (hl) => {
+      hl.innerHTML = `
+	<circle cx="110" cy="100" r="70" fill="#c8922a" opacity="0.25"/>
+        <clipPath id="notB"><circle cx="170" cy="100" r="70" fill="#c8922a" opacity="0.25"/></clipPath>
+        <circle cx="110" cy="100" r="70" fill="#ffffff" opacity="0.8" clip-path="url(#notB)"/>
+      `;
+    }
+  },
+  diff_ba: {
+    name: 'Selisih: B − A',
+    formula: '\\(B - A = \\{x \\mid x \\in B \\text{ dan } x \\notin A\\}\\)',
+    desc: 'Elemen yang ada di B tetapi tidak ada di A.',
+    draw: (hl) => {
+      hl.innerHTML = `
+	<circle cx="170" cy="100" r="70" fill="#c8922a" opacity="0.25"/>
+        <clipPath id="notA"><circle cx="110" cy="100" r="70" fill="#c8922a" opacity="0.25"/></clipPath>
+        <circle cx="170" cy="100" r="70" fill="#ffffff" opacity="0.8" clip-path="url(#notA)"/>
+      `;
+    }
+  },
+  comp_a: {
+    name: 'Komplemen: Ā',
+    formula: '\\(\\bar{A} = U - A = \\{x \\in U \\mid x \\notin A\\}\\)',
+    desc: 'Semua elemen di semesta yang tidak termasuk dalam A.',
+    draw: (hl) => {
+      hl.innerHTML = `
+        <rect x="5" y="5" width="270" height="190" rx="4" fill="#1a5c5c" opacity="0.15"/>
+        <circle cx="110" cy="100" r="70" fill="#f5f0e8" opacity="1"/>
+      `;
+    }
+  },
+  comp_b: {
+    name: 'Komplemen: B̄',
+    formula: '\\(\\bar{B} = U - B = \\{x \\in U \\mid x \\notin B\\}\\)',
+    desc: 'Semua elemen di semesta yang tidak termasuk dalam B.',
+    draw: (hl) => {
+      hl.innerHTML = `
+        <rect x="5" y="5" width="270" height="190" rx="4" fill="#8b1a1a" opacity="0.15"/>
+        <circle cx="170" cy="100" r="70" fill="#f5f0e8" opacity="1"/>
+      `;
+    }
+  },
+  sym_diff: {
+    name: 'Selisih Simetri: A △ B',
+    formula: '\\(A \\triangle B = (A - B) \\cup (B - A)\\)',
+    desc: 'Elemen yang ada di A atau di B, tetapi tidak di keduanya sekaligus.',
+    draw: (hl) => {
+      hl.innerHTML = `
+        <circle cx="170" cy="100" r="70" fill="#c8922a" opacity="0.25"/>
+	<circle cx="100" cy="100" r="70" fill="#c8922a" opacity="0.25"/>
+        <clipPath id="notC"><circle cx="110" cy="100" r="70" fill="#c8922a" opacity="0.25"/></clipPath>
+        <circle cx="170" cy="100" r="70" fill="#ffffff" opacity="0.8" clip-path="url(#notC)"/>
+
+      `;
+    }
+  }
+};
+
+let currentOp = 'union';
+
+function setOp(op) {
+  currentOp = op;
+  document.querySelectorAll('.venn-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  renderVenn(op);
+}
+
+function renderVenn(op) {
+  const cfg = ops[op];
+  const hl = document.getElementById('highlight-layer');
+  cfg.draw(hl);
+  document.getElementById('op-name').textContent = cfg.name;
+  document.getElementById('op-formula').innerHTML = cfg.formula;
+  document.getElementById('op-desc').textContent = cfg.desc;
+  if (window.MathJax) {
+    MathJax.typesetPromise([document.getElementById('op-formula')]);
+  }
+}
+
+renderVenn('union');
+</script>
+</body>
+</html>
