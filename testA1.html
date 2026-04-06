@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Tes Awal Teorema Himpunan</title>
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #4facfe, #00f2fe);
+        margin: 0;
+        padding: 0;
+        color: #333;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 30px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+        text-align: center;
+        color: #0077b6;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0 15px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
+
+    .question {
+        margin-bottom: 20px;
+        padding: 15px;
+        background: #f1f9ff;
+        border-left: 5px solid #0077b6;
+        border-radius: 10px;
+    }
+
+    textarea {
+        width: 100%;
+        height: 80px;
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    button {
+        width: 100%;
+        padding: 15px;
+        background: #0077b6;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #023e8a;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>📘 Tes Awal Pembuktian Teorema Himpunan</h1>
+
+    <label>Nama:</label>
+    <input type="text" id="nama">
+
+    <label>NIM:</label>
+    <input type="text" id="nim">
+
+    <div id="soal"></div>
+
+    <button onclick="kirim()">Kirim Jawaban</button>
+</div>
+
+<script>
+const questions = [
+"1. Buktikan bahwa A ⊆ A.",
+"2. Buktikan bahwa jika A ⊆ B dan B ⊆ C maka A ⊆ C.",
+"3. Buktikan bahwa A ∩ B ⊆ A.",
+"4. Buktikan bahwa A ⊆ A ∪ B.",
+"5. Buktikan hukum komutatif: A ∪ B = B ∪ A.",
+"6. Buktikan hukum komutatif: A ∩ B = B ∩ A.",
+"7. Buktikan hukum identitas: A ∪ ∅ = A.",
+"8. Buktikan hukum identitas: A ∩ U = A.",
+"9. Buktikan hukum distributif: A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C).",
+"10. Buktikan hukum De Morgan: (A ∪ B)' = A' ∩ B'."
+];
+
+let soalHTML = "";
+questions.forEach((q, i) => {
+    soalHTML += `
+    <div class="question">
+        <p>${q}</p>
+        <textarea id="q${i}"></textarea>
+    </div>
+    `;
+});
+
+document.getElementById("soal").innerHTML = soalHTML;
+
+// =========================
+// KONFIGURASI GOOGLE FORM
+// =========================
+const formURL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfeUsDpMfc4ChFxmO967uBHgez3JdoBDWygEXWnNl74qApCog/formResponse";
+
+const entryNama = "entry.1008977238";
+const entryNIM = "entry.811712861";
+const entryJawaban = "entry.988207373";
+
+function kirim() {
+    let nama = document.getElementById("nama").value;
+    let nim = document.getElementById("nim").value;
+
+    let semuaJawaban = "";
+
+    questions.forEach((q, i) => {
+        let jawaban = document.getElementById("q"+i).value;
+        semuaJawaban += q + "\nJawaban: " + jawaban + "\n\n";
+    });
+
+    let url = formURL + "?" +
+        entryNama + "=" + encodeURIComponent(nama) + "&" +
+        entryNIM + "=" + encodeURIComponent(nim) + "&" +
+        entryJawaban + "=" + encodeURIComponent(semuaJawaban);
+
+    fetch(url, {
+        method: "POST",
+        mode: "no-cors"
+    }).then(() => {
+        alert("Jawaban berhasil dikirim!");
+    }).catch(() => {
+        alert("Gagal mengirim!");
+    });
+}
+</script>
+
+</body>
+</html>
