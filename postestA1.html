@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Tes Level Tinggi Teori Himpunan</title>
+
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, #1d3557, #457b9d);
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+h1 {
+    text-align: center;
+    color: #1d3557;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+.question {
+    background: #f1faee;
+    margin: 15px 0;
+    padding: 15px;
+    border-radius: 15px;
+    border-left: 6px solid #457b9d;
+    transition: 0.3s;
+}
+
+.question:hover {
+    transform: scale(1.02);
+    background: #e0fbfc;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    background: #1d3557;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0b2545;
+}
+
+.note {
+    background: #ffe8d6;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>📘 Tes Analisis Tingkat Lanjut<br>Teori Himpunan</h1>
+
+<div class="note">
+📌 Upload jawaban tulisan tangan ke Google Drive, lalu tempel link di bawah.
+</div>
+
+<label>Nama:</label>
+<input type="text" id="nama">
+
+<label>NIM:</label>
+<input type="text" id="nim">
+
+<label>Link File (PDF/DOCX dari Drive):</label>
+<input type="text" id="file">
+
+<div id="soal"></div>
+
+<button onclick="kirim()">Kirim</button>
+</div>
+
+<script>
+const soal = [
+"1. Dalam suatu kelas, mahasiswa yang menyukai matematika dan fisika dinyatakan dalam himpunan. Buktikan hubungan antara irisan dan gabungan menggunakan pendekatan pembuktian langsung.",
+"2. Diketahui tiga himpunan A, B, dan C yang merepresentasikan minat mahasiswa. Buktikan secara formal hubungan distributif dalam konteks tersebut.",
+"3. Dalam sebuah survei, himpunan A dan B mewakili dua kategori. Buktikan hubungan inklusi menggunakan pendekatan kontraposisi.",
+"4. Buktikan bahwa hubungan subset dapat dijelaskan melalui operasi irisan dalam konteks kehidupan nyata.",
+"5. Misalkan A dan B adalah kelompok mahasiswa. Buktikan hukum De Morgan dengan interpretasi konteks sosial.",
+"6. Diberikan kasus keanggotaan organisasi, buktikan hubungan komplemen terhadap subset.",
+"7. Dalam data siswa, buktikan bahwa operasi gabungan memenuhi sifat asosiatif menggunakan contoh konkret.",
+"8. Buktikan bahwa A ⊆ B ekuivalen dengan A ∩ B = A dalam konteks kasus nyata.",
+"9. Dalam konteks pemilihan mata kuliah, buktikan hubungan antara selisih himpunan dan subset.",
+"10. Buktikan secara analitis bahwa operasi himpunan memenuhi sifat absorpsi menggunakan ilustrasi kasus."
+];
+
+let html = "";
+soal.forEach((s, i) => {
+    html += `<div class="question">${s}</div>`;
+});
+document.getElementById("soal").innerHTML = html;
+
+
+// =======================
+// GOOGLE FORM SETTING
+// =======================
+const formURL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLScv-JdhcAMeaMvvWUezk97Q-tPbuslYcwjPnRTvnn0k_muABg/formResponse";
+
+const entryNama = "entry.2059553241";
+const entryNIM = "entry.630942813";
+const entryFile = "entry.286209220";
+
+function kirim() {
+    let nama = document.getElementById("nama").value;
+    let nim = document.getElementById("nim").value;
+    let file = document.getElementById("file").value;
+
+    let url = formURL + "?" +
+        entryNama + "=" + encodeURIComponent(nama) + "&" +
+        entryNIM + "=" + encodeURIComponent(nim) + "&" +
+        entryFile + "=" + encodeURIComponent(file);
+
+    fetch(url, {
+        method: "POST",
+        mode: "no-cors"
+    }).then(() => {
+        alert("Data berhasil dikirim!");
+    }).catch(() => {
+        alert("Gagal mengirim!");
+    });
+}
+</script>
+
+</body>
+</html>
