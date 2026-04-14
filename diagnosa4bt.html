@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Tes Diagnosa Relasi & Fungsi</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #36d1dc, #5b86e5);
+}
+
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+h1 {
+    text-align: center;
+}
+
+input {
+    width: 48%;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px;
+}
+
+.card {
+    background: #f1f5f9;
+    margin: 15px 0;
+    padding: 15px;
+    border-left: 5px solid #2563eb;
+    border-radius: 10px;
+}
+
+textarea {
+    width: 100%;
+    height: 70px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+button {
+    display: block;
+    margin: 20px auto;
+    padding: 12px 25px;
+    border-radius: 20px;
+    border: none;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>Tes Diagnosa Pembuktian</h1>
+
+<input type="text" id="nama" placeholder="Nama">
+<input type="text" id="nim" placeholder="NIM">
+
+<h3>Bagian A: Pilihan Ganda</h3>
+
+<div class="card">
+1. Relasi ekuivalen harus memenuhi...
+<br>
+<input type="radio" name="q1" value="0"> Refleksif saja<br>
+<input type="radio" name="q1" value="1"> Refleksif, Simetri, Transitif<br>
+<input type="radio" name="q1" value="0"> Simetri saja<br>
+</div>
+
+<div class="card">
+2. Fungsi injektif artinya...
+<br>
+<input type="radio" name="q2" value="1"> Setiap elemen domain punya pasangan unik<br>
+<input type="radio" name="q2" value="0"> Semua elemen sama<br>
+<input type="radio" name="q2" value="0"> Tidak punya invers<br>
+</div>
+
+<div class="card">
+3. Fungsi surjektif artinya...
+<br>
+<input type="radio" name="q3" value="1"> Semua kodomain terpetakan<br>
+<input type="radio" name="q3" value="0"> Domain sama semua<br>
+<input type="radio" name="q3" value="0"> Tidak terdefinisi<br>
+</div>
+
+<div class="card">
+4. Relasi ≤ bersifat...
+<br>
+<input type="radio" name="q4" value="1"> Refleksif, antisimetri, transitif<br>
+<input type="radio" name="q4" value="0"> Simetri saja<br>
+</div>
+
+<div class="card">
+5. Fungsi konstan adalah...
+<br>
+<input type="radio" name="q5" value="1"> Tidak injektif<br>
+<input type="radio" name="q5" value="0"> Injektif<br>
+</div>
+
+<h3>Bagian B: Analisis Pembuktian</h3>
+
+<div class="card">
+6. Buktikan relasi aRb jika a-b genap adalah relasi ekuivalen.
+<textarea id="j6"></textarea>
+</div>
+
+<div class="card">
+7. Buktikan fungsi f(x)=x² tidak injektif.
+<textarea id="j7"></textarea>
+</div>
+
+<div class="card">
+8. Buktikan komposisi fungsi injektif tetap injektif.
+<textarea id="j8"></textarea>
+</div>
+
+<div class="card">
+9. Buktikan fungsi linear f(x)=ax+b (a≠0) bijektif.
+<textarea id="j9"></textarea>
+</div>
+
+<div class="card">
+10. Jelaskan kenapa fungsi harus memiliki domain dan kodomain.
+<textarea id="j10"></textarea>
+</div>
+
+<button onclick="kirimData()">Kumpulkan Jawaban</button>
+
+</div>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDGpG2vAoWqwn46upNtU9M-Cx1gkKwBE-c",
+    authDomain: "chatting-matematika.firebaseapp.com",
+    databaseURL: "https://chatting-matematika-default-rtdb.firebaseio.com",
+    projectId: "chatting-matematika",
+    storageBucket: "chatting-matematika.appspot.com",
+    messagingSenderId: "811492413631",
+    appId: "1:811492413631:web:a29a4bba38a6541f90360a",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+window.kirimData = function(){
+
+    let nama = document.getElementById("nama").value;
+    let nim = document.getElementById("nim").value;
+
+    // Hitung skor pilihan ganda
+    let skor = 0;
+    for(let i=1;i<=5;i++){
+        let pilih = document.querySelector('input[name="q'+i+'"]:checked');
+        if(pilih){
+            skor += parseInt(pilih.value);
+        }
+    }
+
+    // Jawaban esai
+    let esai = [];
+    for(let i=6;i<=10;i++){
+        esai.push(document.getElementById("j"+i).value);
+    }
+
+    // Kirim ke Firebase
+    push(ref(db, "diagnosa_mahasiswa"), {
+        nama: nama,
+        nim: nim,
+        skor_pg: skor,
+        jawaban_esai: esai,
+        waktu: new Date().toLocaleString()
+    });
+
+    alert("Data berhasil dikirim! Skor PG: " + skor);
+}
+</script>
+
+</body>
+</html>
