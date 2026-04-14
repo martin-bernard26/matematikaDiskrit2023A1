@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Latihan Relasi & Fungsi</title>
+
+<!-- Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+}
+
+.container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 15px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.card {
+    background: #f8fafc;
+    margin: 15px 0;
+    padding: 15px;
+    border-left: 6px solid #ec4899;
+    border-radius: 10px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 10px;
+    background: #ec4899;
+    color: white;
+    cursor: pointer;
+}
+
+.jawaban {
+    display: none;
+    margin-top: 10px;
+    background: #e0f2fe;
+    padding: 10px;
+    border-radius: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>20 Latihan Pembuktian Relasi & Fungsi</h1>
+
+<div id="soal"></div>
+
+</div>
+
+<script>
+const data = [
+{
+soal: "Buktikan relasi R pada ℤ dengan aRb jika a=b adalah relasi ekuivalen.",
+jawaban: "Refleksif: a=a. Simetri: jika a=b maka b=a. Transitif: jika a=b dan b=c maka a=c."
+},
+{
+soal: "Buktikan relasi 'kurang dari' bukan relasi ekuivalen.",
+jawaban: "Tidak refleksif karena a<a salah, tidak simetri, sehingga bukan ekuivalen."
+},
+{
+soal: "Buktikan fungsi f(x)=x² tidak injektif pada ℝ.",
+jawaban: "f(2)=4 dan f(-2)=4 → nilai sama, sehingga tidak injektif."
+},
+{
+soal: "Buktikan fungsi f(x)=x³ injektif pada ℝ.",
+jawaban: "Jika f(a)=f(b) maka a³=b³ → a=b."
+},
+{
+soal: "Buktikan fungsi f(x)=x+5 surjektif pada ℝ.",
+jawaban: "Untuk setiap y ada x=y-5 sehingga f(x)=y."
+},
+{
+soal: "Buktikan fungsi f(x)=e^x injektif.",
+jawaban: "Jika e^a=e^b maka a=b karena fungsi eksponensial monoton."
+},
+{
+soal: "Buktikan relasi 'sejajar' pada garis adalah relasi ekuivalen.",
+jawaban: "Refleksif, simetri, transitif semua terpenuhi."
+},
+{
+soal: "Buktikan fungsi konstan tidak surjektif (kecuali kodomain 1 elemen).",
+jawaban: "Output hanya satu nilai sehingga tidak mencakup seluruh kodomain."
+},
+{
+soal: "Buktikan komposisi fungsi bijektif adalah bijektif.",
+jawaban: "Gabungan injektif dan surjektif tetap berlaku pada komposisi."
+},
+{
+soal: "Buktikan invers fungsi satu-satu adalah unik.",
+jawaban: "Jika ada dua invers maka hasilnya harus sama karena definisi fungsi."
+},
+{
+soal: "Buktikan relasi kosong adalah relasi.",
+jawaban: "Relasi adalah subset, himpunan kosong adalah subset."
+},
+{
+soal: "Buktikan identitas adalah fungsi bijektif.",
+jawaban: "f(x)=x jelas satu-satu dan onto."
+},
+{
+soal: "Buktikan fungsi linear f(x)=ax+b (a≠0) bijektif.",
+jawaban: "Injektif karena a≠0, surjektif karena bisa dicari invers."
+},
+{
+soal: "Buktikan fungsi genap tidak injektif.",
+jawaban: "f(x)=f(-x) sehingga tidak satu-satu."
+},
+{
+soal: "Buktikan fungsi ganjil bisa injektif.",
+jawaban: "Contoh f(x)=x³ injektif."
+},
+{
+soal: "Buktikan relasi pembagian tidak simetri.",
+jawaban: "2|4 benar tapi 4|2 salah."
+},
+{
+soal: "Buktikan fungsi f(x)=1/x tidak terdefinisi di 0.",
+jawaban: "Karena pembagian nol tidak terdefinisi."
+},
+{
+soal: "Buktikan fungsi invers dari f(x)=2x adalah f⁻¹(x)=x/2.",
+jawaban: "f(f⁻¹(x))=x dan sebaliknya."
+},
+{
+soal: "Buktikan jika f tidak injektif maka tidak punya invers.",
+jawaban: "Karena satu output punya banyak input."
+},
+{
+soal: "Buktikan relasi identitas adalah subset dari setiap relasi refleksif.",
+jawaban: "Karena semua pasangan (a,a) pasti ada."
+}
+];
+
+let html = "";
+
+data.forEach((item, i) => {
+html += `
+<div class="card">
+<b>${i+1}. ${item.soal}</b>
+<br>
+<button onclick="toggle(${i})">Lihat Jawaban</button>
+<div class="jawaban" id="j${i}">
+${item.jawaban}
+</div>
+</div>
+`;
+});
+
+document.getElementById("soal").innerHTML = html;
+
+function toggle(i){
+let el = document.getElementById("j"+i);
+el.style.display = (el.style.display === "block") ? "none" : "block";
+}
+</script>
+
+</body>
+</html>
