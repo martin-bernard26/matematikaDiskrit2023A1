@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Latihan Pembuktian</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 15px;
+}
+
+input {
+    width: 48%;
+    padding: 10px;
+    margin: 10px 1%;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+.soal {
+    margin: 15px 0;
+    padding: 15px;
+    background: #f1f5f9;
+    border-left: 5px solid #4f46e5;
+    border-radius: 10px;
+}
+
+textarea {
+    width: 100%;
+    height: 70px;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+button {
+    display: block;
+    margin: 20px auto;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 20px;
+    background: #4f46e5;
+    color: white;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h2>Latihan Pembuktian Relasi & Fungsi</h2>
+
+<input type="text" id="nama" placeholder="Nama">
+<input type="text" id="nim" placeholder="NIM">
+
+<div id="soalContainer"></div>
+
+<button onclick="kirimData()">Kumpulkan Jawaban</button>
+</div>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDGpG2vAoWqwn46upNtU9M-Cx1gkKwBE-c",
+  authDomain: "chatting-matematika.firebaseapp.com",
+  databaseURL: "https://chatting-matematika-default-rtdb.firebaseio.com",
+  projectId: "chatting-matematika",
+  storageBucket: "chatting-matematika.appspot.com",
+  messagingSenderId: "811492413631",
+  appId: "1:811492413631:web:a29a4bba38a6541f90360a"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+window.kirimData = function() {
+    let nama = document.getElementById("nama").value;
+    let nim = document.getElementById("nim").value;
+
+    let jawaban = [];
+    for (let i = 1; i <= 10; i++) {
+        jawaban.push(document.getElementById("j" + i).value);
+    }
+
+    push(ref(db, "jawaban_mahasiswa"), {
+        nama: nama,
+        nim: nim,
+        jawaban: jawaban,
+        waktu: new Date().toLocaleString()
+    });
+
+    alert("Jawaban berhasil dikirim!");
+}
+</script>
+
+<script>
+// Generate soal otomatis
+const soalList = [
+"Relasi aRb jika a-b genap adalah relasi ekuivalen. Buktikan!",
+"Relasi ≤ adalah refleksif, antisimetri, transitif. Buktikan!",
+"Jika f dan g injektif maka g∘f injektif. Buktikan!",
+"Jika f dan g surjektif maka g∘f surjektif. Buktikan!",
+"f(x)=2x+3 adalah bijektif. Buktikan!",
+"Relasi ekuivalen membentuk kelas ekuivalensi. Buktikan!",
+"Fungsi konstan tidak injektif. Buktikan!",
+"Invers fungsi bijektif juga bijektif. Buktikan!",
+"Fungsi punya invers ⇒ bijektif. Buktikan!",
+"Relasi habis dibagi bukan ekuivalen. Buktikan!"
+];
+
+let container = document.getElementById("soalContainer");
+
+soalList.forEach((s, i) => {
+    container.innerHTML += `
+    <div class="soal">
+        <b>${i+1}.</b> ${s}
+        <textarea id="j${i+1}"></textarea>
+    </div>`;
+});
+</script>
+
+</body>
+</html>
