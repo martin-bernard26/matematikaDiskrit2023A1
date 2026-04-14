@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relasi dan Fungsi — Matematika Diskrit</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+  :root {
+    --navy: #0d1b3e;
+    --navy-mid: #1a2f5e;
+    --navy-light: #253d77;
+    --gold: #c9a227;
+    --gold-light: #e8c96e;
+    --gold-pale: #f9f0d0;
+    --cream: #faf7f0;
+    --white: #ffffff;
+    --text-main: #1a1a2e;
+    --text-muted: #4a4a6a;
+    --text-light: #8888aa;
+    --border: #ddd8cc;
+    --accent-blue: #2d5fa5;
+    --accent-teal: #1a7a6e;
+    --accent-coral: #c44a2a;
+    --accent-purple: #6240b8;
+    --shadow: 0 4px 24px rgba(13,27,62,0.10);
+    --shadow-sm: 0 2px 8px rgba(13,27,62,0.07);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-main);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, var(--navy-light) 100%);
+    color: var(--white);
+    padding: 56px 40px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top:-80px; right:-80px;
+    width: 340px; height: 340px;
+    border-radius: 50%;
+    border: 2px solid rgba(201,162,39,0.18);
+  }
+  .hero::after {
+    content: '';
+    position: absolute; bottom:-60px; left:20%;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    border: 1px solid rgba(201,162,39,0.10);
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(201,162,39,0.18);
+    border: 1px solid var(--gold);
+    color: var(--gold-light);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--gold-light); }
+  .hero-sub {
+    font-size: 15px;
+    color: rgba(255,255,255,0.7);
+    max-width: 580px;
+    margin-bottom: 28px;
+  }
+  .hero-meta {
+    display: flex; gap: 24px; flex-wrap: wrap;
+  }
+  .hero-meta-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: rgba(255,255,255,0.65);
+  }
+  .hero-meta-item .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%; background: var(--gold);
+    flex-shrink: 0;
+  }
+
+  /* ── NAV TABS ── */
+  .nav-container {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: var(--shadow-sm);
+  }
+  .nav-tabs {
+    display: flex; overflow-x: auto;
+    padding: 0 24px;
+    gap: 0;
+    scrollbar-width: none;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    flex-shrink: 0;
+    padding: 14px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    border-bottom: 2.5px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    background: none; border-top: none; border-left: none; border-right: none;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .nav-tab:hover { color: var(--navy); }
+  .nav-tab.active {
+    color: var(--navy);
+    border-bottom-color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* ── SECTIONS ── */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .content-wrap {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 24px 60px;
+  }
+
+  /* ── TYPOGRAPHY ── */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+  .section-lead {
+    font-size: 16px;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+    max-width: 640px;
+  }
+  h3.sub-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--navy);
+    margin: 36px 0 14px;
+  }
+  p { margin-bottom: 14px; color: var(--text-main); }
+
+  /* ── DEFINITION CARD ── */
+  .def-card {
+    background: var(--white);
+    border-left: 4px solid var(--navy);
+    border-radius: 0 12px 12px 0;
+    padding: 20px 24px;
+    margin: 20px 0;
+    box-shadow: var(--shadow-sm);
+  }
+  .def-card .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .def-card .def-label::after {
+    content: ''; flex: 1;
+    height: 1px; background: var(--border);
+  }
+  .def-card.gold { border-left-color: var(--gold); }
+  .def-card.gold .def-label { color: #8a6c0a; }
+  .def-card.teal { border-left-color: var(--accent-teal); }
+  .def-card.teal .def-label { color: var(--accent-teal); }
+  .def-card.coral { border-left-color: var(--accent-coral); }
+  .def-card.coral .def-label { color: var(--accent-coral); }
+  .def-card.purple { border-left-color: var(--accent-purple); }
+  .def-card.purple .def-label { color: var(--accent-purple); }
+
+  /* ── EXAMPLE CARD ── */
+  .example-card {
+    background: #f0f4fb;
+    border: 1px solid #c8d8f0;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+  .example-card .ex-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--accent-blue);
+    margin-bottom: 10px;
+  }
+
+  /* ── THEOREM CARD ── */
+  .theorem-card {
+    background: var(--gold-pale);
+    border: 1px solid #e0c96a;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+  .theorem-card .th-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: #8a6c0a;
+    margin-bottom: 10px;
+  }
+
+  /* ── GRID & TABLE ── */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+  @media(max-width:600px){ .grid-2{ grid-template-columns:1fr; } }
+
+  .info-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    box-shadow: var(--shadow-sm);
+  }
+  .info-card h4 {
+    font-size: 14px; font-weight: 600;
+    color: var(--navy); margin-bottom: 8px;
+  }
+  .info-card p { font-size: 14px; margin-bottom: 6px; }
+
+  table.mat-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 14px; margin: 16px 0;
+  }
+  table.mat-table th {
+    background: var(--navy);
+    color: var(--white);
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 500;
+  }
+  table.mat-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  table.mat-table tr:nth-child(even) td { background: #f5f3ee; }
+
+  /* ── BADGE ── */
+  .badge {
+    display: inline-block;
+    font-size: 11px; font-weight: 600;
+    padding: 3px 10px; border-radius: 20px;
+    margin: 3px 2px;
+  }
+  .badge-navy { background: #e0e6f3; color: var(--navy); }
+  .badge-gold { background: var(--gold-pale); color: #7a5c0a; }
+  .badge-teal { background: #ddf0ec; color: var(--accent-teal); }
+  .badge-coral { background: #fce8e3; color: var(--accent-coral); }
+  .badge-purple { background: #ede8f9; color: var(--accent-purple); }
+
+  /* ── VISUAL DIAGRAM ── */
+  .diagram-wrap {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin: 24px 0;
+    box-shadow: var(--shadow-sm);
+    overflow-x: auto;
+  }
+  .diagram-wrap svg { display: block; margin: 0 auto; }
+  .diagram-caption {
+    font-size: 13px; color: var(--text-muted);
+    text-align: center; margin-top: 10px;
+    font-style: italic;
+  }
+
+  /* ── INTERACTIVE: RELATION CHECKER ── */
+  .interactive-panel {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin: 28px 0;
+    box-shadow: var(--shadow);
+  }
+  .interactive-panel h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .interactive-panel .ip-sub {
+    font-size: 13px; color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+  .matrix-grid {
+    display: inline-grid;
+    gap: 6px;
+    margin: 12px 0;
+  }
+  .matrix-cell {
+    width: 42px; height: 42px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: #f8f7f4;
+    color: var(--text-muted);
+    user-select: none;
+  }
+  .matrix-cell.header {
+    background: var(--navy);
+    color: var(--white);
+    cursor: default;
+    font-size: 12px;
+  }
+  .matrix-cell.on {
+    background: var(--navy);
+    color: var(--white);
+    border-color: var(--navy);
+  }
+  .matrix-cell.corner { background: transparent; border: none; }
+
+  .prop-result {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px;
+  }
+  .prop-tag {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px; font-weight: 500;
+    border: 1.5px solid;
+  }
+  .prop-tag.yes { background: #ddf0ec; color: var(--accent-teal); border-color: var(--accent-teal); }
+  .prop-tag.no { background: #fce8e3; color: var(--accent-coral); border-color: var(--accent-coral); }
+  .prop-tag.unknown { background: #f5f3ee; color: var(--text-muted); border-color: var(--border); }
+
+  .btn-reset {
+    background: none; border: 1.5px solid var(--border);
+    border-radius: 8px; padding: 8px 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; color: var(--text-muted);
+    cursor: pointer; margin-top: 16px;
+    transition: all 0.15s;
+  }
+  .btn-reset:hover { border-color: var(--navy); color: var(--navy); }
+
+  /* ── INTERACTIVE: FUNGSI CHECKER ── */
+  .pair-builder {
+    display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+    margin: 14px 0;
+  }
+  .pair-input {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    padding: 8px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    width: 100px;
+    color: var(--text-main);
+    background: #f8f7f4;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .pair-input:focus { border-color: var(--navy); background: var(--white); }
+  .btn-add {
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-add:hover { background: var(--navy-light); }
+  .pairs-list {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    min-height: 40px; padding: 8px 0;
+  }
+  .pair-chip {
+    background: var(--navy);
+    color: var(--white);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .pair-chip button {
+    background: none; border: none;
+    color: rgba(255,255,255,0.6);
+    cursor: pointer; font-size: 14px;
+    line-height: 1; padding: 0;
+  }
+  .pair-chip button:hover { color: var(--white); }
+
+  .func-verdict {
+    margin-top: 16px;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .func-verdict.ok { background: #ddf0ec; color: var(--accent-teal); }
+  .func-verdict.fail { background: #fce8e3; color: var(--accent-coral); }
+  .func-verdict.empty { background: #f5f3ee; color: var(--text-muted); }
+
+  /* ── QUIZ ── */
+  .quiz-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin: 20px 0;
+    box-shadow: var(--shadow-sm);
+  }
+  .quiz-q {
+    font-size: 15px; font-weight: 500;
+    color: var(--navy); margin-bottom: 16px;
+  }
+  .quiz-q .q-num {
+    display: inline-block;
+    background: var(--navy);
+    color: var(--white);
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    font-size: 12px; font-weight: 700;
+    text-align: center; line-height: 26px;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-opt {
+    padding: 12px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 14px;
+    background: #faf9f6;
+  }
+  .quiz-opt:hover { border-color: var(--navy); background: var(--white); }
+  .quiz-opt.correct { background: #ddf0ec; border-color: var(--accent-teal); color: var(--accent-teal); }
+  .quiz-opt.wrong { background: #fce8e3; border-color: var(--accent-coral); color: var(--accent-coral); }
+  .quiz-opt.disabled { pointer-events: none; }
+  .quiz-feedback {
+    margin-top: 12px; font-size: 14px;
+    padding: 10px 14px; border-radius: 8px;
+    display: none;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.ok { background: #ddf0ec; color: var(--accent-teal); }
+  .quiz-feedback.fail { background: #fce8e3; color: var(--accent-coral); }
+
+  .quiz-score-wrap {
+    background: var(--navy);
+    color: var(--white);
+    border-radius: 16px;
+    padding: 28px;
+    text-align: center;
+    margin-top: 20px;
+    display: none;
+  }
+  .quiz-score-wrap.show { display: block; }
+  .score-big { font-size: 56px; font-weight: 700; font-family: 'Playfair Display', serif; }
+  .score-label { font-size: 14px; color: rgba(255,255,255,0.65); margin-top: 6px; }
+  .btn-retry {
+    margin-top: 16px;
+    background: var(--gold);
+    color: var(--navy);
+    border: none; border-radius: 8px;
+    padding: 10px 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* ── SUMMARY TABLE ── */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+    gap: 14px; margin: 24px 0;
+  }
+  .sum-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: var(--shadow-sm);
+  }
+  .sum-card .sum-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; margin-bottom: 10px;
+  }
+  .sum-card h4 { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+  .sum-card p { font-size: 13px; color: var(--text-muted); margin: 0; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 24px;
+    font-size: 12px;
+  }
+  footer strong { color: rgba(255,255,255,0.8); }
+
+  /* ── CODE ── */
+  code {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--navy);
+  }
+  .formula-block {
+    background: #f0f4fb;
+    border: 1px solid #c8d8f0;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 14px 0;
+    overflow-x: auto;
+    text-align: center;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div style="max-width:860px;margin:0 auto;position:relative;z-index:1;">
+    <div class="hero-badge">Matematika Diskrit · IKIP Siliwangi</div>
+    <h1>Relasi dan <span>Fungsi</span></h1>
+    <p class="hero-sub">Materi kuliah interaktif untuk mahasiswa Pendidikan Matematika — mencakup definisi, sifat-sifat, diagram panah, matriks relasi, jenis fungsi, dan latihan soal.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><div class="dot"></div>5 Topik Utama</div>
+      <div class="hero-meta-item"><div class="dot"></div>Visualisasi Interaktif</div>
+      <div class="hero-meta-item"><div class="dot"></div>Kuis &amp; Latihan</div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav-container">
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showSection('s1',this)">1. Konsep Relasi</button>
+    <button class="nav-tab" onclick="showSection('s2',this)">2. Sifat-Sifat Relasi</button>
+    <button class="nav-tab" onclick="showSection('s3',this)">3. Konsep Fungsi</button>
+    <button class="nav-tab" onclick="showSection('s4',this)">4. Jenis-Jenis Fungsi</button>
+    <button class="nav-tab" onclick="showSection('s5',this)">5. Kuis Interaktif</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SECTION 1: RELASI -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="s1" class="section active">
+<div class="content-wrap">
+  <p class="section-title">Konsep Dasar Relasi</p>
+  <p class="section-lead">Relasi adalah cara matematis untuk menggambarkan hubungan antara elemen-elemen dari dua himpunan.</p>
+
+  <div class="def-card">
+    <div class="def-label">Definisi 1.1 — Produk Kartesian</div>
+    <p>Diberikan dua himpunan \(A\) dan \(B\). <strong>Produk Kartesian</strong> \(A \times B\) didefinisikan sebagai:</p>
+    <div class="formula-block">
+      \(A \times B = \{(a, b) \mid a \in A \text{ dan } b \in B\}\)
+    </div>
+    <p>Produk kartesian menghasilkan himpunan semua pasangan terurut \((a,b)\).</p>
+  </div>
+
+  <div class="def-card gold">
+    <div class="def-label">Definisi 1.2 — Relasi Biner</div>
+    <p>Sebuah <strong>relasi biner</strong> \(R\) dari himpunan \(A\) ke himpunan \(B\) adalah himpunan bagian dari produk kartesian \(A \times B\):</p>
+    <div class="formula-block">
+      \(R \subseteq A \times B\)
+    </div>
+    <p>Jika \((a, b) \in R\), ditulis \(a \, R \, b\) (dibaca: "\(a\) berelasi dengan \(b\)").</p>
+  </div>
+
+  <h3 class="sub-title">Cara Merepresentasikan Relasi</h3>
+
+  <div class="grid-2">
+    <div class="info-card">
+      <h4>1. Himpunan Pasangan Terurut</h4>
+      <p>Menuliskan semua pasangan \((a,b)\) yang memenuhi relasi secara eksplisit.</p>
+      <p style="font-family:'DM Mono',monospace;font-size:13px;color:var(--navy);">\(R = \{(1,a),(1,c),(2,b),(3,a)\}\)</p>
+    </div>
+    <div class="info-card">
+      <h4>2. Diagram Panah (Arrow Diagram)</h4>
+      <p>Menggambar dua himpunan dan menghubungkan elemen yang berelasi dengan tanda panah.</p>
+    </div>
+    <div class="info-card">
+      <h4>3. Matriks Relasi</h4>
+      <p>Tabel \(0\)-\(1\) di mana entri \((i,j) = 1\) jika \((a_i, b_j) \in R\), dan \(0\) sebaliknya.</p>
+    </div>
+    <div class="info-card">
+      <h4>4. Graf Berarah (Digraph)</h4>
+      <p>Untuk relasi pada himpunan \(A\) ke \(A\) sendiri, elemen digambar sebagai simpul dan relasi sebagai busur berarah.</p>
+    </div>
+  </div>
+
+  <h3 class="sub-title">Contoh: Diagram Panah dan Matriks Relasi</h3>
+  <p>Misalkan \(A = \{1, 2, 3\}\) dan \(B = \{a, b, c\}\). Diberikan relasi \(R = \{(1,a),(1,c),(2,b),(3,a),(3,c)\}\).</p>
+
+  <div class="diagram-wrap">
+    <svg width="420" height="200" viewBox="0 0 420 200">
+      <!-- Oval A -->
+      <ellipse cx="90" cy="100" rx="70" ry="85" fill="#e0e6f3" stroke="#0d1b3e" stroke-width="1.5"/>
+      <text x="90" y="28" text-anchor="middle" font-family="Playfair Display,serif" font-size="15" fill="#0d1b3e" font-weight="600">A</text>
+      <!-- Oval B -->
+      <ellipse cx="330" cy="100" rx="70" ry="85" fill="#ddf0ec" stroke="#1a7a6e" stroke-width="1.5"/>
+      <text x="330" y="28" text-anchor="middle" font-family="Playfair Display,serif" font-size="15" fill="#1a7a6e" font-weight="600">B</text>
+      <!-- Nodes A -->
+      <circle cx="90" cy="65" r="16" fill="#0d1b3e"/>
+      <text x="90" y="70" text-anchor="middle" font-size="13" fill="white" font-family="DM Mono,monospace">1</text>
+      <circle cx="90" cy="105" r="16" fill="#0d1b3e"/>
+      <text x="90" y="110" text-anchor="middle" font-size="13" fill="white" font-family="DM Mono,monospace">2</text>
+      <circle cx="90" cy="145" r="16" fill="#0d1b3e"/>
+      <text x="90" y="150" text-anchor="middle" font-size="13" fill="white" font-family="DM Mono,monospace">3</text>
+      <!-- Nodes B -->
+      <circle cx="330" cy="65" r="16" fill="#1a7a6e"/>
+      <text x="330" y="70" text-anchor="middle" font-size="13" fill="white" font-family="DM Mono,monospace">a</text>
+      <circle cx="330" cy="105" r="16" fill="#1a7a6e"/>
+      <text x="330" y="110" text-anchor="middle" font-size="13" fill="white" font-family="DM Mono,monospace">b</text>
+      <circle cx="330" cy="145" r="16" fill="#1a7a6e"/>
+      <text x="330" y="150" text-anchor="middle" font-size="13" fill="white" font-family="DM Mono,monospace">c</text>
+      <!-- Arrows -->
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#c9a227"/>
+        </marker>
+      </defs>
+      <!-- 1→a -->
+      <line x1="107" y1="63" x2="312" y2="65" stroke="#c9a227" stroke-width="1.8" marker-end="url(#arr)"/>
+      <!-- 1→c -->
+      <line x1="107" y1="70" x2="313" y2="142" stroke="#c9a227" stroke-width="1.8" marker-end="url(#arr)"/>
+      <!-- 2→b -->
+      <line x1="107" y1="105" x2="312" y2="105" stroke="#c9a227" stroke-width="1.8" marker-end="url(#arr)"/>
+      <!-- 3→a -->
+      <line x1="107" y1="143" x2="312" y2="68" stroke="#c9a227" stroke-width="1.8" marker-end="url(#arr)"/>
+      <!-- 3→c -->
+      <line x1="107" y1="148" x2="312" y2="147" stroke="#c9a227" stroke-width="1.8" marker-end="url(#arr)"/>
+    </svg>
+    <p class="diagram-caption">Diagram panah relasi \(R = \{(1,a),(1,c),(2,b),(3,a),(3,c)\}\)</p>
+  </div>
+
+  <p>Matriks relasi \(M_R\) berukuran \(|A| \times |B| = 3 \times 3\):</p>
+
+  <div class="diagram-wrap">
+    <table class="mat-table" style="max-width:300px;margin:0 auto;">
+      <thead>
+        <tr><th>\(M_R\)</th><th>\(a\)</th><th>\(b\)</th><th>\(c\)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td style="font-weight:600;">1</td><td>1</td><td>0</td><td>1</td></tr>
+        <tr><td style="font-weight:600;">2</td><td>0</td><td>1</td><td>0</td></tr>
+        <tr><td style="font-weight:600;">3</td><td>1</td><td>0</td><td>1</td></tr>
+      </tbody>
+    </table>
+    <p class="diagram-caption">Matriks relasi \(M_R\): entri 1 menunjukkan adanya relasi</p>
+  </div>
+
+  <h3 class="sub-title">Komposisi Relasi</h3>
+  <div class="def-card teal">
+    <div class="def-label">Definisi 1.3 — Komposisi Relasi</div>
+    <p>Diberikan relasi \(R\) dari \(A\) ke \(B\), dan relasi \(S\) dari \(B\) ke \(C\). <strong>Komposisi</strong> \(S \circ R\) dari \(A\) ke \(C\) didefinisikan:</p>
+    <div class="formula-block">
+      \(S \circ R = \{(a, c) \mid \exists \, b \in B : (a,b) \in R \text{ dan } (b,c) \in S\}\)
+    </div>
+  </div>
+
+  <div class="example-card">
+    <div class="ex-label">Contoh — Komposisi Relasi</div>
+    <p>Misalkan \(R = \{(1,b),(2,c),(3,a)\}\) dari \(\{1,2,3\}\) ke \(\{a,b,c\}\), dan \(S = \{(a,Y),(b,X),(c,Z)\}\) dari \(\{a,b,c\}\) ke \(\{X,Y,Z\}\).</p>
+    <p>Maka \(S \circ R = \{(1,X),(2,Z),(3,Y)\}\).</p>
+  </div>
+
+  <hr>
+  <div class="theorem-card">
+    <div class="th-label">Catatan Penting</div>
+    <p>Komposisi relasi mirip dengan komposisi fungsi: \(S \circ R\) dibaca dari kanan ke kiri. Matriks relasi komposisi dapat dihitung dengan perkalian Boolean: \(M_{S \circ R} = M_R \odot M_S\).</p>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SECTION 2: SIFAT RELASI -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="s2" class="section">
+<div class="content-wrap">
+  <p class="section-title">Sifat-Sifat Relasi</p>
+  <p class="section-lead">Relasi pada himpunan \(A\) (yaitu \(R \subseteq A \times A\)) dapat memiliki berbagai sifat khusus yang penting.</p>
+
+  <div class="def-card">
+    <div class="def-label">Definisi 2.1 — Refleksif</div>
+    <p>Relasi \(R\) pada \(A\) bersifat <strong>refleksif</strong> jika:</p>
+    <div class="formula-block">\(\forall a \in A : (a,a) \in R\)</div>
+    <p><em>Setiap elemen berelasi dengan dirinya sendiri.</em> Pada matriks relasi, seluruh diagonal utama bernilai 1.</p>
+  </div>
+
+  <div class="def-card gold">
+    <div class="def-label">Definisi 2.2 — Simetri</div>
+    <p>Relasi \(R\) bersifat <strong>simetri</strong> jika:</p>
+    <div class="formula-block">\(\forall a, b \in A : (a,b) \in R \Rightarrow (b,a) \in R\)</div>
+    <p>Matriks relasi simetri: \(M_R = M_R^T\) (matriks sama dengan transposnya).</p>
+  </div>
+
+  <div class="def-card teal">
+    <div class="def-label">Definisi 2.3 — Antisimetri</div>
+    <p>Relasi \(R\) bersifat <strong>antisimetri</strong> jika:</p>
+    <div class="formula-block">\(\forall a, b \in A : (a,b) \in R \text{ dan } (b,a) \in R \Rightarrow a = b\)</div>
+    <p>Artinya: jika \(a \neq b\), maka tidak mungkin \((a,b)\) dan \((b,a)\) keduanya ada di \(R\).</p>
+  </div>
+
+  <div class="def-card coral">
+    <div class="def-label">Definisi 2.4 — Transitif</div>
+    <p>Relasi \(R\) bersifat <strong>transitif</strong> jika:</p>
+    <div class="formula-block">\(\forall a, b, c \in A : (a,b) \in R \text{ dan } (b,c) \in R \Rightarrow (a,c) \in R\)</div>
+  </div>
+
+  <h3 class="sub-title">Relasi Ekuivalensi dan Relasi Urutan</h3>
+  <div class="grid-2">
+    <div class="info-card" style="border-left:4px solid var(--accent-purple);">
+      <h4>Relasi Ekuivalensi</h4>
+      <p>Relasi yang bersifat <span class="badge badge-navy">Refleksif</span> <span class="badge badge-gold">Simetri</span> <span class="badge badge-coral">Transitif</span></p>
+      <p style="font-size:13px;margin-top:8px;">Contoh: relasi "kongruensi modulo \(n\)" pada \(\mathbb{Z}\).</p>
+    </div>
+    <div class="info-card" style="border-left:4px solid var(--accent-teal);">
+      <h4>Relasi Urutan Parsial</h4>
+      <p>Relasi yang bersifat <span class="badge badge-navy">Refleksif</span> <span class="badge badge-teal">Antisimetri</span> <span class="badge badge-coral">Transitif</span></p>
+      <p style="font-size:13px;margin-top:8px;">Contoh: relasi "\(\leq\)" pada \(\mathbb{R}\) atau "\(\subseteq\)" pada himpunan kuasa.</p>
+    </div>
+  </div>
+
+  <h3 class="sub-title">Pemeriksa Sifat Relasi — Interaktif</h3>
+  <p>Klik sel pada matriks di bawah untuk menghidupkan/mematikan relasi pada \(A = \{1, 2, 3\}\). Sifat-sifat relasi akan dideteksi otomatis.</p>
+
+  <div class="interactive-panel">
+    <h3>Matriks Relasi Interaktif</h3>
+    <p class="ip-sub">Klik sel untuk toggle nilai 0/1. \(A = \{1, 2, 3\}\).</p>
+
+    <div style="overflow-x:auto;">
+      <div class="matrix-grid" id="mat" style="grid-template-columns:repeat(4,42px);">
+        <!-- header row -->
+        <div class="matrix-cell corner"></div>
+        <div class="matrix-cell header">1</div>
+        <div class="matrix-cell header">2</div>
+        <div class="matrix-cell header">3</div>
+        <!-- row 1 -->
+        <div class="matrix-cell header">1</div>
+        <div class="matrix-cell" data-r="0" data-c="0" onclick="toggleCell(this)">0</div>
+        <div class="matrix-cell" data-r="0" data-c="1" onclick="toggleCell(this)">0</div>
+        <div class="matrix-cell" data-r="0" data-c="2" onclick="toggleCell(this)">0</div>
+        <!-- row 2 -->
+        <div class="matrix-cell header">2</div>
+        <div class="matrix-cell" data-r="1" data-c="0" onclick="toggleCell(this)">0</div>
+        <div class="matrix-cell" data-r="1" data-c="1" onclick="toggleCell(this)">0</div>
+        <div class="matrix-cell" data-r="1" data-c="2" onclick="toggleCell(this)">0</div>
+        <!-- row 3 -->
+        <div class="matrix-cell header">3</div>
+        <div class="matrix-cell" data-r="2" data-c="0" onclick="toggleCell(this)">0</div>
+        <div class="matrix-cell" data-r="2" data-c="1" onclick="toggleCell(this)">0</div>
+        <div class="matrix-cell" data-r="2" data-c="2" onclick="toggleCell(this)">0</div>
+      </div>
+    </div>
+
+    <div class="prop-result" id="propResult">
+      <div class="prop-tag unknown">Refleksif: —</div>
+      <div class="prop-tag unknown">Simetri: —</div>
+      <div class="prop-tag unknown">Antisimetri: —</div>
+      <div class="prop-tag unknown">Transitif: —</div>
+    </div>
+    <div id="relClass" style="margin-top:12px;font-size:14px;color:var(--text-muted);"></div>
+    <button class="btn-reset" onclick="resetMatrix()">Reset Matriks</button>
+  </div>
+
+  <h3 class="sub-title">Penutupan (Closure) Relasi</h3>
+  <div class="def-card purple">
+    <div class="def-label">Definisi 2.5 — Penutupan Refleksif</div>
+    <p><strong>Penutupan refleksif</strong> dari \(R\) adalah relasi terkecil yang mengandung \(R\) dan bersifat refleksif:</p>
+    <div class="formula-block">\(r(R) = R \cup \Delta \quad \text{di mana } \Delta = \{(a,a) \mid a \in A\}\)</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="info-card">
+      <h4>Penutupan Simetri</h4>
+      <div class="formula-block" style="text-align:center;font-size:14px;">\(s(R) = R \cup R^{-1}\)</div>
+      <p style="font-size:13px;">di mana \(R^{-1} = \{(b,a) \mid (a,b) \in R\}\)</p>
+    </div>
+    <div class="info-card">
+      <h4>Penutupan Transitif</h4>
+      <div class="formula-block" style="text-align:center;font-size:14px;">\(t(R) = R^+ = \bigcup_{n=1}^{\infty} R^n\)</div>
+      <p style="font-size:13px;">Dapat dihitung dengan Algoritma Warshall.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SECTION 3: FUNGSI -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="s3" class="section">
+<div class="content-wrap">
+  <p class="section-title">Konsep Fungsi</p>
+  <p class="section-lead">Fungsi adalah relasi khusus: setiap elemen domain dipasangkan dengan tepat satu elemen kodomain.</p>
+
+  <div class="def-card">
+    <div class="def-label">Definisi 3.1 — Fungsi</div>
+    <p>Sebuah <strong>fungsi</strong> \(f\) dari himpunan \(A\) ke himpunan \(B\), ditulis \(f: A \to B\), adalah relasi dari \(A\) ke \(B\) sedemikian sehingga:</p>
+    <div class="formula-block">
+      \(\forall a \in A, \exists! \, b \in B : (a, b) \in f\)
+    </div>
+    <p>("\(\exists!\)" berarti "ada tepat satu".) Nilai \(b\) tersebut ditulis \(f(a)\).</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="info-card" style="border-left:4px solid var(--navy);">
+      <h4>Domain (\(A\))</h4>
+      <p>Himpunan semua nilai masukan. Disebut juga <em>daerah asal</em>.</p>
+    </div>
+    <div class="info-card" style="border-left:4px solid var(--accent-teal);">
+      <h4>Kodomain (\(B\))</h4>
+      <p>Himpunan yang menjadi tujuan. Disebut juga <em>daerah kawan</em>.</p>
+    </div>
+    <div class="info-card" style="border-left:4px solid var(--gold);">
+      <h4>Range (Jangkauan)</h4>
+      <p>Himpunan semua nilai \(f(a)\) yang benar-benar tercapai: \(\text{Im}(f) = \{f(a) \mid a \in A\}\).</p>
+    </div>
+    <div class="info-card" style="border-left:4px solid var(--accent-purple);">
+      <h4>Prapeta (\(f^{-1}(b)\))</h4>
+      <p>Himpunan semua elemen di \(A\) yang dipetakan ke \(b\): \(\{a \in A \mid f(a) = b\}\).</p>
+    </div>
+  </div>
+
+  <h3 class="sub-title">Syarat Suatu Relasi Menjadi Fungsi</h3>
+  <div class="theorem-card">
+    <div class="th-label">Teorema</div>
+    <p>Relasi \(R \subseteq A \times B\) merupakan fungsi jika dan hanya jika:</p>
+    <p>✔ <strong>Eksistensi:</strong> Setiap \(a \in A\) memiliki setidaknya satu pasangan di \(B\).</p>
+    <p>✔ <strong>Keunikan:</strong> Setiap \(a \in A\) memiliki paling banyak satu pasangan di \(B\).</p>
+    <p>Dua syarat ini digabung: setiap \(a \in A\) memiliki <em>tepat satu</em> pasangan di \(B\).</p>
+  </div>
+
+  <h3 class="sub-title">Pemeriksa Fungsi — Interaktif</h3>
+  <p>Masukkan pasangan terurut \((x, y)\) dari \(A = \{1,2,3\}\) ke \(B = \{a,b,c\}\) dan lihat apakah membentuk fungsi.</p>
+
+  <div class="interactive-panel">
+    <h3>Apakah ini Fungsi?</h3>
+    <p class="ip-sub">Masukkan pasangan \((x, y)\) dengan \(x \in \{1,2,3\}\) dan \(y \in \{a,b,c\}\).</p>
+    <div class="pair-builder">
+      <span style="font-size:14px;font-weight:500;">(</span>
+      <input class="pair-input" id="inp-x" placeholder="x: 1,2,3" maxlength="1">
+      <span style="font-size:14px;font-weight:500;">,</span>
+      <input class="pair-input" id="inp-y" placeholder="y: a,b,c" maxlength="1">
+      <span style="font-size:14px;font-weight:500;">)</span>
+      <button class="btn-add" onclick="addPair()">Tambah</button>
+    </div>
+    <div class="pairs-list" id="pairsList">
+      <span style="font-size:13px;color:var(--text-light);">Belum ada pasangan</span>
+    </div>
+    <div class="func-verdict empty" id="funcVerdict">Tambahkan pasangan untuk memeriksa.</div>
+    <button class="btn-reset" onclick="clearPairs()">Hapus Semua</button>
+  </div>
+
+  <h3 class="sub-title">Komposisi Fungsi</h3>
+  <div class="def-card teal">
+    <div class="def-label">Definisi 3.2 — Komposisi Fungsi</div>
+    <p>Diberikan \(f: A \to B\) dan \(g: B \to C\). <strong>Komposisi</strong> \(g \circ f: A \to C\) didefinisikan:</p>
+    <div class="formula-block">(g \circ f)(x) = g(f(x))</div>
+    <p>Syarat: kodomain \(f\) harus merupakan bagian dari domain \(g\).</p>
+  </div>
+
+  <div class="example-card">
+    <div class="ex-label">Contoh — Komposisi Fungsi</div>
+    <p>Misalkan \(f: \mathbb{Z} \to \mathbb{Z}\) dengan \(f(x) = 2x + 1\) dan \(g: \mathbb{Z} \to \mathbb{Z}\) dengan \(g(x) = x^2\).</p>
+    <p>Maka \((g \circ f)(x) = g(f(x)) = g(2x+1) = (2x+1)^2 = 4x^2 + 4x + 1\).</p>
+    <p>Sedangkan \((f \circ g)(x) = f(g(x)) = f(x^2) = 2x^2 + 1\).</p>
+    <p>Perhatikan: \(g \circ f \neq f \circ g\), komposisi tidak komutatif secara umum.</p>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SECTION 4: JENIS FUNGSI -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="s4" class="section">
+<div class="content-wrap">
+  <p class="section-title">Jenis-Jenis Fungsi</p>
+  <p class="section-lead">Fungsi dapat diklasifikasikan berdasarkan bagaimana elemen domain dipetakan ke kodomain.</p>
+
+  <div class="def-card">
+    <div class="def-label">Definisi 4.1 — Fungsi Injektif (Satu-Satu)</div>
+    <p>Fungsi \(f: A \to B\) bersifat <strong>injektif</strong> jika:</p>
+    <div class="formula-block">\(\forall a_1, a_2 \in A : f(a_1) = f(a_2) \Rightarrow a_1 = a_2\)</div>
+    <p>Ekuivalen: \(a_1 \neq a_2 \Rightarrow f(a_1) \neq f(a_2)\). Setiap elemen kodomain paling banyak dipetakan dari satu elemen domain.</p>
+  </div>
+
+  <div class="def-card gold">
+    <div class="def-label">Definisi 4.2 — Fungsi Surjektif (Pada)</div>
+    <p>Fungsi \(f: A \to B\) bersifat <strong>surjektif</strong> jika:</p>
+    <div class="formula-block">\(\forall b \in B, \exists a \in A : f(a) = b\)</div>
+    <p>Setiap elemen kodomain dicapai oleh setidaknya satu elemen domain. Range = Kodomain.</p>
+  </div>
+
+  <div class="def-card teal">
+    <div class="def-label">Definisi 4.3 — Fungsi Bijektif (Korespondensi Satu-Satu)</div>
+    <p>Fungsi \(f: A \to B\) bersifat <strong>bijektif</strong> jika bersifat <em>sekaligus</em> injektif dan surjektif.</p>
+    <p>Fungsi bijektif memiliki <strong>fungsi invers</strong> \(f^{-1}: B \to A\) yang juga merupakan fungsi.</p>
+  </div>
+
+  <h3 class="sub-title">Visualisasi Diagram Panah</h3>
+
+  <div class="diagram-wrap">
+    <svg width="100%" viewBox="0 0 720 260" style="max-width:720px;">
+      <defs>
+        <marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#0d1b3e"/>
+        </marker>
+        <marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#c9a227"/>
+        </marker>
+        <marker id="a3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#1a7a6e"/>
+        </marker>
+      </defs>
+
+      <!-- ── INJEKTIF ── -->
+      <text x="110" y="22" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="13" fill="#0d1b3e" font-weight="600">Injektif</text>
+      <ellipse cx="70" cy="130" rx="40" ry="95" fill="#e0e6f3" stroke="#0d1b3e" stroke-width="1.2"/>
+      <ellipse cx="155" cy="130" rx="40" ry="95" fill="#ddf0ec" stroke="#1a7a6e" stroke-width="1.2"/>
+      <!-- dots A -->
+      <circle cx="70" cy="75" r="10" fill="#0d1b3e"/><text x="70" y="79" text-anchor="middle" font-size="11" fill="white" font-family="DM Mono,monospace">1</text>
+      <circle cx="70" cy="115" r="10" fill="#0d1b3e"/><text x="70" y="119" text-anchor="middle" font-size="11" fill="white" font-family="DM Mono,monospace">2</text>
+      <circle cx="70" cy="155" r="10" fill="#0d1b3e"/><text x="70" y="159" text-anchor="middle" font-size="11" fill="white" font-family="DM Mono,monospace">3</text>
+      <!-- dots B -->
+      <circle cx="155" cy="75" r="10" fill="#1a7a6e"/><text x="155" y="79" text-anchor="middle" font-size="11" fill="white" font-family="DM Mono,monospace">a</text>
+      <circle cx="155" cy="115" r="10" fill="#1a7a6e"/><text x="155" y="119" text-anchor="middle" font-size="11" fill="white" font-family="DM Mono,monospace">b</text>
+      <circle cx="155" cy="155" r="10" fill="#1a7a6e"/><text x="155" y="159" text-anchor="middle" font-size="11" fill="white" font-family="DM Mono,monospace">c</text>
+      <circle cx="155" cy="195" r="10" fill="#ccc"/><text x="155" y="199" text-anchor="middle" font-size="11" fill="#666" font-family="DM Mono,monospace">d</text>
+      <!-- arrows -->
+      <line x1="81" y1="75" x2="142" y2="75" stroke="#0d1b3e" stroke-width="1.5" marker-end="url(#a1)"/>
+      <line x1="81" y1="115" x2="142" y2="115" stroke="#0d1b3e" stroke-width="1.5" marker-end="url(#a1)"/>
+      <line x1="81" y1="155" x2="142" y2="155" stroke="#0d1b3e" stroke-width="1.5" marker-end="url(#a1)"/>
+      <text x="110" y="248" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" fill="#888">satu-satu, d tidak tercapai</text>
+
+      <!-- ── SURJEKTIF ── -->
+      <text x="360" y="22" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="13" fill="#0d1b3e" font-weight="600">Surjektif</text>
+      <ellipse cx="318" cy="130" rx="40" ry="95" fill="#e0e6f3" stroke="#0d1b3e" stroke-width="1.2"/>
+      <ellipse cx="403" cy="130" rx="40" ry="95" fill="#ddf0ec" stroke="#1a7a6e" stroke-width="1.2"/>
+      <circle cx="318" cy="75" r="10" fill="#0d1b3e"/><text x="318" y="79" text-anchor="middle" font-size="11" fill="white">1</text>
+      <circle cx="318" cy="115" r="10" fill="#0d1b3e"/><text x="318" y="119" text-anchor="middle" font-size="11" fill="white">2</text>
+      <circle cx="318" cy="155" r="10" fill="#0d1b3e"/><text x="318" y="159" text-anchor="middle" font-size="11" fill="white">3</text>
+      <circle cx="318" cy="195" r="10" fill="#0d1b3e"/><text x="318" y="199" text-anchor="middle" font-size="11" fill="white">4</text>
+      <circle cx="403" cy="95" r="10" fill="#1a7a6e"/><text x="403" y="99" text-anchor="middle" font-size="11" fill="white">a</text>
+      <circle cx="403" cy="135" r="10" fill="#1a7a6e"/><text x="403" y="139" text-anchor="middle" font-size="11" fill="white">b</text>
+      <circle cx="403" cy="175" r="10" fill="#1a7a6e"/><text x="403" y="179" text-anchor="middle" font-size="11" fill="white">c</text>
+      <line x1="329" y1="75" x2="390" y2="93" stroke="#c9a227" stroke-width="1.5" marker-end="url(#a2)"/>
+      <line x1="329" y1="115" x2="390" y2="133" stroke="#c9a227" stroke-width="1.5" marker-end="url(#a2)"/>
+      <line x1="329" y1="155" x2="390" y2="133" stroke="#c9a227" stroke-width="1.5" marker-end="url(#a2)"/>
+      <line x1="329" y1="195" x2="390" y2="173" stroke="#c9a227" stroke-width="1.5" marker-end="url(#a2)"/>
+      <text x="360" y="248" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" fill="#888">semua b tercapai (2,3→b)</text>
+
+      <!-- ── BIJEKTIF ── -->
+      <text x="610" y="22" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="13" fill="#0d1b3e" font-weight="600">Bijektif</text>
+      <ellipse cx="568" cy="130" rx="40" ry="95" fill="#e0e6f3" stroke="#0d1b3e" stroke-width="1.2"/>
+      <ellipse cx="653" cy="130" rx="40" ry="95" fill="#ddf0ec" stroke="#1a7a6e" stroke-width="1.2"/>
+      <circle cx="568" cy="75" r="10" fill="#0d1b3e"/><text x="568" y="79" text-anchor="middle" font-size="11" fill="white">1</text>
+      <circle cx="568" cy="115" r="10" fill="#0d1b3e"/><text x="568" y="119" text-anchor="middle" font-size="11" fill="white">2</text>
+      <circle cx="568" cy="155" r="10" fill="#0d1b3e"/><text x="568" y="159" text-anchor="middle" font-size="11" fill="white">3</text>
+      <circle cx="653" cy="75" r="10" fill="#1a7a6e"/><text x="653" y="79" text-anchor="middle" font-size="11" fill="white">a</text>
+      <circle cx="653" cy="115" r="10" fill="#1a7a6e"/><text x="653" y="119" text-anchor="middle" font-size="11" fill="white">b</text>
+      <circle cx="653" cy="155" r="10" fill="#1a7a6e"/><text x="653" y="159" text-anchor="middle" font-size="11" fill="white">c</text>
+      <line x1="579" y1="75" x2="640" y2="115" stroke="#1a7a6e" stroke-width="1.5" marker-end="url(#a3)"/>
+      <line x1="579" y1="115" x2="640" y2="75" stroke="#1a7a6e" stroke-width="1.5" marker-end="url(#a3)"/>
+      <line x1="579" y1="155" x2="640" y2="155" stroke="#1a7a6e" stroke-width="1.5" marker-end="url(#a3)"/>
+      <text x="610" y="248" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" fill="#888">korespondensi satu-satu sempurna</text>
+    </svg>
+  </div>
+
+  <h3 class="sub-title">Perbandingan Lengkap</h3>
+  <div class="diagram-wrap">
+    <table class="mat-table">
+      <thead>
+        <tr>
+          <th>Jenis</th>
+          <th>Injektif?</th>
+          <th>Surjektif?</th>
+          <th>Syarat \(|A|\) vs \(|B|\)</th>
+          <th>Invers?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Injektif</strong></td>
+          <td>✔ Ya</td>
+          <td>✘ Belum tentu</td>
+          <td>\(|A| \leq |B|\)</td>
+          <td>Invers parsial</td>
+        </tr>
+        <tr>
+          <td><strong>Surjektif</strong></td>
+          <td>✘ Belum tentu</td>
+          <td>✔ Ya</td>
+          <td>\(|A| \geq |B|\)</td>
+          <td>Tidak selalu</td>
+        </tr>
+        <tr>
+          <td><strong>Bijektif</strong></td>
+          <td>✔ Ya</td>
+          <td>✔ Ya</td>
+          <td>\(|A| = |B|\)</td>
+          <td>✔ Ya, \(f^{-1}\) ada</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub-title">Fungsi Invers</h3>
+  <div class="def-card coral">
+    <div class="def-label">Definisi 4.4 — Fungsi Invers</div>
+    <p>Jika \(f: A \to B\) bijektif, maka <strong>fungsi invers</strong> \(f^{-1}: B \to A\) didefinisikan:</p>
+    <div class="formula-block">\(f^{-1}(b) = a \iff f(a) = b\)</div>
+    <p>Sifat: \(f^{-1} \circ f = I_A\) dan \(f \circ f^{-1} = I_B\), di mana \(I\) adalah fungsi identitas.</p>
+  </div>
+
+  <div class="example-card">
+    <div class="ex-label">Contoh — Fungsi Invers</div>
+    <p>Misalkan \(f: \mathbb{R} \to \mathbb{R}\), \(f(x) = 3x - 5\). Fungsi ini bijektif.</p>
+    <p>Untuk mencari invers: misalkan \(y = 3x - 5\), maka \(x = \dfrac{y+5}{3}\).</p>
+    <p>Jadi \(f^{-1}(y) = \dfrac{y+5}{3}\), atau ditulis \(f^{-1}(x) = \dfrac{x+5}{3}\).</p>
+  </div>
+
+  <h3 class="sub-title">Jenis Fungsi Lainnya</h3>
+  <div class="summary-grid">
+    <div class="sum-card">
+      <div class="sum-icon" style="background:#e0e6f3;">⌊⌋</div>
+      <h4>Fungsi Lantai (Floor)</h4>
+      <p>\(\lfloor x \rfloor\) = bilangan bulat terbesar \(\leq x\). Contoh: \(\lfloor 3.7 \rfloor = 3\).</p>
+    </div>
+    <div class="sum-card">
+      <div class="sum-icon" style="background:#ddf0ec;">⌈⌉</div>
+      <h4>Fungsi Langit-Langit (Ceiling)</h4>
+      <p>\(\lceil x \rceil\) = bilangan bulat terkecil \(\geq x\). Contoh: \(\lceil 3.2 \rceil = 4\).</p>
+    </div>
+    <div class="sum-card">
+      <div class="sum-icon" style="background:#fce8e3;">|·|</div>
+      <h4>Fungsi Nilai Mutlak</h4>
+      <p>\(|x| = x\) jika \(x \geq 0\), \(|x| = -x\) jika \(x < 0\). Surjektif ke \(\mathbb{R}^+_0\).</p>
+    </div>
+    <div class="sum-card">
+      <div class="sum-icon" style="background:#ede8f9;">\(x^n\)</div>
+      <h4>Fungsi Rekursif</h4>
+      <p>Didefinisikan berdasarkan nilai sebelumnya. Contoh: \(f(n) = n!\) dengan \(f(0)=1\).</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SECTION 5: KUIS -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="s5" class="section">
+<div class="content-wrap">
+  <p class="section-title">Kuis Interaktif</p>
+  <p class="section-lead">Uji pemahaman Anda tentang Relasi dan Fungsi. 8 soal pilihan ganda dengan penjelasan langsung.</p>
+
+  <div id="quizArea"></div>
+
+  <div class="quiz-score-wrap" id="scoreWrap">
+    <div class="score-big" id="scoreNum">0/8</div>
+    <div class="score-label">Jawaban Benar</div>
+    <div id="scoreMsg" style="margin-top:12px;font-size:14px;opacity:0.8;"></div>
+    <button class="btn-retry" onclick="resetQuiz()">Ulangi Kuis</button>
+  </div>
+</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <strong>Relasi dan Fungsi — Matematika Diskrit</strong><br>
+  Martin Bernard, M.Pd. &nbsp;|&nbsp; Program Studi Pendidikan Matematika &nbsp;|&nbsp; IKIP Siliwangi
+</footer>
+
+<script>
+// ── NAV ──────────────────────────────────────────────────
+function showSection(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+  if (window.MathJax) MathJax.typesetPromise();
+}
+
+// ── MATRIX INTERAKTIF ────────────────────────────────────
+let mat = [[0,0,0],[0,0,0],[0,0,0]];
+function toggleCell(el) {
+  const r = +el.dataset.r, c = +el.dataset.c;
+  mat[r][c] = mat[r][c] ? 0 : 1;
+  el.textContent = mat[r][c];
+  el.classList.toggle('on', mat[r][c] === 1);
+  checkProps();
+}
+function resetMatrix() {
+  mat = [[0,0,0],[0,0,0],[0,0,0]];
+  document.querySelectorAll('.matrix-cell[data-r]').forEach(el => {
+    el.textContent = '0'; el.classList.remove('on');
+  });
+  checkProps();
+}
+function checkProps() {
+  const n = 3;
+  let refl = true, sym = true, antisym = true, trans = true;
+  for (let i=0;i<n;i++) if (!mat[i][i]) { refl=false; break; }
+  for (let i=0;i<n;i++) for (let j=0;j<n;j++) {
+    if (mat[i][j] && !mat[j][i]) sym = false;
+    if (i!==j && mat[i][j] && mat[j][i]) antisym = false;
+  }
+  for (let i=0;i<n;i++) for (let j=0;j<n;j++) for (let k=0;k<n;k++) {
+    if (mat[i][j] && mat[j][k] && !mat[i][k]) { trans=false; }
+  }
+  const tags = document.querySelectorAll('.prop-tag');
+  const props = [{name:'Refleksif',val:refl},{name:'Simetri',val:sym},{name:'Antisimetri',val:antisym},{name:'Transitif',val:trans}];
+  props.forEach((p,i) => {
+    tags[i].textContent = p.name + ': ' + (p.val ? 'Ya ✔' : 'Tidak ✘');
+    tags[i].className = 'prop-tag ' + (p.val ? 'yes' : 'no');
+  });
+  let cls = [];
+  if (refl && sym && trans) cls.push('Relasi Ekuivalensi');
+  if (refl && antisym && trans) cls.push('Relasi Urutan Parsial (Poset)');
+  document.getElementById('relClass').innerHTML = cls.length
+    ? '✦ Relasi ini merupakan: <strong>' + cls.join(' dan ') + '</strong>'
+    : '';
+}
+
+// ── FUNGSI CHECKER ───────────────────────────────────────
+let pairs = [];
+const validX = ['1','2','3'], validY = ['a','b','c'];
+function addPair() {
+  const x = document.getElementById('inp-x').value.trim();
+  const y = document.getElementById('inp-y').value.trim();
+  if (!validX.includes(x)) { alert('x harus dari {1,2,3}'); return; }
+  if (!validY.includes(y)) { alert('y harus dari {a,b,c}'); return; }
+  pairs.push({x,y});
+  document.getElementById('inp-x').value='';
+  document.getElementById('inp-y').value='';
+  renderPairs();
+}
+function removePair(i) {
+  pairs.splice(i,1); renderPairs();
+}
+function clearPairs() { pairs=[]; renderPairs(); }
+function renderPairs() {
+  const list = document.getElementById('pairsList');
+  if (!pairs.length) { list.innerHTML='<span style="font-size:13px;color:var(--text-light);">Belum ada pasangan</span>'; checkFunc(); return; }
+  list.innerHTML = pairs.map((p,i) => `<div class="pair-chip">(${p.x},${p.y})<button onclick="removePair(${i})">×</button></div>`).join('');
+  checkFunc();
+}
+function checkFunc() {
+  const v = document.getElementById('funcVerdict');
+  if (!pairs.length) { v.className='func-verdict empty'; v.textContent='Tambahkan pasangan untuk memeriksa.'; return; }
+  const map = {};
+  let fail = null;
+  for (const p of pairs) {
+    if (map[p.x] && map[p.x] !== p.y) { fail = `Elemen ${p.x} dipetakan ke ${map[p.x]} dan ${p.y} — bukan fungsi!`; break; }
+    map[p.x] = p.y;
+  }
+  if (fail) { v.className='func-verdict fail'; v.textContent='✘ Bukan Fungsi. ' + fail; return; }
+  const covered = validX.filter(x => map[x]);
+  if (covered.length < validX.length) {
+    const missing = validX.filter(x => !map[x]);
+    v.className='func-verdict fail';
+    v.textContent='✘ Belum Fungsi. Elemen ' + missing.join(', ') + ' dari domain belum memiliki pasangan.';
+    return;
+  }
+  const range = [...new Set(pairs.map(p=>p.y))];
+  let extra = '';
+  if (range.length === validX.length && validX.length === validY.length) extra = ' (Bijektif ✦)';
+  else if (new Set(Object.values(map)).size === Object.keys(map).length) extra = ' (Injektif ✦)';
+  if (range.length === validY.length && !extra.includes('Bijektif')) extra += (extra ? '' : '') + ' (Surjektif ✦)';
+  v.className='func-verdict ok';
+  v.textContent='✔ Ya, ini adalah Fungsi!' + extra;
+}
+
+// ── KUIS ─────────────────────────────────────────────────
+const questions = [
+  {
+    q: 'Manakah yang merupakan definisi relasi biner \\(R\\) dari \\(A\\) ke \\(B\\)?',
+    opts: ['\\(R = A \\cup B\\)','\\(R \\subseteq A \\times B\\)','\\(R = A \\cap B\\)','\\(R = P(A)\\)'],
+    ans: 1,
+    fb: 'Relasi biner adalah himpunan bagian dari produk kartesian \\(A \\times B\\).'
+  },
+  {
+    q: 'Sebuah relasi \\(R\\) pada \\(A\\) bersifat refleksif jika:',
+    opts: ['\\((a,b)\\in R \\Rightarrow (b,a)\\in R\\)','\\(\\forall a \\in A: (a,a)\\in R\\)','\\((a,b)\\in R\\) dan \\((b,c)\\in R \\Rightarrow (a,c)\\in R\\)','\\((a,b)\\in R\\) dan \\((b,a)\\in R \\Rightarrow a=b\\)'],
+    ans: 1,
+    fb: 'Refleksif berarti setiap elemen berelasi dengan dirinya sendiri.'
+  },
+  {
+    q: 'Fungsi \\(f: A \\to B\\) disebut surjektif jika:',
+    opts: ['Setiap \\(a \\in A\\) punya paling satu pasangan','Setiap \\(b \\in B\\) memiliki prapeta di \\(A\\)','\\(f\\) juga bersifat injektif','Range \\(f\\) lebih kecil dari \\(B\\)'],
+    ans: 1,
+    fb: 'Surjektif: setiap elemen \\(B\\) dicapai oleh minimal satu elemen \\(A\\). Range = Kodomain.'
+  },
+  {
+    q: 'Relasi yang bersifat refleksif, simetri, dan transitif disebut:',
+    opts: ['Relasi Urutan Parsial','Relasi Total','Relasi Ekuivalensi','Relasi Antisimetri'],
+    ans: 2,
+    fb: 'Relasi ekuivalensi = refleksif + simetri + transitif. Contoh: kongruensi modulo n.'
+  },
+  {
+    q: 'Diberikan \\(f(x)=2x+3\\). Nilai \\(f^{-1}(11)\\) adalah:',
+    opts: ['25','4','7','\\(\\frac{14}{3}\\)'],
+    ans: 1,
+    fb: '\\(f^{-1}(y)=\\frac{y-3}{2}\\), maka \\(f^{-1}(11)=\\frac{11-3}{2}=4\\).'
+  },
+  {
+    q: 'Fungsi \\(f: \\mathbb{R} \\to \\mathbb{R}\\) dengan \\(f(x)=x^2\\) bersifat:',
+    opts: ['Bijektif','Injektif saja','Surjektif saja','Bukan injektif dan bukan surjektif'],
+    ans: 3,
+    fb: '\\(f(-2)=f(2)=4\\) (tidak injektif), dan tidak ada \\(x\\) dengan \\(x^2=-1\\) (tidak surjektif ke \\(\\mathbb{R}\\)).'
+  },
+  {
+    q: 'Komposisi \\(g \\circ f\\) didefinisikan sebagai:',
+    opts: ['\\(f(g(x))\\)','\\(g(f(x))\\)','\\(f(x) \\cdot g(x)\\)','\\(f(x) + g(x)\\)'],
+    ans: 1,
+    fb: '\\((g \\circ f)(x) = g(f(x))\\). Urutan: kerjakan \\(f\\) dulu, hasilnya masukkan ke \\(g\\).'
+  },
+  {
+    q: 'Manakah yang merupakan syarat suatu relasi \\(R \\subseteq A \\times B\\) menjadi fungsi?',
+    opts: ['Setiap \\(b \\in B\\) muncul di \\(R\\)','Setiap \\(a \\in A\\) muncul tepat sekali sebagai komponen pertama di \\(R\\)','\\(|A|=|B|\\)','\\(R\\) bersifat simetri'],
+    ans: 1,
+    fb: 'Fungsi mensyaratkan setiap elemen domain dipasangkan dengan tepat satu elemen kodomain.'
+  }
+];
+
+let answered = new Array(questions.length).fill(null);
+let quizScore = 0;
+
+function buildQuiz() {
+  const area = document.getElementById('quizArea');
+  area.innerHTML = questions.map((q,i) => `
+    <div class="quiz-card" id="qc${i}">
+      <div class="quiz-q"><span class="q-num">${i+1}</span>${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((o,j) => `<div class="quiz-opt" id="opt${i}_${j}" onclick="answer(${i},${j})">${o}</div>`).join('')}
+      </div>
+      <div class="quiz-feedback" id="fb${i}"></div>
+    </div>
+  `).join('');
+  if (window.MathJax) MathJax.typesetPromise();
+}
+
+function answer(qi, chosen) {
+  if (answered[qi] !== null) return;
+  answered[qi] = chosen;
+  const q = questions[qi];
+  const opts = document.querySelectorAll(`#qc${qi} .quiz-opt`);
+  opts.forEach((o,j) => {
+    o.classList.add('disabled');
+    if (j===q.ans) o.classList.add('correct');
+    else if (j===chosen && chosen!==q.ans) o.classList.add('wrong');
+  });
+  const fb = document.getElementById(`fb${qi}`);
+  const ok = chosen === q.ans;
+  if (ok) quizScore++;
+  fb.textContent = (ok ? '✔ Benar! ' : '✘ Kurang tepat. ') + q.fb;
+  fb.className = 'quiz-feedback show ' + (ok ? 'ok' : 'fail');
+  if (window.MathJax) MathJax.typesetPromise();
+  if (answered.every(a => a !== null)) showScore();
+}
+
+function showScore() {
+  const wrap = document.getElementById('scoreWrap');
+  wrap.classList.add('show');
+  document.getElementById('scoreNum').textContent = quizScore + '/' + questions.length;
+  const pct = quizScore / questions.length;
+  let msg = pct === 1 ? 'Sempurna! Pemahaman Anda sangat baik.'
+    : pct >= 0.75 ? 'Bagus! Masih ada beberapa konsep yang perlu diperkuat.'
+    : pct >= 0.5 ? 'Cukup baik. Ulangi materi yang belum dipahami.'
+    : 'Perlu belajar lebih lanjut. Baca kembali materi dari awal.';
+  document.getElementById('scoreMsg').textContent = msg;
+}
+
+function resetQuiz() {
+  answered = new Array(questions.length).fill(null);
+  quizScore = 0;
+  document.getElementById('scoreWrap').classList.remove('show');
+  buildQuiz();
+}
+
+buildQuiz();
+</script>
+</body>
+</html>
