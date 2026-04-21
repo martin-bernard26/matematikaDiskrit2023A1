@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Pengumpulan Tugas Mahasiswa</title>
+  <style>
+    /* CSS kamu sudah bagus, tidak ada perubahan di sini */
+    body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #4facfe, #00f2fe); margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .container { background: white; padding: 30px; border-radius: 15px; width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+    h2 { text-align: center; color: #333; }
+    input, textarea { width: 100%; padding: 10px; margin-top: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
+    button { width: 100%; padding: 12px; margin-top: 15px; border: none; border-radius: 10px; background: linear-gradient(135deg, #43e97b, #38f9d7); color: white; font-size: 16px; cursor: pointer; transition: 0.3s; }
+    button:hover { transform: scale(1.05); }
+    .preview { margin-top: 10px; font-size: 12px; color: #555; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>📚 Upload Tugas</h2>
+  <input type="text" id="nama" placeholder="Nama Mahasiswa">
+  <textarea id="komentar" placeholder="Masukkan jawaban atau komentar"></textarea>
+  <input type="file" id="fileInput">
+  <div class="preview" id="preview"></div>
+  <button id="btnKirim">Kirim Tugas</button>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDGpG2vAoWqwn46upNtU9M-Cx1gkKwBE-c",
+    authDomain: "chatting-matematika.firebaseapp.com",
+    databaseURL: "https://chatting-matematika-default-rtdb.firebaseio.com",
+    projectId: "chatting-matematika",
+    storageBucket: "chatting-matematika.appspot.com",
+    messagingSenderId: "811492413631",
+    appId: "1:811492413631:web:a29a4bba38a6541f90360a",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+
+  let fileBase64 = "";
+  let fileName = "";
+
+  // Preview file
+  document.getElementById("fileInput").addEventListener("change", function(e) {
+    let file = e.target.files[0];
+    if (!file) return;
+    
+    fileName = file.name;
+    let reader = new FileReader();
+    reader.onload = function() {
+      fileBase64 = reader.result;
+      document.getElementById("preview").innerHTML = "File dipilih: <b>" + fileName + "</b>";
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Fungsi Kirim Data
+  async function kirimData() {
+    let nama = document.getElementById("nama").value;
+    let komentar = document.getElementById("komentar").value;
+
+    if(nama === "" || komentar === "" || fileBase64 === "") {
+      alert("Harap isi semua data!");
+      return;
+    }
+
+    let id = Date.now();
+
+    try {
+      // Perbaikan sintaks versi modular
+      await set(ref(database, "tugas/" + id), {
+        nama: nama,
+        komentar: komentar,
+        file: fileBase64,
+        namaFile: fileName,
+        waktu: new Date().toLocaleString()
+      });
+
+      alert("Tugas berhasil dikirim!");
+
+      // Reset form
+      document.getElementById("nama").value = "";
+      document.getElementById("komentar").value = "";
+      document.getElementById("fileInput").value = "";
+      document.getElementById("preview").innerHTML = "";
+      fileBase64 = "";
+    } catch (error) {
+      console.error(error);
+      alert("Gagal mengirim tugas: " + error.message);
+    }
+  }
+
+  // Gunakan Event Listener alih-alih onclick di HTML
+  document.getElementById("btnKirim").addEventListener("click", kirimData);
+</script>
+
+</body>
+</html>
