@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>20 Soal Pembuktian Teori Bilangan – Matematika Diskrit</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)'],['$','$']], displayMath: [['\\[','\\]'],['$$','$$']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+/* ═══════════════════════════════════════════
+   ROOT & BASE
+═══════════════════════════════════════════ */
+:root {
+  --cream:       #faf6ef;
+  --cream2:      #f3ece0;
+  --cream3:      #e8ddc8;
+  --brown-ink:   #2c1a06;
+  --brown-mid:   #5a3e24;
+  --brown-light: #8b6b4a;
+  --brown-faint: #b89e82;
+  --gold:        #c8960c;
+  --gold2:       #e8b830;
+  --gold-pale:   #f5e8b0;
+  --teal:        #1a6060;
+  --teal-pale:   #d4eded;
+  --crimson:     #8b1a1a;
+  --crimson-pale:#fceaea;
+  --sage:        #2d5a2d;
+  --sage-pale:   #e0f0e0;
+  --indigo:      #1e2d6e;
+  --indigo-pale: #e8ecfb;
+  --paper-shadow: rgba(44,26,6,0.12);
+  --rule: rgba(44,26,6,0.15);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: #e8dcc8;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 20% 10%, rgba(200,150,12,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 90%, rgba(26,96,96,0.06) 0%, transparent 60%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  color: var(--brown-ink);
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 17px;
+  line-height: 1.72;
+  min-height: 100vh;
+}
+
+/* ═══════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════ */
+.masthead {
+  background: var(--brown-ink);
+  color: var(--cream);
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+.masthead::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 44px, rgba(200,150,12,0.06) 44px, rgba(200,150,12,0.06) 45px),
+    repeating-linear-gradient(90deg, transparent, transparent 44px, rgba(200,150,12,0.04) 44px, rgba(200,150,12,0.04) 45px);
+}
+.masthead-inner {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3.5rem 2rem 3rem;
+  text-align: center;
+}
+.masthead-kop {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--gold2);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  opacity: 0.85;
+}
+.masthead-ornament {
+  color: var(--gold);
+  font-size: 1.6rem;
+  letter-spacing: 12px;
+  margin-bottom: 1rem;
+  display: block;
+}
+.masthead h1 {
+  font-family: 'EB Garamond', serif;
+  font-size: clamp(2rem, 5.5vw, 3.4rem);
+  font-weight: 600;
+  line-height: 1.18;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.3px;
+}
+.masthead h1 em {
+  color: var(--gold2);
+  font-style: italic;
+}
+.masthead-sub {
+  font-family: 'Crimson Pro', serif;
+  font-style: italic;
+  font-size: 1.15rem;
+  color: rgba(250,246,239,0.65);
+  margin-bottom: 2rem;
+}
+.masthead-rule {
+  width: 220px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 0 auto 1.5rem;
+}
+.masthead-stats {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+.mstat { text-align: center; }
+.mstat-n {
+  font-family: 'EB Garamond', serif;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--gold2);
+  display: block;
+  line-height: 1;
+}
+.mstat-l {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(250,246,239,0.45);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ═══════════════════════════════════════════
+   STICKY TOOLBAR
+═══════════════════════════════════════════ */
+.toolbar {
+  background: rgba(44,26,6,0.97);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(200,150,12,0.2);
+  padding: 0.6rem 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+.toolbar-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.toolbar-inner::-webkit-scrollbar { display: none; }
+.tb-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: rgba(184,158,130,0.6);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  margin-right: 0.3rem;
+}
+.tb-btn {
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(200,150,12,0.2);
+  color: rgba(250,246,239,0.65);
+  font-family: 'Crimson Pro', serif;
+  font-size: 13.5px;
+  padding: 4px 13px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.18s;
+  white-space: nowrap;
+}
+.tb-btn:hover { background: rgba(200,150,12,0.15); color: var(--gold2); border-color: var(--gold); }
+.tb-btn.active { background: var(--gold); color: var(--brown-ink); border-color: var(--gold); font-weight: 600; }
+.tb-sep { width: 1px; height: 20px; background: rgba(200,150,12,0.2); margin: 0 0.2rem; flex-shrink: 0; }
+.tb-expand {
+  margin-left: auto;
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid rgba(200,150,12,0.3);
+  color: var(--gold2);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 4px 12px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.tb-expand:hover { background: rgba(200,150,12,0.15); }
+
+/* ═══════════════════════════════════════════
+   MAIN
+═══════════════════════════════════════════ */
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 5rem;
+}
+
+.counter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--rule);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.counter-txt {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--brown-light);
+  letter-spacing: 1px;
+}
+.counter-txt strong { color: var(--gold); }
+
+/* ═══════════════════════════════════════════
+   SOAL CARD — PAPER SHEET AESTHETIC
+═══════════════════════════════════════════ */
+.soal {
+  background: var(--cream);
+  border: 1px solid var(--cream3);
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px var(--paper-shadow), 0 0 0 1px rgba(255,255,255,0.5) inset;
+  overflow: hidden;
+  transition: box-shadow 0.25s, transform 0.25s;
+  animation: paperIn 0.4s ease both;
+}
+@keyframes paperIn {
+  from { opacity:0; transform:translateY(10px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.soal:hover { box-shadow: 0 6px 20px var(--paper-shadow), 0 0 0 1px rgba(255,255,255,0.5) inset; }
+
+/* Card accent stripe per topik */
+.soal[data-topik="keterbagian"]  { border-left: 5px solid var(--teal); }
+.soal[data-topik="prima"]        { border-left: 5px solid var(--crimson); }
+.soal[data-topik="gcd"]          { border-left: 5px solid var(--sage); }
+.soal[data-topik="kongruensi"]   { border-left: 5px solid var(--indigo); }
+.soal[data-topik="induksi"]      { border-left: 5px solid var(--gold); }
+
+/* HEADER */
+.soal-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem 1.4rem 1.1rem;
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px dashed var(--rule);
+  transition: background 0.15s;
+}
+.soal-head:hover { background: rgba(200,150,12,0.03); }
+
+.soal-nomor {
+  font-family: 'EB Garamond', serif;
+  font-size: 1.55rem;
+  font-weight: 600;
+  line-height: 1;
+  flex-shrink: 0;
+  width: 38px;
+  text-align: right;
+  padding-top: 3px;
+}
+.soal[data-topik="keterbagian"] .soal-nomor { color: var(--teal); }
+.soal[data-topik="prima"]       .soal-nomor { color: var(--crimson); }
+.soal[data-topik="gcd"]         .soal-nomor { color: var(--sage); }
+.soal[data-topik="kongruensi"]  .soal-nomor { color: var(--indigo); }
+.soal[data-topik="induksi"]     .soal-nomor { color: var(--gold); }
+
+.soal-vline {
+  width: 1px;
+  align-self: stretch;
+  background: var(--rule);
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.soal-info { flex: 1; }
+.soal-chips {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.45rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.chip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 2px;
+  border: 1px solid;
+}
+.chip-topik-keterbagian { background: var(--teal-pale); border-color: rgba(26,96,96,0.3); color: var(--teal); }
+.chip-topik-prima       { background: var(--crimson-pale); border-color: rgba(139,26,26,0.3); color: var(--crimson); }
+.chip-topik-gcd         { background: var(--sage-pale); border-color: rgba(45,90,45,0.3); color: var(--sage); }
+.chip-topik-kongruensi  { background: var(--indigo-pale); border-color: rgba(30,45,110,0.3); color: var(--indigo); }
+.chip-topik-induksi     { background: var(--gold-pale); border-color: rgba(200,150,12,0.3); color: var(--gold); }
+
+.chip-tingkat-mudah { background: rgba(45,90,45,0.08); border-color: rgba(45,90,45,0.25); color: var(--sage); }
+.chip-tingkat-sedang { background: rgba(200,150,12,0.08); border-color: rgba(200,150,12,0.3); color: #9a7008; }
+.chip-tingkat-sulit { background: rgba(139,26,26,0.08); border-color: rgba(139,26,26,0.25); color: var(--crimson); }
+
+.soal-judul {
+  font-family: 'EB Garamond', serif;
+  font-size: 1.08rem;
+  font-weight: 600;
+  color: var(--brown-ink);
+  margin-bottom: 0.3rem;
+  line-height: 1.35;
+}
+.soal-pernyataan {
+  font-size: 15.5px;
+  color: var(--brown-mid);
+  font-style: italic;
+  line-height: 1.6;
+}
+.soal-toggle {
+  flex-shrink: 0;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--rule);
+  background: var(--cream2);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--brown-light);
+  font-size: 11px;
+  transition: all 0.25s;
+  margin-top: 3px;
+}
+.soal.open .soal-toggle { background: var(--brown-ink); color: var(--gold2); border-color: var(--brown-ink); transform: rotate(180deg); }
+
+/* BODY */
+.soal-body {
+  display: none;
+  padding: 1.5rem 1.4rem 1.4rem 1.4rem;
+  background: linear-gradient(180deg, var(--cream2) 0%, var(--cream) 60px);
+  border-top: 1px solid var(--rule);
+}
+.soal.open .soal-body { display: block; animation: bodyReveal 0.28s ease; }
+@keyframes bodyReveal { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
+
+/* SOAL BOX */
+.box-soal {
+  background: #fff;
+  border: 1.5px solid var(--cream3);
+  border-left: 4px solid var(--gold);
+  border-radius: 3px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.box-soal .box-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+}
+.box-soal p { font-size: 15.5px; color: var(--brown-ink); line-height: 1.7; }
+
+/* BUKTI SECTION */
+.bukti-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--brown-light);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.bukti-label::after { content:''; flex:1; height:1px; background:var(--rule); }
+
+/* STEPS */
+.steps { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem; }
+.step {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+}
+.step-dot {
+  flex-shrink: 0;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  border: 1.5px solid var(--cream3);
+  background: var(--cream2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--brown-light);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+.step.key .step-dot {
+  background: var(--brown-ink);
+  border-color: var(--brown-ink);
+  color: var(--gold2);
+}
+.step-content {
+  background: var(--cream2);
+  border: 1px solid var(--cream3);
+  border-radius: 3px;
+  padding: 0.7rem 1rem;
+  flex: 1;
+  font-size: 14.5px;
+  color: var(--brown-mid);
+  line-height: 1.7;
+}
+.step.key .step-content {
+  background: #fff;
+  border-color: rgba(200,150,12,0.25);
+  color: var(--brown-ink);
+}
+.step-content strong { color: var(--brown-ink); font-weight: 600; }
+.step-content .mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  background: var(--cream3);
+  padding: 1px 5px;
+  border-radius: 2px;
+}
+
+/* FORMULA */
+.formula {
+  background: #fff;
+  border: 1px solid var(--cream3);
+  border-radius: 3px;
+  padding: 0.85rem;
+  text-align: center;
+  margin: 0.6rem 0;
+  font-size: 1.05rem;
+  overflow-x: auto;
+}
+
+/* QED */
+.qed-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: linear-gradient(90deg, rgba(200,150,12,0.08), transparent);
+  border: 1px solid rgba(200,150,12,0.2);
+  border-radius: 3px;
+  padding: 0.9rem 1.1rem;
+  margin-top: 1rem;
+}
+.qed-sq {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--gold);
+}
+.qed-text { font-size: 14.5px; color: var(--brown-ink); line-height: 1.65; }
+.qed-text strong { color: var(--gold); }
+.qed-mark {
+  margin-left: auto;
+  font-family: 'EB Garamond', serif;
+  font-size: 1.3rem;
+  color: var(--gold);
+  flex-shrink: 0;
+  align-self: flex-end;
+  font-weight: 600;
+}
+
+/* METODE BADGE */
+.metode {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: var(--indigo-pale);
+  border: 1px solid rgba(30,45,110,0.2);
+  color: var(--indigo);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 2px;
+  margin-bottom: 1.1rem;
+}
+
+/* HIDDEN state */
+.soal.hidden { display: none; }
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+footer {
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  border-top: 1px solid var(--rule);
+  color: var(--brown-light);
+  font-size: 14px;
+  font-style: italic;
+  background: var(--cream2);
+  margin-top: 1rem;
+}
+footer strong { font-style: normal; color: var(--brown-mid); }
+footer .ornament { color: var(--gold); font-style: normal; display: block; font-size: 1.1rem; letter-spacing: 8px; margin-bottom: 0.5rem; }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media (max-width:600px) {
+  .soal-head { flex-wrap: wrap; gap: 0.6rem; }
+  .soal-vline { display: none; }
+  .masthead-stats { gap: 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ MASTHEAD ═══ -->
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="masthead-kop">IKIP Siliwangi · Pendidikan Matematika · Matematika Diskrit</div>
+    <span class="masthead-ornament">✦ ✦ ✦</span>
+    <h1>20 Soal Pembuktian<br><em>Teori Bilangan</em></h1>
+    <p class="masthead-sub">Latihan berpikir deduktif untuk mahasiswa Pendidikan Matematika</p>
+    <div class="masthead-rule"></div>
+    <div class="masthead-stats">
+      <div class="mstat"><span class="mstat-n">20</span><span class="mstat-l">Soal</span></div>
+      <div class="mstat"><span class="mstat-n">5</span><span class="mstat-l">Topik</span></div>
+      <div class="mstat"><span class="mstat-n">3</span><span class="mstat-l">Tingkat</span></div>
+      <div class="mstat"><span class="mstat-n">∞</span><span class="mstat-l">Inspirasi</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ TOOLBAR ═══ -->
+<nav class="toolbar">
+  <div class="toolbar-inner">
+    <span class="tb-label">Topik:</span>
+    <button class="tb-btn active" onclick="filterSoal('semua',this)">Semua</button>
+    <button class="tb-btn" onclick="filterSoal('keterbagian',this)">Keterbagian</button>
+    <button class="tb-btn" onclick="filterSoal('prima',this)">Bil. Prima</button>
+    <button class="tb-btn" onclick="filterSoal('gcd',this)">GCD &amp; LCM</button>
+    <button class="tb-btn" onclick="filterSoal('kongruensi',this)">Kongruensi</button>
+    <button class="tb-btn" onclick="filterSoal('induksi',this)">Induksi</button>
+    <div class="tb-sep"></div>
+    <button class="tb-expand" id="expand-btn" onclick="toggleAll()">▸ Buka Semua</button>
+  </div>
+</nav>
+
+<!-- ═══ MAIN ═══ -->
+<main>
+  <div class="counter-row">
+    <span class="counter-txt">Menampilkan <strong id="vis-count">20</strong> dari 20 soal</span>
+    <span class="counter-txt" style="font-style:italic;color:var(--brown-faint)">Klik soal untuk melihat bukti lengkap</span>
+  </div>
+
+  <div id="soal-list">
+  <!-- SOAL AKAN DIRENDER VIA JS -->
+  </div>
+</main>
+
+<footer>
+  <span class="ornament">· · ·</span>
+  Disusun oleh <strong>Martin Bernard, M.Pd.</strong> &nbsp;·&nbsp; Program Studi Pendidikan Matematika<br>
+  IKIP Siliwangi, Cimahi &nbsp;·&nbsp; Mata Kuliah: Matematika Diskrit
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// DATA SOAL — 20 SOAL PEMBUKTIAN TEORI BILANGAN
+// ═══════════════════════════════════════════════════════
+const SOAL = [
+
+// ─── KETERBAGIAN (1–5) ───────────────────────────────
+{
+  no:1, topik:'keterbagian', tingkat:'mudah',
+  judul:'Sifat Transitif Keterbagian',
+  pernyataan:'Jika $a \\mid b$ dan $b \\mid c$, maka $a \\mid c$.',
+  soal:'Misalkan $a, b, c \\in \\mathbb{Z}$ dengan $a \\neq 0$. Buktikan bahwa jika $a \\mid b$ dan $b \\mid c$, maka $a \\mid c$.',
+  metode:'Bukti Langsung',
+  langkah:[
+    {t:'<strong>Asumsi:</strong> Diberikan $a \\mid b$ dan $b \\mid c$, dengan $a,b,c \\in \\mathbb{Z}$ dan $a \\neq 0$.'},
+    {t:'<strong>Dari $a \\mid b$:</strong> Terdapat $k_1 \\in \\mathbb{Z}$ sehingga $b = k_1 a$.', k:true},
+    {t:'<strong>Dari $b \\mid c$:</strong> Terdapat $k_2 \\in \\mathbb{Z}$ sehingga $c = k_2 b$.', k:true},
+    {t:'<strong>Substitusikan:</strong> $c = k_2 b = k_2(k_1 a) = (k_1 k_2)\\,a$.', k:true},
+    {t:'<strong>Konklusi:</strong> Karena $k_1 k_2 \\in \\mathbb{Z}$ (hasil kali bilangan bulat adalah bilangan bulat), maka $a \\mid c$.'},
+  ],
+  qed:'Terbukti: keterbagian bersifat <strong>transitif</strong>. Contoh: $3\\mid6$ dan $6\\mid18$, maka $3\\mid18$ ✓'
+},
+
+{
+  no:2, topik:'keterbagian', tingkat:'mudah',
+  judul:'Kombinasi Linear Kelipatan',
+  pernyataan:'Jika $a \\mid b$ dan $a \\mid c$, maka $a \\mid (mb + nc)$ untuk semua $m,n\\in\\mathbb{Z}$.',
+  soal:'Buktikan: untuk $a,b,c,m,n \\in \\mathbb{Z}$ dengan $a\\neq0$, jika $a\\mid b$ dan $a \\mid c$, maka $a \\mid (mb + nc)$.',
+  metode:'Bukti Langsung',
+  langkah:[
+    {t:'<strong>Dari $a \\mid b$:</strong> Ada $k_1 \\in \\mathbb{Z}$ dengan $b = k_1 a$.', k:true},
+    {t:'<strong>Dari $a \\mid c$:</strong> Ada $k_2 \\in \\mathbb{Z}$ dengan $c = k_2 a$.', k:true},
+    {t:'<strong>Hitung $mb + nc$:</strong> $mb + nc = m(k_1 a) + n(k_2 a) = (mk_1 + nk_2)a$.', k:true},
+    {t:'<strong>Konklusi:</strong> Karena $mk_1 + nk_2 \\in \\mathbb{Z}$, maka $a \\mid (mb+nc)$.'},
+  ],
+  qed:'Terbukti. Akibat penting: jika $a\\mid b$ dan $a\\mid c$ maka $a\\mid(b+c)$, $a\\mid(b-c)$, $a\\mid kb$ untuk semua $k\\in\\mathbb{Z}$.'
+},
+
+{
+  no:3, topik:'keterbagian', tingkat:'sedang',
+  judul:'Hasil Kali Tiga Bilangan Berurutan',
+  pernyataan:'Untuk setiap $n \\in \\mathbb{Z}$, berlaku $6 \\mid n(n+1)(n+2)$.',
+  soal:'Buktikan bahwa hasil kali tiga bilangan bulat berurutan selalu habis dibagi 6.',
+  metode:'Kasus Modulo',
+  langkah:[
+    {t:'<strong>Strategi:</strong> Cukup buktikan $2\\mid n(n+1)(n+2)$ dan $3\\mid n(n+1)(n+2)$, karena $\\gcd(2,3)=1$.'},
+    {t:'<strong>Bukti $2\\mid P$:</strong> Di antara dua bilangan berurutan $n,n+1$, tepat satu genap. Jadi salah satu dari $n$ atau $n+1$ habis dibagi 2, sehingga $2\\mid n(n+1)(n+2)$.', k:true},
+    {t:'<strong>Bukti $3\\mid P$:</strong> Tulis $n \\equiv r\\pmod{3}$ untuk $r\\in\\{0,1,2\\}$. Maka $n, n+1, n+2$ memberi sisa $r, r+1, r+2$ (mod 3). Di antara ketiganya, tepat satu kongruen 0 (mod 3). Jadi $3\\mid n(n+1)(n+2)$.', k:true},
+    {t:'<strong>Konklusi:</strong> Karena $2\\mid P$ dan $3\\mid P$ dan $\\gcd(2,3)=1$, maka $6=2\\cdot3\\mid P$.'},
+    {t:'<strong>Verifikasi:</strong> $n=4$: $4\\cdot5\\cdot6=120=6\\cdot20$ ✓. $n=7$: $7\\cdot8\\cdot9=504=6\\cdot84$ ✓.'},
+  ],
+  qed:'Terbukti $6\\mid n(n+1)(n+2)$ untuk semua $n\\in\\mathbb{Z}$. Ini ekuivalen dengan $n(n+1)(n+2)=6\\binom{n+2}{3}$.'
+},
+
+{
+  no:4, topik:'keterbagian', tingkat:'sedang',
+  judul:'Keterbagian oleh 4 untuk Kuadrat Ganjil',
+  pernyataan:'Jika $n$ ganjil, maka $8 \\mid (n^2 - 1)$.',
+  soal:'Buktikan bahwa $n^2 - 1$ selalu habis dibagi 8 untuk setiap bilangan bulat ganjil $n$.',
+  metode:'Substitusi Bentuk Umum',
+  langkah:[
+    {t:'<strong>Bentuk umum ganjil:</strong> Karena $n$ ganjil, tulis $n = 2k+1$ untuk suatu $k\\in\\mathbb{Z}$.', k:true},
+    {t:'<strong>Hitung $n^2-1$:</strong> $n^2-1 = (2k+1)^2-1 = 4k^2+4k+1-1 = 4k^2+4k = 4k(k+1)$.', k:true},
+    {t:'<strong>Amati $k(k+1)$:</strong> Ini adalah hasil kali dua bilangan berurutan. Salah satunya pasti genap, jadi $2\\mid k(k+1)$, artinya $k(k+1)=2m$ untuk suatu $m\\in\\mathbb{Z}$.', k:true},
+    {t:'<strong>Konklusi:</strong> $n^2-1 = 4k(k+1) = 4\\cdot2m = 8m$. Jadi $8\\mid(n^2-1)$.'},
+  ],
+  qed:'Terbukti $8\\mid(n^2-1)$ untuk setiap $n$ ganjil. Contoh: $n=7$: $49-1=48=8\\cdot6$ ✓. $n=11$: $121-1=120=8\\cdot15$ ✓.'
+},
+
+{
+  no:5, topik:'keterbagian', tingkat:'sulit',
+  judul:'Habis Dibagi 30 untuk $n^5-n$',
+  pernyataan:'Untuk setiap $n \\in \\mathbb{Z}$, berlaku $30 \\mid n^5 - n$.',
+  soal:'Buktikan bahwa $n^5 - n$ selalu habis dibagi 30 untuk setiap bilangan bulat $n$.',
+  metode:'Teorema Fermat Kecil & Faktorisasi',
+  langkah:[
+    {t:'<strong>Faktorisasi:</strong> $n^5-n = n(n^4-1) = n(n^2-1)(n^2+1) = (n-1)n(n+1)(n^2+1)$.'},
+    {t:'<strong>Strategi:</strong> Tunjukkan $2\\mid$, $3\\mid$, $5\\mid n^5-n$ (faktor saling koprima, perkalian = 30).'},
+    {t:'<strong>Bukti $2\\mid n^5-n$:</strong> Fermat Kecil: $n^2\\equiv n\\pmod{2}$ sehingga $n^5\\equiv n\\pmod{2}$. Jadi $2\\mid n^5-n$.', k:true},
+    {t:'<strong>Bukti $3\\mid n^5-n$:</strong> Fermat Kecil: $n^3\\equiv n\\pmod{3}$, maka $n^5=n^3\\cdot n^2\\equiv n\\cdot n^2=n^3\\equiv n\\pmod{3}$. Jadi $3\\mid n^5-n$.', k:true},
+    {t:'<strong>Bukti $5\\mid n^5-n$:</strong> Fermat Kecil langsung: $n^5\\equiv n\\pmod{5}$. Jadi $5\\mid n^5-n$.', k:true},
+    {t:'<strong>Konklusi:</strong> Karena $\\gcd(2,3)=\\gcd(3,5)=\\gcd(2,5)=1$, maka $2\\cdot3\\cdot5=30\\mid n^5-n$.'},
+  ],
+  qed:'Terbukti $30\\mid n^5-n$ untuk semua $n\\in\\mathbb{Z}$. Contoh: $n=4$: $1024-4=1020=30\\cdot34$ ✓.'
+},
+
+// ─── BILANGAN PRIMA (6–10) ────────────────────────────
+{
+  no:6, topik:'prima', tingkat:'mudah',
+  judul:'Uji Keprimaan dengan Batas $\\sqrt{n}$',
+  pernyataan:'Jika $n$ bukan prima, maka $n$ memiliki faktor prima $p \\leq \\sqrt{n}$.',
+  soal:'Buktikan bahwa jika bilangan bulat $n > 1$ bukan prima, maka $n$ memiliki faktor prima $p$ dengan $p \\leq \\sqrt{n}$.',
+  metode:'Bukti Kontradiksi / Langsung',
+  langkah:[
+    {t:'<strong>Karena $n$ komposit:</strong> Ada $a, b \\in \\mathbb{Z}^+$ dengan $n = ab$, $1 < a \\leq b < n$.'},
+    {t:'<strong>Estimasi:</strong> Karena $a\\leq b$, maka $a^2 \\leq ab = n$, sehingga $a\\leq \\sqrt{n}$.', k:true},
+    {t:'<strong>Faktor prima dari $a$:</strong> Bilangan $a > 1$ memiliki setidaknya satu faktor prima $p$. Karena $p\\leq a \\leq \\sqrt{n}$, maka $p\\leq\\sqrt{n}$.', k:true},
+    {t:'<strong>Konklusi:</strong> $p$ juga merupakan faktor dari $n$ (karena $p\\mid a$ dan $a\\mid n$). Jadi $n$ memiliki faktor prima $\\leq\\sqrt{n}$.'},
+  ],
+  qed:'Akibat penting untuk algoritma: untuk menguji keprimaan $n$, cukup periksa pembagian oleh semua prima hingga $\\lfloor\\sqrt{n}\\rfloor$.'
+},
+
+{
+  no:7, topik:'prima', tingkat:'mudah',
+  judul:'Bilangan Prima Ada Tak Hingga Banyak',
+  pernyataan:'Banyaknya bilangan prima adalah tak hingga.',
+  soal:'Buktikan teorema Euklides: terdapat tak hingga banyak bilangan prima.',
+  metode:'Bukti Kontradiksi',
+  langkah:[
+    {t:'<strong>Asumsi (kontradiksi):</strong> Misalkan bilangan prima hanya berhingga banyak: $p_1, p_2, \\ldots, p_k$.'},
+    {t:'<strong>Konstruksi:</strong> Definisikan $N = p_1 p_2 \\cdots p_k + 1$.', k:true},
+    {t:'<strong>Faktor prima $N$:</strong> Karena $N > 1$, ada faktor prima $q$ dari $N$. Apakah $q \\in \\{p_1,\\ldots,p_k\\}$?', k:true},
+    {t:'<strong>Kontradiksi:</strong> Jika $q = p_i$ untuk suatu $i$, maka $p_i \\mid N$ dan $p_i \\mid p_1\\cdots p_k$, sehingga $p_i \\mid (N - p_1\\cdots p_k) = 1$. Tidak mungkin ada prima yang membagi 1!', k:true},
+    {t:'<strong>Konklusi:</strong> $q \\notin \\{p_1,\\ldots,p_k\\}$, kontradiksi dengan asumsi daftar memuat semua prima.'},
+  ],
+  qed:'Terbukti: selalu ada prima baru. Konstruksi $N = p_1\\cdots p_k+1$ menjamin eksistensi prima di luar daftar (meski $N$ sendiri belum tentu prima).'
+},
+
+{
+  no:8, topik:'prima', tingkat:'sedang',
+  judul:'Prima $p > 2$ Selalu Ganjil',
+  pernyataan:'Setiap bilangan prima $p > 2$ adalah bilangan ganjil.',
+  soal:'Buktikan bahwa semua bilangan prima yang lebih besar dari 2 adalah bilangan ganjil.',
+  metode:'Bukti Kontrapositif',
+  langkah:[
+    {t:'<strong>Kontrapositif:</strong> Ekuivalen dengan membuktikan "jika $p$ genap dan $p>2$, maka $p$ bukan prima."'},
+    {t:'<strong>Misalkan $p$ genap dan $p>2$:</strong> Karena $p$ genap, ada $k\\in\\mathbb{Z}^+$ dengan $p=2k$.', k:true},
+    {t:'<strong>Analisis faktor:</strong> Karena $p=2k$ dan $p>2$, maka $k>1$. Jadi $p$ memiliki faktor 2 dan faktor $k$, keduanya bukan 1 dan bukan $p$ sendiri (karena $k < p$).', k:true},
+    {t:'<strong>Konklusi kontrapositif:</strong> $p$ memiliki faktor selain 1 dan dirinya sendiri, jadi $p$ bukan prima.'},
+    {t:'<strong>Ekuivalensi:</strong> Karena kontrapositif terbukti, pernyataan asli pun terbukti: setiap prima $>2$ adalah ganjil.'},
+  ],
+  qed:'Terbukti. Akibatnya, 2 adalah satu-satunya prima genap — bilangan yang "unik" dalam dunia bilangan prima.'
+},
+
+{
+  no:9, topik:'prima', tingkat:'sedang',
+  judul:'Ketunggalan Faktorisasi Prima',
+  pernyataan:'Setiap bilangan bulat $n > 1$ memiliki tepat satu representasi faktorisasi prima.',
+  soal:'Buktikan bagian keunikan dari Teorema Dasar Aritmetika: jika $n = p_1^{a_1}\\cdots p_k^{a_k} = q_1^{b_1}\\cdots q_m^{b_m}$, maka $k=m$ dan faktor-faktornya sama.',
+  metode:'Induksi Kuat & Lemma Prima',
+  langkah:[
+    {t:'<strong>Lemma Kunci:</strong> Jika $p$ prima dan $p\\mid ab$, maka $p\\mid a$ atau $p\\mid b$.'},
+    {t:'<strong>Bukti Lemma:</strong> Misalkan $p\\nmid a$. Karena $p$ prima, $\\gcd(p,a)=1$. Dari Identitas Bézout: $sp+ta=1$ untuk suatu $s,t$. Kalikan $b$: $spb+tab=b$. Karena $p\\mid spb$ dan $p\\mid ab$ maka $p\\mid tab$. Jadi $p\\mid b$.', k:true},
+    {t:'<strong>Bukti keunikan:</strong> Misalkan $p_1 = q_j$ untuk suatu $j$. Jika tidak ada $j$ demikian: $p_1\\mid q_1^{b_1}\\cdots q_m^{b_m}$, maka oleh lemma $p_1\\mid q_j$ untuk suatu $j$. Karena $q_j$ prima, $p_1=q_j$.', k:true},
+    {t:'<strong>Induksi:</strong> Bagi kedua ruas dengan $p_1=q_j$. Ulangi argumen hingga semua faktor cocok. Keunikan terjamin.', k:true},
+  ],
+  qed:'Terbukti keunikan faktorisasi prima. Inilah mengapa "atom-atom" bilangan prima begitu fundamental dalam teori bilangan.'
+},
+
+{
+  no:10, topik:'prima', tingkat:'sulit',
+  judul:'Tidak Ada Prima di Rentang $(n!,\\ n!+n]$',
+  pernyataan:'Untuk $n \\geq 2$, tidak ada bilangan prima dalam rentang $(n!,\\; n!+n]$.',
+  soal:'Buktikan bahwa untuk setiap bilangan bulat $n \\geq 2$, semua bilangan $n!+2,\\ n!+3,\\ \\ldots,\\ n!+n$ adalah bilangan komposit.',
+  metode:'Konstruksi Langsung',
+  langkah:[
+    {t:'<strong>Ingat:</strong> $n! = 1\\cdot2\\cdot3\\cdots n$. Untuk setiap $k$ dengan $2\\leq k\\leq n$, berlaku $k\\mid n!$.'},
+    {t:'<strong>Klaim:</strong> Untuk setiap $k$ dengan $2\\leq k\\leq n$, bilangan $n!+k$ habis dibagi $k$.', k:true},
+    {t:'<strong>Bukti klaim:</strong> Karena $k\\leq n$ maka $k\\mid n!$. Jelas $k\\mid k$. Dengan sifat keterbagian: $k\\mid(n!+k)$.', k:true},
+    {t:'<strong>Komposit:</strong> Karena $1 < k < n!+k$ (sebab $n!\\geq2$), maka $k$ adalah faktor sejati dari $n!+k$. Artinya $n!+k$ komposit.', k:true},
+    {t:'<strong>Contoh $n=5$:</strong> $5!=120$. Periksa: $122=2\\cdot61$, $123=3\\cdot41$, $124=4\\cdot31$, $125=5\\cdot25$. Semua komposit ✓.'},
+  ],
+  qed:'Terbukti: untuk $n\\geq2$, rentang $(n!, n!+n]$ bebas prima. Ini membuktikan "celah prima" (prime gaps) bisa sepanjang apapun!'
+},
+
+// ─── GCD & LCM (11–13) ───────────────────────────────
+{
+  no:11, topik:'gcd', tingkat:'mudah',
+  judul:'GCD Membagi Kombinasi Linear',
+  pernyataan:'Jika $d = \\gcd(a,b)$, maka $d \\mid (ma+nb)$ untuk semua $m,n\\in\\mathbb{Z}$.',
+  soal:'Buktikan bahwa $\\gcd(a,b)$ membagi setiap kombinasi linear bilangan bulat dari $a$ dan $b$.',
+  metode:'Bukti Langsung',
+  langkah:[
+    {t:'<strong>Misalkan $d=\\gcd(a,b)$.</strong> Maka $d\\mid a$ dan $d\\mid b$.', k:true},
+    {t:'<strong>Dari $d\\mid a$:</strong> Ada $k_1\\in\\mathbb{Z}$ dengan $a=k_1 d$.'},
+    {t:'<strong>Dari $d\\mid b$:</strong> Ada $k_2\\in\\mathbb{Z}$ dengan $b=k_2 d$.'},
+    {t:'<strong>Kombinasi linear:</strong> $ma+nb = m(k_1 d)+n(k_2 d) = (mk_1+nk_2)d$.', k:true},
+    {t:'<strong>Konklusi:</strong> Karena $mk_1+nk_2\\in\\mathbb{Z}$, maka $d\\mid(ma+nb)$.'},
+  ],
+  qed:'Terbukti. Korolari penting: $d=\\gcd(a,b)$ adalah bilangan positif terkecil yang dapat dinyatakan sebagai kombinasi linear bulat $ma+nb$ (Identitas Bézout).'
+},
+
+{
+  no:12, topik:'gcd', tingkat:'sedang',
+  judul:'GCD dari Hasil Bagi Adalah 1',
+  pernyataan:'Jika $d = \\gcd(a,b)$, maka $\\gcd\\left(\\tfrac{a}{d},\\tfrac{b}{d}\\right)=1$.',
+  soal:'Buktikan bahwa setelah membagi $a$ dan $b$ dengan GCD mereka, hasil baginya saling prima.',
+  metode:'Bukti Kontradiksi',
+  langkah:[
+    {t:'<strong>Setup:</strong> Tulis $a=da\'$, $b=db\'$ dengan $a\'=a/d$, $b\'=b/d$, $a\',b\'\\in\\mathbb{Z}^+$.'},
+    {t:'<strong>Asumsi kontradiksi:</strong> Misalkan $\\gcd(a\',b\')=e>1$. Maka $e\\mid a\'$ dan $e\\mid b\'$.', k:true},
+    {t:'<strong>Implikasi:</strong> $e\\mid a\'$ berarti $de\\mid da\'=a$. Serupa, $de\\mid b$. Jadi $de$ adalah pembagi persekutuan dari $a$ dan $b$.', k:true},
+    {t:'<strong>Kontradiksi:</strong> Karena $e>1$, maka $de>d$. Tetapi $d=\\gcd(a,b)$ adalah pembagi persekutuan terbesar. Kontradiksi!', k:true},
+    {t:'<strong>Konklusi:</strong> Asumsi $e>1$ salah. Maka $\\gcd(a/d,b/d)=1$.'},
+  ],
+  qed:'Terbukti. Inilah dasar mengapa pecahan $\\frac{a}{b}$ dapat disederhanakan menjadi $\\frac{a/d}{b/d}$ dalam bentuk paling sederhana.'
+},
+
+{
+  no:13, topik:'gcd', tingkat:'sedang',
+  judul:'Hubungan GCD dan LCM',
+  pernyataan:'Untuk $a,b\\in\\mathbb{Z}^+$, berlaku $\\gcd(a,b)\\cdot\\text{lcm}(a,b)=ab$.',
+  soal:'Buktikan bahwa hasil kali GCD dan LCM dari dua bilangan bulat positif sama dengan hasil kali kedua bilangan itu.',
+  metode:'Faktorisasi Prima',
+  langkah:[
+    {t:'<strong>Faktorisasi prima:</strong> Tulis $a=\\prod p_i^{\\alpha_i}$ dan $b=\\prod p_i^{\\beta_i}$ (eksponen 0 untuk faktor yang tidak ada).'},
+    {t:'<strong>Rumus GCD:</strong> $\\gcd(a,b)=\\prod p_i^{\\min(\\alpha_i,\\beta_i)}$.', k:true},
+    {t:'<strong>Rumus LCM:</strong> $\\text{lcm}(a,b)=\\prod p_i^{\\max(\\alpha_i,\\beta_i)}$.', k:true},
+    {t:'<strong>Kunci:</strong> Untuk setiap bilangan real $x,y$: $\\min(x,y)+\\max(x,y)=x+y$.', k:true},
+    {t:'<strong>Hitung:</strong> $\\gcd\\cdot\\text{lcm}=\\prod p_i^{\\min(\\alpha_i,\\beta_i)+\\max(\\alpha_i,\\beta_i)}=\\prod p_i^{\\alpha_i+\\beta_i}=\\left(\\prod p_i^{\\alpha_i}\\right)\\left(\\prod p_i^{\\beta_i}\\right)=ab$.'},
+  ],
+  qed:'Terbukti $\\gcd(a,b)\\cdot\\text{lcm}(a,b)=ab$. Contoh: $\\gcd(12,18)=6$, $\\text{lcm}(12,18)=36$, dan $6\\cdot36=216=12\\cdot18$ ✓.'
+},
+
+// ─── KONGRUENSI (14–17) ───────────────────────────────
+{
+  no:14, topik:'kongruensi', tingkat:'mudah',
+  judul:'Kongruensi Bersifat Ekuivalensi',
+  pernyataan:'Relasi kongruensi modulo $m$ adalah relasi ekuivalensi pada $\\mathbb{Z}$.',
+  soal:'Buktikan bahwa kongruensi modulo $m$ bersifat refleksif, simetris, dan transitif.',
+  metode:'Definisi Relasi Ekuivalensi',
+  langkah:[
+    {t:'<strong>Refleksif:</strong> Untuk setiap $a\\in\\mathbb{Z}$: $a-a=0=m\\cdot0$, jadi $m\\mid(a-a)$, sehingga $a\\equiv a\\pmod{m}$.', k:true},
+    {t:'<strong>Simetris:</strong> Misalkan $a\\equiv b\\pmod{m}$, maka $m\\mid(a-b)$. Ada $k\\in\\mathbb{Z}$ dengan $a-b=km$. Maka $b-a=(-k)m$. Karena $-k\\in\\mathbb{Z}$, maka $m\\mid(b-a)$, jadi $b\\equiv a\\pmod{m}$.', k:true},
+    {t:'<strong>Transitif:</strong> Misalkan $a\\equiv b$ dan $b\\equiv c\\pmod{m}$. Ada $k_1,k_2\\in\\mathbb{Z}$ dengan $a-b=k_1m$ dan $b-c=k_2m$. Maka $a-c=(a-b)+(b-c)=(k_1+k_2)m$. Jadi $a\\equiv c\\pmod{m}$.', k:true},
+  ],
+  qed:'Terbukti: kongruensi modulo $m$ adalah relasi ekuivalensi. Kelas ekuivalensinya adalah "kelas residu" (residue class) modulo $m$.'
+},
+
+{
+  no:15, topik:'kongruensi', tingkat:'sedang',
+  judul:'Kongruensi Tertutup terhadap Penjumlahan dan Perkalian',
+  pernyataan:'Jika $a\\equiv b\\pmod{m}$ dan $c\\equiv d\\pmod{m}$, maka $a+c\\equiv b+d$ dan $ac\\equiv bd\\pmod{m}$.',
+  soal:'Buktikan bahwa operasi penjumlahan dan perkalian terdefinisi dengan baik (well-defined) pada kelas residu modulo $m$.',
+  metode:'Definisi Kongruensi',
+  langkah:[
+    {t:'<strong>Asumsi:</strong> $m\\mid(a-b)$ dan $m\\mid(c-d)$. Ada $k_1,k_2\\in\\mathbb{Z}$ dengan $a=b+k_1m$ dan $c=d+k_2m$.'},
+    {t:'<strong>Penjumlahan:</strong> $(a+c)-(b+d)=(a-b)+(c-d)=k_1m+k_2m=(k_1+k_2)m$. Karena $k_1+k_2\\in\\mathbb{Z}$, maka $m\\mid[(a+c)-(b+d)]$, jadi $a+c\\equiv b+d\\pmod{m}$.', k:true},
+    {t:'<strong>Perkalian:</strong> $ac-bd=ac-bc+bc-bd=c(a-b)+b(c-d)=ck_1m+bk_2m=(ck_1+bk_2)m$.', k:true},
+    {t:'<strong>Konklusi perkalian:</strong> Karena $ck_1+bk_2\\in\\mathbb{Z}$, maka $m\\mid(ac-bd)$, jadi $ac\\equiv bd\\pmod{m}$.', k:true},
+  ],
+  qed:'Terbukti. Akibat langsung: $a^n\\equiv b^n\\pmod{m}$ untuk semua $n\\geq0$. Ini sangat berguna menghitung sisa pangkat besar.'
+},
+
+{
+  no:16, topik:'kongruensi', tingkat:'sedang',
+  judul:'Teorema Fermat Kecil',
+  pernyataan:'Jika $p$ prima dan $\\gcd(a,p)=1$, maka $a^{p-1}\\equiv 1\\pmod{p}$.',
+  soal:'Buktikan Teorema Fermat Kecil menggunakan pendekatan kelas residu.',
+  metode:'Analisis Kelas Residu',
+  langkah:[
+    {t:'<strong>Pertimbangkan himpunan:</strong> $S=\\{a,2a,3a,\\ldots,(p-1)a\\}$ modulo $p$.'},
+    {t:'<strong>Klaim:</strong> Himpunan $S\\pmod{p}$ adalah permutasi dari $\\{1,2,\\ldots,p-1\\}$.', k:true},
+    {t:'<strong>Bukti klaim:</strong> Karena $\\gcd(a,p)=1$, tidak ada dua elemen $ia$ dan $ja$ ($1\\leq i<j\\leq p-1$) yang kongruen mod $p$ (jika $p\\mid(i-j)a$ dan $\\gcd(a,p)=1$, maka $p\\mid(i-j)$, mustahil karena $|i-j|<p$). Juga tidak ada yang kongruen 0. Jadi $S$ adalah permutasi dari $\\{1,\\ldots,p-1\\}$.', k:true},
+    {t:'<strong>Kalikan semua elemen:</strong> $a\\cdot2a\\cdots(p-1)a \\equiv 1\\cdot2\\cdots(p-1)\\pmod{p}$, sehingga $a^{p-1}(p-1)!\\equiv(p-1)!\\pmod{p}$.', k:true},
+    {t:'<strong>Sederhanakan:</strong> Karena $\\gcd((p-1)!,p)=1$, bagi kedua ruas oleh $(p-1)!$: $a^{p-1}\\equiv1\\pmod{p}$.'},
+  ],
+  qed:'Terbukti Teorema Fermat Kecil. Penerapan: menghitung $7^{100}\\bmod13$ — karena $7^{12}\\equiv1\\pmod{13}$ dan $100=12\\cdot8+4$, maka $7^{100}\\equiv7^4\\equiv9\\pmod{13}$.'
+},
+
+{
+  no:17, topik:'kongruensi', tingkat:'sulit',
+  judul:'Teorema Wilson',
+  pernyataan:'$p$ prima $\\iff$ $(p-1)! \\equiv -1 \\pmod{p}$.',
+  soal:'Buktikan Teorema Wilson: bilangan $p>1$ adalah prima jika dan hanya jika $(p-1)!\\equiv-1\\pmod{p}$.',
+  metode:'Invers Modular & Pasangan',
+  langkah:[
+    {t:'<strong>(⇐) Jika $(p-1)!\\equiv-1\\pmod{p}$, maka $p$ prima.</strong> Misalkan $p$ komposit: ada $d$ dengan $1<d<p$ dan $d\\mid p$. Maka $d\\mid(p-1)!$ (karena $d\\leq p-1$). Jika $(p-1)!\\equiv-1\\pmod{p}$, maka $d\\mid(p-1)+1=p$, tetapi $d\\mid p$ sudah diketahui — tidak ada kontradiksi langsung. Argumen lebih halus: jika $p$ komposit dan $p\\neq4$, ada pembagi $a,b$ dengan $ab=p$ dan $a\\neq b$, keduanya $<p$, sehingga $p\\mid(p-1)!$, kontradiksi.'},
+    {t:'<strong>(⇒) Jika $p$ prima, buktikan $(p-1)!\\equiv-1\\pmod{p}$.</strong>'},
+    {t:'<strong>Pasangan invers:</strong> Setiap $a\\in\\{1,\\ldots,p-1\\}$ memiliki invers unik $a^{-1}\\pmod{p}$. Elemen yang merupakan invers dirinya sendiri: $a^2\\equiv1\\pmod{p}$, yaitu $a\\equiv\\pm1\\pmod{p}$, sehingga hanya $a=1$ dan $a=p-1$.', k:true},
+    {t:'<strong>Kalikan berpasangan:</strong> Elemen $2,3,\\ldots,p-2$ berpasangan dengan invers masing-masing (semua berbeda), sehingga hasil kalinya $\\equiv1\\pmod{p}$.', k:true},
+    {t:'<strong>Hitung $(p-1)!$:</strong> $(p-1)! = 1\\cdot\\underbrace{2\\cdot3\\cdots(p-2)}_{\\equiv\\,1}\\cdot(p-1)\\equiv1\\cdot1\\cdot(-1)=-1\\pmod{p}$.', k:true},
+  ],
+  qed:'Terbukti Teorema Wilson. Verifikasi: $p=7$: $6!=720=7\\cdot103-1$, jadi $720\\equiv-1\\pmod7$ ✓. $p=11$: $10!\\equiv-1\\pmod{11}$ ✓.'
+},
+
+// ─── INDUKSI MATEMATIS (18–20) ────────────────────────
+{
+  no:18, topik:'induksi', tingkat:'mudah',
+  judul:'Rumus Jumlah Bilangan Asli',
+  pernyataan:'Untuk setiap $n\\geq1$: $1+2+3+\\cdots+n = \\dfrac{n(n+1)}{2}$.',
+  soal:'Buktikan dengan induksi matematis bahwa jumlah bilangan asli dari 1 hingga $n$ adalah $\\frac{n(n+1)}{2}$.',
+  metode:'Induksi Matematis',
+  langkah:[
+    {t:'<strong>Basis ($n=1$):</strong> Ruas kiri $=1$. Ruas kanan $=\\frac{1\\cdot2}{2}=1$. ✓'},
+    {t:'<strong>Hipotesis Induktif:</strong> Misalkan pernyataan benar untuk $n=k$: $1+2+\\cdots+k=\\frac{k(k+1)}{2}$.', k:true},
+    {t:'<strong>Langkah Induktif:</strong> Tunjukkan benar untuk $n=k+1$. Tambahkan $(k+1)$ ke kedua ruas hipotesis:', k:true},
+    {t:'<strong>Perhitungan:</strong> $1+2+\\cdots+k+(k+1)=\\frac{k(k+1)}{2}+(k+1)=\\frac{k(k+1)+2(k+1)}{2}=\\frac{(k+1)(k+2)}{2}$.', k:true},
+    {t:'<strong>Ini tepat rumus untuk $n=k+1$:</strong> $\\frac{(k+1)((k+1)+1)}{2}$ ✓. Bukti induksi selesai.'},
+  ],
+  qed:'Terbukti dengan induksi. Formula ini ditemukan oleh Gauss usia 9 tahun. Contoh: $n=100$: $1+2+\\cdots+100=\\frac{100\\cdot101}{2}=5050$.'
+},
+
+{
+  no:19, topik:'induksi', tingkat:'sedang',
+  judul:'Keterbagian $6\\mid(7^n-1)$ dengan Induksi',
+  pernyataan:'Untuk setiap $n\\geq1$, berlaku $6\\mid(7^n-1)$.',
+  soal:'Buktikan dengan induksi matematis bahwa $7^n-1$ selalu habis dibagi 6 untuk setiap bilangan asli $n$.',
+  metode:'Induksi Matematis',
+  langkah:[
+    {t:'<strong>Basis ($n=1$):</strong> $7^1-1=6=6\\cdot1$. Jelas $6\\mid6$. ✓'},
+    {t:'<strong>Hipotesis Induktif:</strong> Misalkan $6\\mid(7^k-1)$ untuk suatu $k\\geq1$. Artinya ada $m\\in\\mathbb{Z}$ dengan $7^k-1=6m$, sehingga $7^k=6m+1$.', k:true},
+    {t:'<strong>Langkah Induktif:</strong> $7^{k+1}-1=7\\cdot7^k-1$.', k:true},
+    {t:'<strong>Substitusi hipotesis:</strong> $=7(6m+1)-1=42m+7-1=42m+6=6(7m+1)$.', k:true},
+    {t:'<strong>Konklusi:</strong> Karena $7m+1\\in\\mathbb{Z}$, maka $6\\mid(7^{k+1}-1)$. ✓ Prinsip induksi selesaikan bukti.'},
+  ],
+  qed:'Terbukti $6\\mid(7^n-1)$ untuk semua $n\\geq1$. Penjelasan alternatif: $7\\equiv1\\pmod{6}$, maka $7^n\\equiv1^n=1\\pmod{6}$, sehingga $6\\mid7^n-1$.'
+},
+
+{
+  no:20, topik:'induksi', tingkat:'sulit',
+  judul:'Pertidaksamaan Bernoulli',
+  pernyataan:'Untuk $x\\geq-1$ dan $n\\in\\mathbb{Z}^+$, berlaku $(1+x)^n\\geq1+nx$.',
+  soal:'Buktikan Pertidaksamaan Bernoulli dengan induksi matematis.',
+  metode:'Induksi Matematis',
+  langkah:[
+    {t:'<strong>Basis ($n=1$):</strong> $(1+x)^1=1+x=1+1\\cdot x$. Kesetaraan terpenuhi ✓.'},
+    {t:'<strong>Hipotesis Induktif:</strong> Misalkan $(1+x)^k\\geq1+kx$ untuk suatu $k\\geq1$ dan $x\\geq-1$.', k:true},
+    {t:'<strong>Langkah Induktif:</strong> $(1+x)^{k+1}=(1+x)^k\\cdot(1+x)$.', k:true},
+    {t:'<strong>Terapkan hipotesis:</strong> Karena $1+x\\geq0$ (dari $x\\geq-1$), maka $(1+x)^k\\cdot(1+x)\\geq(1+kx)(1+x)$.', k:true},
+    {t:'<strong>Ekspansi:</strong> $(1+kx)(1+x)=1+x+kx+kx^2=1+(k+1)x+kx^2\\geq1+(k+1)x$, karena $kx^2\\geq0$.', k:true},
+    {t:'<strong>Rangkai:</strong> $(1+x)^{k+1}\\geq(1+kx)(1+x)\\geq1+(k+1)x$ ✓.'},
+  ],
+  qed:'Terbukti pertidaksamaan Bernoulli. Kesetaraan hanya berlaku ketika $n=1$ atau $x=0$. Penerapan: bunga majemuk $(1+r)^n\\geq1+nr$ selalu $\\geq$ bunga sederhana.'
+}
+
+]; // akhir SOAL
+
+// ═══════════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════════
+function renderSoal(arr) {
+  const container = document.getElementById('soal-list');
+  container.innerHTML = '';
+  document.getElementById('vis-count').textContent = arr.length;
+
+  arr.forEach((s, idx) => {
+    const el = document.createElement('div');
+    el.className = `soal`;
+    el.setAttribute('data-topik', s.topik);
+    el.setAttribute('data-id', s.no);
+    el.style.animationDelay = `${idx * 0.035}s`;
+
+    const stepsHtml = s.langkah.map((l, i) => `
+      <div class="step${l.k ? ' key' : ''}">
+        <div class="step-dot">${i+1}</div>
+        <div class="step-content">${l.t}</div>
+      </div>`).join('');
+
+    const topikLabel = {
+      keterbagian:'Keterbagian', prima:'Bilangan Prima',
+      gcd:'GCD & LCM', kongruensi:'Kongruensi', induksi:'Induksi'
+    }[s.topik];
+
+    const tingkatLabel = s.tingkat === 'mudah' ? '● Mudah' : s.tingkat === 'sedang' ? '●● Sedang' : '●●● Sulit';
+
+    el.innerHTML = `
+      <div class="soal-head" onclick="toggleSoal(${s.no})">
+        <div class="soal-nomor">${s.no}</div>
+        <div class="soal-vline"></div>
+        <div class="soal-info">
+          <div class="soal-chips">
+            <span class="chip chip-topik-${s.topik}">${topikLabel}</span>
+            <span class="chip chip-tingkat-${s.tingkat}">${tingkatLabel}</span>
+          </div>
+          <div class="soal-judul">${s.judul}</div>
+          <div class="soal-pernyataan">${s.pernyataan}</div>
+        </div>
+        <div class="soal-toggle">▾</div>
+      </div>
+      <div class="soal-body">
+        <div class="box-soal">
+          <div class="box-label">Soal / Pernyataan yang Dibuktikan</div>
+          <p>${s.soal}</p>
+        </div>
+        <div class="metode">⊢ Metode: ${s.metode}</div>
+        <div class="bukti-label">Bukti Lengkap</div>
+        <div class="steps">${stepsHtml}</div>
+        <div class="qed-row">
+          <div class="qed-sq">✦</div>
+          <div class="qed-text"><strong>Kesimpulan: </strong>${s.qed}</div>
+          <div class="qed-mark">□</div>
+        </div>
+      </div>`;
+    container.appendChild(el);
+  });
+
+  // Typeset
+  if (window.MathJax) {
+    MathJax.typesetPromise([container]).catch(e => console.warn(e));
+  }
+}
+
+function toggleSoal(id) {
+  const el = document.querySelector(`.soal[data-id="${id}"]`);
+  if (!el) return;
+  const wasOpen = el.classList.contains('open');
+  el.classList.toggle('open');
+  if (!wasOpen && window.MathJax) {
+    MathJax.typesetPromise([el]).catch(e => console.warn(e));
+  }
+}
+
+let semua_topik = 'semua';
+function filterSoal(topik, btn) {
+  semua_topik = topik;
+  document.querySelectorAll('.tb-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const arr = topik === 'semua' ? SOAL : SOAL.filter(s => s.topik === topik);
+  // reset expand state
+  allOpen = false;
+  document.getElementById('expand-btn').textContent = '▸ Buka Semua';
+  renderSoal(arr);
+}
+
+let allOpen = false;
+function toggleAll() {
+  allOpen = !allOpen;
+  document.querySelectorAll('.soal').forEach(el => {
+    el.classList.toggle('open', allOpen);
+  });
+  document.getElementById('expand-btn').textContent = allOpen ? '▾ Tutup Semua' : '▸ Buka Semua';
+  if (allOpen && window.MathJax) {
+    MathJax.typesetPromise(document.querySelectorAll('.soal')).catch(e => console.warn(e));
+  }
+}
+
+// ═══ INIT ═══
+renderSoal(SOAL);
+</script>
+</body>
+</html>
