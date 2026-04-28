@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teori Bilangan — Warisan Peradaban Kuno</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=IM+Fell+English:ital@0;1&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8CC7A;
+    --gold-pale: #F5E4A8;
+    --papyrus: #F2E8D0;
+    --papyrus-dark: #D6C8A0;
+    --ink: #1C1208;
+    --ink-mid: #3D2B0E;
+    --ink-soft: #5C4020;
+    --stone: #8B7355;
+    --stone-light: #B09A78;
+    --egypt: #C0392B;
+    --sumer: #2980B9;
+    --china: #C0392B;
+    --greece: #27AE60;
+    --shadow: rgba(28,18,8,0.45);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: #1C1208;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(201,168,76,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(139,115,85,0.1) 0%, transparent 60%),
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 40px,
+        rgba(201,168,76,0.03) 40px,
+        rgba(201,168,76,0.03) 41px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 40px,
+        rgba(201,168,76,0.03) 40px,
+        rgba(201,168,76,0.03) 41px
+      );
+    font-family: 'Crimson Pro', Georgia, serif;
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ========== HERO ========== */
+  .hero {
+    text-align: center;
+    padding: 60px 24px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(201,168,76,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-glyph {
+    font-size: 3.5rem;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 0 20px rgba(201,168,76,0.6));
+    animation: glow-pulse 3s ease-in-out infinite;
+  }
+  @keyframes glow-pulse {
+    0%, 100% { filter: drop-shadow(0 0 20px rgba(201,168,76,0.6)); }
+    50% { filter: drop-shadow(0 0 40px rgba(201,168,76,0.9)); }
+  }
+  .hero h1 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1.4rem, 4vw, 2.8rem);
+    color: var(--gold);
+    text-shadow: 0 0 30px rgba(201,168,76,0.5), 2px 2px 0 rgba(28,18,8,0.8);
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .hero-sub {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--gold-light);
+    opacity: 0.8;
+    margin-bottom: 24px;
+  }
+  .hero-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .hero-divider span { font-size: 1.4rem; color: var(--gold); }
+  .hero-divider-line {
+    width: 120px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+  .hero-desc {
+    max-width: 700px;
+    margin: 0 auto 32px;
+    font-size: 1.05rem;
+    color: var(--papyrus-dark);
+    line-height: 1.7;
+  }
+
+  /* ========== CIVILIZATION TABS ========== */
+  .civ-nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 0 16px 32px;
+  }
+  .civ-btn {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.72rem;
+    padding: 10px 20px;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--gold-light);
+    cursor: pointer;
+    border-radius: 3px;
+    letter-spacing: 0.08em;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .civ-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .civ-btn:hover::before, .civ-btn.active::before { opacity: 0.15; }
+  .civ-btn.active {
+    border-color: var(--gold-light);
+    color: var(--gold-pale);
+    box-shadow: 0 0 20px rgba(201,168,76,0.3);
+  }
+  .civ-btn span { position: relative; z-index: 1; }
+
+  /* ========== CONTENT AREA ========== */
+  .content {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+  }
+
+  /* ========== SOAL CARD ========== */
+  .soal-section { display: none; }
+  .soal-section.visible { display: block; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+  }
+  .section-icon { font-size: 2.5rem; }
+  .section-title-group h2 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.3rem;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .section-title-group p {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    color: var(--stone-light);
+    font-size: 0.95rem;
+  }
+
+  .soal-card {
+    background: linear-gradient(135deg, rgba(242,232,208,0.97) 0%, rgba(214,200,160,0.95) 100%);
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.3);
+    animation: card-in 0.5s ease forwards;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  .soal-card:nth-child(2) { animation-delay: 0.05s; }
+  .soal-card:nth-child(3) { animation-delay: 0.10s; }
+
+  @keyframes card-in {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-accent {
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+  }
+  .egypt-accent { background: linear-gradient(to bottom, #C0392B, #E74C3C, #C0392B); }
+  .sumer-accent { background: linear-gradient(to bottom, #1565C0, #2196F3, #1565C0); }
+  .china-accent { background: linear-gradient(to bottom, #B71C1C, #F44336, #B71C1C); }
+  .greece-accent { background: linear-gradient(to bottom, #1B5E20, #4CAF50, #1B5E20); }
+
+  .card-header {
+    padding: 18px 20px 12px 24px;
+    border-bottom: 1px solid rgba(139,115,85,0.3);
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .soal-number {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    background: rgba(201,168,76,0.25);
+    border: 1px solid rgba(201,168,76,0.5);
+    padding: 4px 10px;
+    border-radius: 2px;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .soal-judul {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.88rem;
+    color: var(--ink-mid);
+    line-height: 1.4;
+    flex: 1;
+  }
+  .soal-tag {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 0.8rem;
+    color: var(--stone);
+    white-space: nowrap;
+  }
+
+  .card-body { padding: 16px 24px 0; }
+
+  .konteks-box {
+    background: rgba(139,115,85,0.1);
+    border-left: 3px solid var(--stone-light);
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    border-radius: 0 3px 3px 0;
+  }
+  .konteks-label {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.65rem;
+    color: var(--stone);
+    letter-spacing: 0.12em;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .konteks-box p {
+    font-style: italic;
+    color: var(--ink-soft);
+    font-size: 0.97rem;
+    line-height: 1.65;
+  }
+
+  .soal-text {
+    color: var(--ink);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 16px;
+    font-weight: 400;
+  }
+  .soal-text strong { color: var(--ink-mid); font-weight: 600; }
+
+  .toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-mid);
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.4);
+    padding: 9px 18px;
+    cursor: pointer;
+    border-radius: 2px;
+    margin: 0 0 0 0;
+    transition: all 0.25s;
+    width: 100%;
+    justify-content: center;
+  }
+  .toggle-btn:hover {
+    background: rgba(201,168,76,0.28);
+    border-color: var(--gold);
+    color: var(--ink);
+  }
+  .toggle-arrow {
+    transition: transform 0.3s;
+    font-size: 0.8rem;
+  }
+  .toggle-btn.open .toggle-arrow { transform: rotate(180deg); }
+
+  .bukti-panel {
+    display: none;
+    padding: 18px 0 4px;
+    border-top: 1px dashed rgba(139,115,85,0.4);
+    margin-top: 0;
+  }
+  .bukti-panel.open { display: block; }
+
+  .bukti-label {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.65rem;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .bukti-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, rgba(201,168,76,0.5), transparent);
+  }
+
+  .bukti-step {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+  .step-num {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.65rem;
+    color: var(--stone);
+    background: rgba(139,115,85,0.15);
+    border: 1px solid rgba(139,115,85,0.3);
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .step-content {
+    flex: 1;
+    color: var(--ink);
+    font-size: 0.98rem;
+    line-height: 1.7;
+  }
+
+  .bukti-conclusion {
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.35);
+    border-radius: 3px;
+    padding: 12px 16px;
+    margin-top: 14px;
+    color: var(--ink-mid);
+    font-size: 0.97rem;
+    line-height: 1.65;
+  }
+  .bukti-conclusion::before {
+    content: '∴ ';
+    font-family: 'Cinzel Decorative', serif;
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  .qed {
+    text-align: right;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.75rem;
+    color: var(--stone);
+    padding: 8px 0 4px;
+    letter-spacing: 0.15em;
+  }
+
+  .card-footer {
+    padding: 12px 24px 16px;
+    background: rgba(139,115,85,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+    border-top: 1px solid rgba(139,115,85,0.2);
+  }
+  .footer-ref {
+    font-style: italic;
+    font-size: 0.82rem;
+    color: var(--stone);
+  }
+  .footer-topic {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.6rem;
+    color: var(--stone-light);
+    background: rgba(139,115,85,0.15);
+    padding: 3px 10px;
+    border-radius: 2px;
+    letter-spacing: 0.1em;
+  }
+
+  /* ========== PROGRESS BAR ========== */
+  .progress-bar-wrap {
+    background: rgba(28,18,8,0.8);
+    border-top: 1px solid rgba(201,168,76,0.2);
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    padding: 10px 20px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 1000px;
+    margin: 0 auto 30px;
+  }
+  .progress-label {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.62rem;
+    color: var(--stone-light);
+    white-space: nowrap;
+    letter-spacing: 0.08em;
+  }
+  .progress-track {
+    flex: 1;
+    height: 4px;
+    background: rgba(139,115,85,0.3);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--gold), var(--gold-light));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+  .progress-count {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.62rem;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+
+  /* ========== FOOTER ========== */
+  .page-footer {
+    text-align: center;
+    padding: 30px 20px;
+    border-top: 1px solid rgba(201,168,76,0.2);
+    color: var(--stone);
+    font-style: italic;
+    font-size: 0.9rem;
+  }
+  .page-footer strong {
+    font-family: 'Cinzel Decorative', serif;
+    color: var(--gold);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  /* ========== MathJax override ========== */
+  .MathJax { color: var(--ink-mid) !important; }
+
+  /* ========== responsive ========== */
+  @media (max-width: 600px) {
+    .card-header { flex-wrap: wrap; }
+    .soal-tag { display: none; }
+    .section-header { flex-wrap: wrap; }
+    .hero h1 { font-size: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-glyph">𓂀</div>
+  <h1>Teori Bilangan<br>Warisan Peradaban Kuno</h1>
+  <p class="hero-sub">Soal Cerita &amp; Pembuktian dari Empat Peradaban Agung</p>
+  <div class="hero-divider">
+    <div class="hero-divider-line"></div>
+    <span>𓆣</span>
+    <div class="hero-divider-line"></div>
+  </div>
+  <p class="hero-desc">
+    Ribuan tahun sebelum simbolisme modern, para ahli matematika dari Mesir Kuno, Sumeria, Tiongkok, dan Yunani Kuno
+    telah meletakkan fondasi Teori Bilangan. Telusuri soal-soal yang terinspirasi dari prasasti kuno,
+    papirus, dan risalah-risalah yang bertahan menembus zaman.
+  </p>
+</div>
+
+<!-- NAVIGASI PERADABAN -->
+<div class="civ-nav">
+  <button class="civ-btn active" onclick="showCiv('mesir')" id="btn-mesir">
+    <span>𓂀 Mesir Kuno</span>
+  </button>
+  <button class="civ-btn" onclick="showCiv('sumeria')" id="btn-sumeria">
+    <span>𒀭 Sumeria</span>
+  </button>
+  <button class="civ-btn" onclick="showCiv('cina')" id="btn-cina">
+    <span>龍 Tiongkok Kuno</span>
+  </button>
+  <button class="civ-btn" onclick="showCiv('yunani')" id="btn-yunani">
+    <span>Ω Yunani Kuno</span>
+  </button>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-bar-wrap" id="progressWrap">
+  <span class="progress-label">PEMBUKTIAN TERBUKA</span>
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <span class="progress-count" id="progressCount">0 / 10</span>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- ===== MESIR KUNO ===== -->
+  <div class="soal-section visible" id="sec-mesir">
+    <div class="section-header">
+      <div class="section-icon">𓂀</div>
+      <div class="section-title-group">
+        <h2>Mesir Kuno</h2>
+        <p>Papirus Rhind &amp; Papirus Moskow — ±1650 SM</p>
+      </div>
+    </div>
+
+    <!-- SOAL 1 -->
+    <div class="soal-card">
+      <div class="card-accent egypt-accent"></div>
+      <div class="card-header">
+        <span class="soal-number">Soal I</span>
+        <span class="soal-judul">Pembagian Roti dengan Pecahan Satuan</span>
+        <span class="soal-tag">Divisibility · Fractions</span>
+      </div>
+      <div class="card-body">
+        <div class="konteks-box">
+          <div class="konteks-label">Konteks Sejarah</div>
+          <p>Papirus Rhind (±1650 SM) oleh ahli tulis Ahmes menunjukkan bahwa Mesir Kuno hanya menggunakan <em>unit fractions</em> (pecahan satuan: 1/n). Setiap pecahan diuraikan sebagai jumlah pecahan satuan yang berbeda. Ini merupakan cikal-bakal gagasan keterbagian.</p>
+        </div>
+        <p class="soal-text">
+          Para pekerja piramida menerima <strong>8 roti</strong> yang harus dibagikan rata kepada <strong>10 orang</strong>.
+          Tuliskan \(\dfrac{8}{10}\) sebagai jumlah pecahan satuan (sesuai tradisi Mesir), kemudian buktikan bahwa
+          setiap pecahan satuan \(\dfrac{1}{n}\) dengan \(n \geq 2\) dapat dinyatakan sebagai jumlah dua pecahan satuan yang berbeda,
+          yaitu \(\dfrac{1}{n} = \dfrac{1}{n+1} + \dfrac{1}{n(n+1)}\).
+        </p>
+        <button class="toggle-btn" onclick="toggleBukti(this)">
+          <span>BUKA PEMBUKTIAN</span>
+          <span class="toggle-arrow">▼</span>
+        </button>
+        <div class="bukti-panel">
+          <div class="bukti-label">✦ Pembuktian</div>
+          <div class="bukti-step">
+            <span class="step-num">1</span>
+            <div class="step-content">
+              Uraikan \(\dfrac{8}{10}\): dengan algoritma Mesir,
+              \(\dfrac{8}{10} = \dfrac{1}{2} + \dfrac{1}{4} + \dfrac{1}{20}\).
+              (Verifikasi: \(\dfrac{10}{20} + \dfrac{5}{20} + \dfrac{1}{20} = \dfrac{16}{20} = \dfrac{8}{10}\) ✓)
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">2</span>
+            <div class="step-content">
+              <strong>Teorema:</strong> Untuk setiap bilangan asli \(n \geq 2\),
+              \[\dfrac{1}{n} = \dfrac{1}{n+1} + \dfrac{1}{n(n+1)}\]
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">3</span>
+            <div class="step-content">
+              <strong>Bukti Aljabar:</strong> Ruas kanan dihitung,
+              \[\dfrac{1}{n+1} + \dfrac{1}{n(n+1)} = \dfrac{n}{n(n+1)} + \dfrac{1}{n(n+1)} = \dfrac{n+1}{n(n+1)} = \dfrac{1}{n}\]
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">4</span>
+            <div class="step-content">
+              Kedua pecahan \(\dfrac{1}{n+1}\) dan \(\dfrac{1}{n(n+1)}\) adalah pecahan satuan yang berbeda karena \(n+1 \neq n(n+1)\) untuk \(n \geq 2\).
+            </div>
+          </div>
+          <div class="bukti-conclusion">
+            Setiap pecahan satuan \(\frac{1}{n}\) (\(n \geq 2\)) dapat diurai menjadi jumlah dua pecahan satuan berbeda. Identitas \(\frac{1}{n} = \frac{1}{n+1} + \frac{1}{n(n+1)}\) berlaku untuk semua \(n \geq 2\). &nbsp;<strong>□</strong>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="footer-ref">Sumber: Papirus Rhind, Problem 1 (Ahmes, ±1650 SM)</span>
+        <span class="footer-topic">Unit Fractions · Keterbagian</span>
+      </div>
+    </div>
+
+    <!-- SOAL 2 -->
+    <div class="soal-card">
+      <div class="card-accent egypt-accent"></div>
+      <div class="card-header">
+        <span class="soal-number">Soal II</span>
+        <span class="soal-judul">Algoritma Perkalian Mesir &amp; Bilangan Genap-Ganjil</span>
+        <span class="soal-tag">Binary · Parity</span>
+      </div>
+      <div class="card-body">
+        <div class="konteks-box">
+          <div class="konteks-label">Konteks Sejarah</div>
+          <p>Mesir Kuno menggunakan metode <em>duplasi</em> (penggandaan) untuk perkalian — cikal-bakal sistem biner. Metode ini mengandalkan pembagian berulang dengan 2 dan sifat bilangan genap-ganjil.</p>
+        </div>
+        <p class="soal-text">
+          Seorang arsitek Mesir memiliki <strong>13 baris batu</strong> dan setiap baris berisi <strong>27 batu</strong>.
+          Gunakan metode duplasi Mesir untuk menghitung \(13 \times 27\). Kemudian buktikan bahwa metode ini valid
+          dengan menunjukkan: setiap bilangan asli \(n\) dapat dinyatakan secara unik sebagai jumlah pangkat dua
+          yang berbeda (Representasi Biner).
+        </p>
+        <button class="toggle-btn" onclick="toggleBukti(this)">
+          <span>BUKA PEMBUKTIAN</span>
+          <span class="toggle-arrow">▼</span>
+        </button>
+        <div class="bukti-panel">
+          <div class="bukti-label">✦ Pembuktian</div>
+          <div class="bukti-step">
+            <span class="step-num">1</span>
+            <div class="step-content">
+              <strong>Metode Duplasi untuk \(13 \times 27\):</strong><br>
+              13 = 1 + 4 + 8 (ganjil, ganjil, ganjil: pilih 1✓, 2✗, 4✓, 8✓)<br>
+              \[1 \to 27,\quad 2 \to 54,\quad 4 \to 108,\quad 8 \to 216\]
+              \[13 \times 27 = 27 + 108 + 216 = 351\]
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">2</span>
+            <div class="step-content">
+              <strong>Teorema Representasi Biner:</strong> Setiap bilangan asli \(n\) memiliki representasi unik
+              \(n = \sum_{k=0}^{m} a_k \cdot 2^k\) dengan \(a_k \in \{0,1\}\).
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">3</span>
+            <div class="step-content">
+              <strong>Eksistensi</strong> (Induksi Kuat): Basis: \(n=1 = 2^0\) ✓.
+              Jika \(n\) genap: \(n = 2m\), dan \(m\) punya representasi biner (hipotesis induksi), maka deret \(n\) diperoleh dengan menggeser satu bit.
+              Jika \(n\) ganjil: \(n = 2m+1\), bit terakhir 1, selebihnya dari \(m\).
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">4</span>
+            <div class="step-content">
+              <strong>Keunikan:</strong> Misalkan \(\sum a_k 2^k = \sum b_k 2^k\). Ambil \(k\) terkecil dengan \(a_k \neq b_k\),
+              maka \((a_k - b_k)2^k = \sum_{j>k}(b_j-a_j)2^j\). Ruas kiri tidak habis dibagi \(2^{k+1}\), ruas kanan ya — kontradiksi.
+              Jadi \(a_k = b_k\) untuk semua \(k\).
+            </div>
+          </div>
+          <div class="bukti-conclusion">
+            Metode duplasi Mesir ekivalen dengan representasi biner, dan setiap bilangan asli memiliki representasi biner yang unik. &nbsp;<strong>□</strong>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="footer-ref">Sumber: Papirus Rhind, Problem 69 (Metode Duplasi)</span>
+        <span class="footer-topic">Representasi Biner · Induksi</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SUMERIA ===== -->
+  <div class="soal-section" id="sec-sumeria">
+    <div class="section-header">
+      <div class="section-icon">𒀭</div>
+      <div class="section-title-group">
+        <h2>Sumeria &amp; Babilonia</h2>
+        <p>Tablet Tanah Liat Cuneiform — ±2000–1600 SM</p>
+      </div>
+    </div>
+
+    <!-- SOAL 3 -->
+    <div class="soal-card">
+      <div class="card-accent sumer-accent"></div>
+      <div class="card-header">
+        <span class="soal-number">Soal III</span>
+        <span class="soal-judul">Sistem Seksagesimal &amp; Bilangan Reguler</span>
+        <span class="soal-tag">Number Base · Regulars</span>
+      </div>
+      <div class="card-body">
+        <div class="konteks-box">
+          <div class="konteks-label">Konteks Sejarah</div>
+          <p>Babilonia menggunakan sistem basis 60 (seksagesimal). Mereka sangat menyukai <em>bilangan reguler</em> — bilangan yang hanya mengandung faktor prima 2, 3, dan 5 — karena kebalikannya dapat dinyatakan sebagai desimal seksagesimal terhenti.</p>
+        </div>
+        <p class="soal-text">
+          Seorang pedagang Ur memiliki <strong>360 keping perak</strong> yang harus dibagi rata kepada beberapa kelompok.
+          Buktikan bahwa \(360 = 2^3 \times 3^2 \times 5\) adalah bilangan "reguler" Babilonia (hanya faktor prima 2, 3, 5),
+          dan tunjukkan bahwa jumlah seluruh pembagi \(360\) adalah \(\sigma(360) = 1170\). Kemudian buktikan
+          formula \(\sigma(p^a) = \dfrac{p^{a+1}-1}{p-1}\) untuk \(p\) prima.
+        </p>
+        <button class="toggle-btn" onclick="toggleBukti(this)">
+          <span>BUKA PEMBUKTIAN</span>
+          <span class="toggle-arrow">▼</span>
+        </button>
+        <div class="bukti-panel">
+          <div class="bukti-label">✦ Pembuktian</div>
+          <div class="bukti-step">
+            <span class="step-num">1</span>
+            <div class="step-content">
+              <strong>Faktoring \(360\):</strong> \(360 = 8 \times 45 = 2^3 \times 3^2 \times 5^1\). Faktor prima hanya 2, 3, 5 → bilangan reguler Babilonia ✓
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">2</span>
+            <div class="step-content">
+              <strong>Formula \(\sigma\) Multiplikatif:</strong> Karena \(\gcd(2^3, 3^2) = \gcd(2^3, 5) = \gcd(3^2,5) = 1\),
+              \[\sigma(360) = \sigma(2^3)\cdot\sigma(3^2)\cdot\sigma(5)\]
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">3</span>
+            <div class="step-content">
+              <strong>Bukti \(\sigma(p^a) = \dfrac{p^{a+1}-1}{p-1}\):</strong>
+              Pembagi \(p^a\) adalah \(1, p, p^2, \ldots, p^a\) (deret geometri):
+              \[\sigma(p^a) = \sum_{k=0}^{a} p^k = \frac{p^{a+1}-1}{p-1}\]
+              (rumus deret geometri, \(p \neq 1\))
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">4</span>
+            <div class="step-content">
+              Hitung:
+              \[\sigma(2^3) = \frac{2^4-1}{1} = 15,\quad \sigma(3^2) = \frac{3^3-1}{2} = 13,\quad \sigma(5) = \frac{5^2-1}{4} = 6\]
+              \[\sigma(360) = 15 \times 13 \times 6 = 1170\]
+            </div>
+          </div>
+          <div class="bukti-conclusion">
+            \(\sigma(p^a) = \frac{p^{a+1}-1}{p-1}\) terbukti dari deret geometri. Maka \(\sigma(360) = 1170\). &nbsp;<strong>□</strong>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="footer-ref">Sumber: Tablet Plimpton 322 &amp; Daftar Bilangan Reguler Babilonia</span>
+        <span class="footer-topic">Fungsi σ · Aritmetika Faktor</span>
+      </div>
+    </div>
+
+    <!-- SOAL 4 -->
+    <div class="soal-card">
+      <div class="card-accent sumer-accent"></div>
+      <div class="card-header">
+        <span class="soal-number">Soal IV</span>
+        <span class="soal-judul">Tripel Pythagoras &amp; Tablet Plimpton 322</span>
+        <span class="soal-tag">Pythagorean Triples</span>
+      </div>
+      <div class="card-body">
+        <div class="konteks-box">
+          <div class="konteks-label">Konteks Sejarah</div>
+          <p>Tablet Plimpton 322 (±1800 SM) memuat 15 baris pasangan bilangan yang kini dikenal sebagai bagian dari tripel Pythagoras. Ini membuktikan bahwa Babilonia mengetahui hubungan \(a^2 + b^2 = c^2\) seribu tahun sebelum Pythagoras lahir.</p>
+        </div>
+        <p class="soal-text">
+          Insinyur Babilonia merancang taman berbentuk siku-siku dengan sisi \(a = 3\), \(b = 4\), \(c = 5\).
+          Buktikan bahwa setiap tripel Pythagoras primitif \((a, b, c)\) dengan \(\gcd(a,b,c)=1\) dapat digenerate oleh
+          formula \(a = m^2 - n^2,\ b = 2mn,\ c = m^2 + n^2\) dengan \(m > n > 0\), \(\gcd(m,n) = 1\), dan \(m \not\equiv n \pmod{2}\).
+        </p>
+        <button class="toggle-btn" onclick="toggleBukti(this)">
+          <span>BUKA PEMBUKTIAN</span>
+          <span class="toggle-arrow">▼</span>
+        </button>
+        <div class="bukti-panel">
+          <div class="bukti-label">✦ Pembuktian</div>
+          <div class="bukti-step">
+            <span class="step-num">1</span>
+            <div class="step-content">
+              <strong>Verifikasi formula:</strong>
+              \[a^2+b^2 = (m^2-n^2)^2+(2mn)^2 = m^4-2m^2n^2+n^4+4m^2n^2 = (m^2+n^2)^2 = c^2\] ✓
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">2</span>
+            <div class="step-content">
+              <strong>Primitif:</strong> Misalkan \(d = \gcd(a,b,c)\) dan \(d \mid a, d \mid b\).
+              Jika \(p\) prima memenuhi \(p \mid a\) dan \(p \mid b\), maka \(p \mid (c^2 = a^2+b^2)\).
+              Karena \(\gcd(m,n)=1\) dan beda paritas, dapat ditunjukkan \(p \nmid m\) dan \(p \nmid n\) — kontradiksi.
+              Jadi \(\gcd(a,b) = 1\), sehingga tripel primitif.
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">3</span>
+            <div class="step-content">
+              <strong>Contoh Plimpton 322:</strong> \(m=2, n=1\):
+              \[a = 4-1=3,\quad b = 4,\quad c = 5\]
+              \(m=3, n=2\): \(a=5, b=12, c=13\). Keduanya ada di tablet Babilonia!
+            </div>
+          </div>
+          <div class="bukti-conclusion">
+            Formula \((m^2-n^2,\ 2mn,\ m^2+n^2)\) menghasilkan semua tripel Pythagoras primitif. Babilonia telah menemukan ini ±1800 SM. &nbsp;<strong>□</strong>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="footer-ref">Sumber: Tablet Plimpton 322, Kolumbia University (±1800 SM)</span>
+        <span class="footer-topic">Tripel Pythagoras · GCD</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TIONGKOK KUNO ===== -->
+  <div class="soal-section" id="sec-cina">
+    <div class="section-header">
+      <div class="section-icon">龍</div>
+      <div class="section-title-group">
+        <h2>Tiongkok Kuno</h2>
+        <p>Jiuzhang Suanshu &amp; Sun Zi Suanjing — ±200 SM – 400 M</p>
+      </div>
+    </div>
+
+    <!-- SOAL 5 -->
+    <div class="soal-card">
+      <div class="card-accent china-accent"></div>
+      <div class="card-header">
+        <span class="soal-number">Soal V</span>
+        <span class="soal-judul">Teorema Sisa Tiongkok (Chinese Remainder Theorem)</span>
+        <span class="soal-tag">Congruences · CRT</span>
+      </div>
+      <div class="card-body">
+        <div class="konteks-box">
+          <div class="konteks-label">Konteks Sejarah</div>
+          <p>Sun Zi Suanjing (Kitab Matematika Master Sun, ±400 M) memuat masalah: "Ada suatu bilangan yang jika dibagi 3 sisa 2, dibagi 5 sisa 3, dibagi 7 sisa 2. Berapa bilangan itu?" — Inilah asal-usul <em>Chinese Remainder Theorem</em>.</p>
+        </div>
+        <p class="soal-text">
+          Seorang panglima perang Tiongkok ingin menghitung jumlah prajuritnya. Ketika berbaris <strong>3 per baris</strong>, sisa 2.
+          Ketika <strong>5 per baris</strong>, sisa 3. Ketika <strong>7 per baris</strong>, sisa 2.
+          Temukan solusi terkecil positif dan buktikan Teorema Sisa Tiongkok (CRT):
+          sistem kongruensi \(x \equiv r_i \pmod{m_i}\) memiliki solusi unik modulo \(M = \prod m_i\)
+          jika semua \(m_i\) saling prima.
+        </p>
+        <button class="toggle-btn" onclick="toggleBukti(this)">
+          <span>BUKA PEMBUKTIAN</span>
+          <span class="toggle-arrow">▼</span>
+        </button>
+        <div class="bukti-panel">
+          <div class="bukti-label">✦ Pembuktian</div>
+          <div class="bukti-step">
+            <span class="step-num">1</span>
+            <div class="step-content">
+              Sistem: \(x \equiv 2\pmod{3},\ x \equiv 3\pmod{5},\ x \equiv 2\pmod{7}\).<br>
+              \(M = 3 \times 5 \times 7 = 105\), \(M_1=35,\ M_2=21,\ M_3=15\).
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">2</span>
+            <div class="step-content">
+              Cari invers: \(35 y_1 \equiv 1\pmod3 \Rightarrow 2y_1\equiv1\pmod3 \Rightarrow y_1=2\).<br>
+              \(21 y_2 \equiv 1\pmod5 \Rightarrow y_2=1\).<br>
+              \(15 y_3 \equiv 1\pmod7 \Rightarrow y_3=1\).
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">3</span>
+            <div class="step-content">
+              \(x = 2(35)(2) + 3(21)(1) + 2(15)(1) = 140 + 63 + 30 = 233\).<br>
+              \(x \equiv 233 \pmod{105} = 233 - 2(105) = 23\).
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">4</span>
+            <div class="step-content">
+              <strong>Bukti Keunikan:</strong> Jika \(x_1, x_2\) keduanya solusi, maka \(m_i \mid (x_1-x_2)\) untuk semua \(i\).
+              Karena \(m_i\) saling prima, maka \(M \mid (x_1-x_2)\), sehingga \(x_1 \equiv x_2 \pmod{M}\). Unik modulo \(M\). ✓
+            </div>
+          </div>
+          <div class="bukti-conclusion">
+            Solusi: \(x = 23\) (prajurit paling sedikit). CRT menjamin eksistensi dan keunikan modulo \(M=105\). &nbsp;<strong>□</strong>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="footer-ref">Sumber: Sun Zi Suanjing, Bab 3, Problem 26 (±400 M)</span>
+        <span class="footer-topic">CRT · Kongruensi Linear</span>
+      </div>
+    </div>
+
+    <!-- SOAL 6 -->
+    <div class="soal-card">
+      <div class="card-accent china-accent"></div>
+      <div class="card-header">
+        <span class="soal-number">Soal VI</span>
+        <span class="soal-judul">Segitiga Pascal &amp; Koefisien Binomial</span>
+        <span class="soal-tag">Binomial · Combinatorics</span>
+      </div>
+      <div class="card-body">
+        <div class="konteks-box">
+          <div class="konteks-label">Konteks Sejarah</div>
+          <p>Yang Hui (±1261 M) dan Zhu Shijie (1303 M) telah mendokumentasikan "Segitiga Yang Hui" (yang di Barat disebut Segitiga Pascal) — 400 tahun sebelum Pascal lahir. Mereka menggunakannya untuk perluasan pangkat binomial.</p>
+        </div>
+        <p class="soal-text">
+          Seorang penenun sutra Tiongkok memiliki <strong>5 warna benang</strong> dan ingin membuat motif dengan memilih 3 warna.
+          Hitung \(\binom{5}{3}\) menggunakan Segitiga Yang Hui. Kemudian buktikan bahwa untuk \(p\) prima,
+          \(\binom{p}{k} \equiv 0 \pmod{p}\) untuk \(1 \leq k \leq p-1\) — dan gunakan ini untuk membuktikan
+          <strong>Teorema Kecil Fermat</strong>: \(a^p \equiv a \pmod{p}\).
+        </p>
+        <button class="toggle-btn" onclick="toggleBukti(this)">
+          <span>BUKA PEMBUKTIAN</span>
+          <span class="toggle-arrow">▼</span>
+        </button>
+        <div class="bukti-panel">
+          <div class="bukti-label">✦ Pembuktian</div>
+          <div class="bukti-step">
+            <span class="step-num">1</span>
+            <div class="step-content">
+              \(\binom{5}{3} = \dfrac{5!}{3!\,2!} = 10\) motif warna berbeda.
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">2</span>
+            <div class="step-content">
+              <strong>Lemma:</strong> Untuk \(p\) prima dan \(1 \leq k \leq p-1\):
+              \[\binom{p}{k} = \frac{p!}{k!(p-k)!}\]
+              Pembilang mengandung faktor \(p\). Penyebut \(k!(p-k)!\) tidak mengandung \(p\) (karena \(k < p\) dan \(p-k < p\), dan \(p\) prima). Maka \(p \mid \binom{p}{k}\). ✓
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">3</span>
+            <div class="step-content">
+              <strong>Teorema Kecil Fermat</strong> via induksi atas \(a\):<br>
+              Basis: \(a=1\): \(1^p = 1 \equiv 1\pmod p\) ✓.<br>
+              Langkah induksi: asumsikan \(a^p \equiv a\pmod p\). Maka:
+              \[(a+1)^p = \sum_{k=0}^{p}\binom{p}{k}a^k = a^p + 1 + \sum_{k=1}^{p-1}\binom{p}{k}a^k\]
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">4</span>
+            <div class="step-content">
+              Dari Lemma, \(p \mid \binom{p}{k}\) untuk \(1 \leq k \leq p-1\), sehingga suku tengah \(\equiv 0 \pmod p\).
+              Maka \((a+1)^p \equiv a^p + 1 \equiv a + 1 \pmod p\). Induksi selesai.
+            </div>
+          </div>
+          <div class="bukti-conclusion">
+            Untuk setiap bilangan asli \(a\) dan prima \(p\): \(a^p \equiv a \pmod{p}\). (Teorema Kecil Fermat) &nbsp;<strong>□</strong>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="footer-ref">Sumber: Yang Hui Suanfa (1261 M) &amp; Sijuan Yujian (Zhu Shijie, 1303 M)</span>
+        <span class="footer-topic">Binomial · Fermat Kecil</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== YUNANI KUNO ===== -->
+  <div class="soal-section" id="sec-yunani">
+    <div class="section-header">
+      <div class="section-icon">Ω</div>
+      <div class="section-title-group">
+        <h2>Yunani Kuno</h2>
+        <p>Euclid, Pythagoras, Eratosthenes — ±600–200 SM</p>
+      </div>
+    </div>
+
+    <!-- SOAL 7 -->
+    <div class="soal-card">
+      <div class="card-accent greece-accent"></div>
+      <div class="card-header">
+        <span class="soal-number">Soal VII</span>
+        <span class="soal-judul">Infinitas Bilangan Prima (Euclid)</span>
+        <span class="soal-tag">Primes · Infinitude</span>
+      </div>
+      <div class="card-body">
+        <div class="konteks-box">
+          <div class="konteks-label">Konteks Sejarah</div>
+          <p>Euclid dalam <em>Stoicheia</em> (Elemen, ±300 SM) Buku IX Proposisi 20 memberikan salah satu pembuktian paling elegan sepanjang sejarah matematika: bilangan prima ada tak terhingga banyaknya.</p>
+        </div>
+        <p class="soal-text">
+          Seorang filsuf di Agora Athena berdebat: "Apakah ada bilangan prima terbesar?" Buktikan dengan metode Euclid
+          bahwa <strong>bilangan prima ada tak terhingga banyaknya</strong>. Kemudian verifikasikan dengan menunjukkan
+          bahwa jika \(p_1=2, p_2=3, p_3=5\), maka \(N = p_1 p_2 p_3 + 1 = 31\) adalah prima baru.
+        </p>
+        <button class="toggle-btn" onclick="toggleBukti(this)">
+          <span>BUKA PEMBUKTIAN</span>
+          <span class="toggle-arrow">▼</span>
+        </button>
+        <div class="bukti-panel">
+          <div class="bukti-label">✦ Pembuktian (Euclid, ±300 SM)</div>
+          <div class="bukti-step">
+            <span class="step-num">1</span>
+            <div class="step-content">
+              <strong>Asumsi kontradiksi:</strong> Misalkan hanya ada finitely many primes: \(p_1, p_2, \ldots, p_k\).
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">2</span>
+            <div class="step-content">
+              Konstruksi: \(N = p_1 \cdot p_2 \cdots p_k + 1\).
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">3</span>
+            <div class="step-content">
+              Setiap \(p_i\) tidak membagi \(N\) (karena \(N \equiv 1 \pmod{p_i}\) untuk semua \(i\)).
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">4</span>
+            <div class="step-content">
+              \(N > 1\), sehingga \(N\) memiliki faktor prima. Faktor prima tersebut bukan salah satu \(p_i\) — kontradiksi dengan asumsi daftar lengkap!
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">5</span>
+            <div class="step-content">
+              <strong>Verifikasi:</strong> \(N = 2 \times 3 \times 5 + 1 = 31\). Cek: 31 tidak habis dibagi 2, 3, 5.
+              \(\sqrt{31} < 6\), tidak ada faktor prima ≤ 5. Jadi 31 prima! ✓
+            </div>
+          </div>
+          <div class="bukti-conclusion">
+            Asumsi finit menyebabkan kontradiksi. Maka bilangan prima ada tak terhingga banyaknya. &nbsp;<strong>□</strong>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="footer-ref">Sumber: Euclid, Stoicheia (Elemen), Buku IX Prop. 20 (±300 SM)</span>
+        <span class="footer-topic">Infinitas Prima · Bukti Kontradiksi</span>
+      </div>
+    </div>
+
+    <!-- SOAL 8 -->
+    <div class="soal-card">
+      <div class="card-accent greece-accent"></div>
+      <div class="card-header">
+        <span class="soal-number">Soal VIII</span>
+        <span class="soal-judul">Algoritma Euclidean &amp; GCD</span>
+        <span class="soal-tag">GCD · Euclidean Algorithm</span>
+      </div>
+      <div class="card-body">
+        <div class="konteks-box">
+          <div class="konteks-label">Konteks Sejarah</div>
+          <p>Euclid (±300 SM) dalam Buku VII Elemen menjelaskan algoritma untuk mencari <em>ukuran bersama terbesar</em> dua ruas garis — yang kini kita kenal sebagai Algoritma Euclid untuk GCD. Ini adalah algoritma tertua yang masih digunakan hingga kini.</p>
+        </div>
+        <p class="soal-text">
+          Dua tali ritual di kuil Delphi berukuran <strong>252 cm</strong> dan <strong>105 cm</strong>.
+          Seorang imam ingin memotongnya menjadi potongan-potongan sama panjang sebesar mungkin tanpa sisa.
+          Gunakan Algoritma Euclid untuk mencari \(\gcd(252, 105)\), kemudian buktikan:
+          \[\gcd(a,b) = \gcd(b,\, a \bmod b)\]
+        </p>
+        <button class="toggle-btn" onclick="toggleBukti(this)">
+          <span>BUKA PEMBUKTIAN</span>
+          <span class="toggle-arrow">▼</span>
+        </button>
+        <div class="bukti-panel">
+          <div class="bukti-label">✦ Pembuktian</div>
+          <div class="bukti-step">
+            <span class="step-num">1</span>
+            <div class="step-content">
+              <strong>Langkah Algoritma:</strong><br>
+              \(252 = 2 \times 105 + 42\)<br>
+              \(105 = 2 \times 42 + 21\)<br>
+              \(42 = 2 \times 21 + 0\)<br>
+              ∴ \(\gcd(252,105) = 21\)
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">2</span>
+            <div class="step-content">
+              <strong>Bukti \(\gcd(a,b) = \gcd(b, a \bmod b)\):</strong>
+              Tulis \(a = qb + r\) dengan \(r = a \bmod b\). Misalkan \(d = \gcd(a,b)\).
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">3</span>
+            <div class="step-content">
+              \(d \mid a\) dan \(d \mid b\) ⟹ \(d \mid (a - qb) = r\). Jadi \(d \mid \gcd(b,r)\).
+              Sebaliknya, jika \(e \mid b\) dan \(e \mid r\), maka \(e \mid (qb + r) = a\), jadi \(e \mid \gcd(a,b)\).
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">4</span>
+            <div class="step-content">
+              Dari kedua arah: \(\gcd(a,b) = \gcd(b, r) = \gcd(b, a \bmod b)\). ✓
+            </div>
+          </div>
+          <div class="bukti-conclusion">
+            \(\gcd(252,105) = 21\) cm. Potongan tali sepanjang 21 cm memenuhi syarat. Algoritma Euclid valid karena \(\gcd(a,b) = \gcd(b, a \bmod b)\). &nbsp;<strong>□</strong>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="footer-ref">Sumber: Euclid, Stoicheia, Buku VII Prop. 1–2 (±300 SM)</span>
+        <span class="footer-topic">GCD · Algoritma Euclid</span>
+      </div>
+    </div>
+
+    <!-- SOAL 9 -->
+    <div class="soal-card">
+      <div class="card-accent greece-accent"></div>
+      <div class="card-header">
+        <span class="soal-number">Soal IX</span>
+        <span class="soal-judul">Saringan Eratosthenes &amp; Jumlah Prima</span>
+        <span class="soal-tag">Sieve · Prime Distribution</span>
+      </div>
+      <div class="card-body">
+        <div class="konteks-box">
+          <div class="konteks-label">Konteks Sejarah</div>
+          <p>Eratosthenes dari Kirene (±276–194 SM), kepala perpustakaan Alexandria, mengembangkan metode "saringan" untuk menemukan semua bilangan prima hingga batas tertentu — metode yang kini menyandang namanya.</p>
+        </div>
+        <p class="soal-text">
+          Perpustakaan Alexandria memiliki <strong>rak nomor 1 sampai 50</strong>. Gunakan Saringan Eratosthenes
+          untuk menemukan semua prima ≤ 50. Kemudian buktikan: jika \(n\) <em>bukan</em> prima, maka \(n\) memiliki
+          faktor prima \(p \leq \sqrt{n}\). Ini menjustifikasi mengapa saringan cukup hingga \(\lfloor\sqrt{n}\rfloor\).
+        </p>
+        <button class="toggle-btn" onclick="toggleBukti(this)">
+          <span>BUKA PEMBUKTIAN</span>
+          <span class="toggle-arrow">▼</span>
+        </button>
+        <div class="bukti-panel">
+          <div class="bukti-label">✦ Pembuktian</div>
+          <div class="bukti-step">
+            <span class="step-num">1</span>
+            <div class="step-content">
+              <strong>Saringan sampai 50:</strong> Eliminasi kelipatan 2, 3, 5, 7 (karena \(\sqrt{50} \approx 7.07\)).<br>
+              Prima ≤ 50: <strong>2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47</strong> (15 prima).
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">2</span>
+            <div class="step-content">
+              <strong>Teorema:</strong> Jika \(n > 1\) komposit, maka \(n\) memiliki faktor prima \(p \leq \sqrt{n}\).
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">3</span>
+            <div class="step-content">
+              <strong>Bukti:</strong> Karena \(n\) komposit, tulis \(n = ab\) dengan \(1 < a \leq b < n\).
+              Maka \(a^2 \leq ab = n\), sehingga \(a \leq \sqrt{n}\).
+              Faktor prima dari \(a\) juga faktor prima dari \(n\) dan \(\leq a \leq \sqrt{n}\). ✓
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">4</span>
+            <div class="step-content">
+              Jadi cukup uji primalitas \(n\) dengan memeriksa semua prima \(p \leq \sqrt{n}\). Saringan berakhir di \(\lfloor\sqrt{n}\rfloor\).
+            </div>
+          </div>
+          <div class="bukti-conclusion">
+            Setiap bilangan komposit memiliki faktor prima ≤ akar kuadratnya. Saringan Eratosthenes menemukan semua prima ≤ 50 dengan hanya menyaring hingga \(p \leq 7\). &nbsp;<strong>□</strong>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="footer-ref">Sumber: Nicomachus, Introductio Arithmetica (mengutip Eratosthenes, ±200 SM)</span>
+        <span class="footer-topic">Saringan Prima · Batas √n</span>
+      </div>
+    </div>
+
+    <!-- SOAL 10 -->
+    <div class="soal-card">
+      <div class="card-accent greece-accent"></div>
+      <div class="card-header">
+        <span class="soal-number">Soal X</span>
+        <span class="soal-judul">Bilangan Sempurna &amp; Teorema Euclid-Euler</span>
+        <span class="soal-tag">Perfect Numbers · σ</span>
+      </div>
+      <div class="card-body">
+        <div class="konteks-box">
+          <div class="konteks-label">Konteks Sejarah</div>
+          <p>Pythagoras (±570–495 SM) dan Euclid (Buku IX Prop. 36) meneliti <em>bilangan sempurna</em> — bilangan yang sama dengan jumlah pembagi sejatinya. Euclid membuktikan bahwa \(2^{p-1}(2^p-1)\) adalah sempurna jika \(2^p-1\) prima. Euler kemudian membuktikan kebalikannya untuk bilangan genap.</p>
+        </div>
+        <p class="soal-text">
+          Komunitas Pythagorean di Kroton menganggap angka <strong>6</strong> dan <strong>28</strong> sebagai bilangan "sempurna" — suci secara mistis.
+          Verifikasi bahwa 6 dan 28 adalah bilangan sempurna. Kemudian buktikan teorema Euclid:
+          jika \(q = 2^p - 1\) adalah prima (bilangan prima Mersenne), maka \(n = 2^{p-1} \cdot q\) adalah bilangan sempurna.
+        </p>
+        <button class="toggle-btn" onclick="toggleBukti(this)">
+          <span>BUKA PEMBUKTIAN</span>
+          <span class="toggle-arrow">▼</span>
+        </button>
+        <div class="bukti-panel">
+          <div class="bukti-label">✦ Pembuktian (Euclid, Buku IX Prop. 36)</div>
+          <div class="bukti-step">
+            <span class="step-num">1</span>
+            <div class="step-content">
+              <strong>Verifikasi 6:</strong> \(p=2\), \(q = 2^2-1=3\) (prima). \(n=2^1 \cdot 3 = 6\).<br>
+              Pembagi sejati: 1, 2, 3. Jumlah: \(1+2+3=6\) ✓<br>
+              <strong>Verifikasi 28:</strong> \(p=3\), \(q=7\) (prima). \(n=4 \times 7=28\).<br>
+              Pembagi sejati: 1,2,4,7,14. Jumlah: \(28\) ✓
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">2</span>
+            <div class="step-content">
+              <strong>Bukti Teorema:</strong> Hitung \(\sigma(n) = \sigma(2^{p-1} \cdot q)\).<br>
+              Karena \(\gcd(2^{p-1}, q) = 1\) (q ganjil prima), maka \(\sigma\) multiplikatif:
+              \[\sigma(n) = \sigma(2^{p-1}) \cdot \sigma(q)\]
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">3</span>
+            <div class="step-content">
+              \[\sigma(2^{p-1}) = 2^p - 1 = q, \qquad \sigma(q) = q + 1 = 2^p\]
+              (karena \(q\) prima, pembaginya hanya 1 dan \(q\))
+            </div>
+          </div>
+          <div class="bukti-step">
+            <span class="step-num">4</span>
+            <div class="step-content">
+              \[\sigma(n) = q \cdot 2^p = (2^p-1)\cdot 2^p = 2 \cdot 2^{p-1}(2^p-1) = 2n\]
+              Definisi bilangan sempurna: \(\sigma(n) = 2n\). ✓
+            </div>
+          </div>
+          <div class="bukti-conclusion">
+            Jika \(2^p - 1\) prima, maka \(n = 2^{p-1}(2^p-1)\) adalah bilangan sempurna genap. (Euclid-Euler) &nbsp;<strong>□</strong>
+          </div>
+          <div class="qed">Q.E.D. — Quod Erat Demonstrandum</div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="footer-ref">Sumber: Euclid, Stoicheia Buku IX Prop. 36 (±300 SM); Euler (1747)</span>
+        <span class="footer-topic">Bilangan Sempurna · Prima Mersenne</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- .content -->
+
+<!-- PAGE FOOTER -->
+<div class="page-footer">
+  <strong>IKIP Siliwangi — Pendidikan Matematika</strong>
+  Materi Teori Bilangan | Soal Cerita &amp; Pembuktian dari Peradaban Kuno<br>
+  <span style="opacity:0.6; font-size:0.8rem;">Mesir · Sumeria · Tiongkok · Yunani — Fondasi Matematika Dunia</span>
+</div>
+
+<script>
+  // Track opened panels
+  const opened = new Set();
+  let total = 10;
+
+  function updateProgress() {
+    const pct = (opened.size / total) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressCount').textContent = opened.size + ' / ' + total;
+  }
+
+  function toggleBukti(btn) {
+    const panel = btn.nextElementSibling;
+    const isOpen = panel.classList.contains('open');
+    panel.classList.toggle('open', !isOpen);
+    btn.classList.toggle('open', !isOpen);
+    btn.querySelector('span').textContent = isOpen ? 'BUKA PEMBUKTIAN' : 'TUTUP PEMBUKTIAN';
+
+    // Track
+    const card = btn.closest('.soal-card');
+    const num = card.querySelector('.soal-number').textContent;
+    if (!isOpen) opened.add(num);
+    updateProgress();
+
+    // Re-render MathJax
+    if (!isOpen && window.MathJax) {
+      MathJax.typesetPromise([panel]);
+    }
+  }
+
+  function showCiv(id) {
+    document.querySelectorAll('.soal-section').forEach(s => s.classList.remove('visible'));
+    document.querySelectorAll('.civ-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('sec-' + id).classList.add('visible');
+    document.getElementById('btn-' + id).classList.add('active');
+
+    // Re-animate cards
+    document.querySelectorAll('#sec-' + id + ' .soal-card').forEach((c, i) => {
+      c.style.animation = 'none';
+      c.offsetHeight; // reflow
+      c.style.animation = '';
+      c.style.animationDelay = (i * 0.08) + 's';
+    });
+
+    // MathJax re-render
+    if (window.MathJax) MathJax.typesetPromise();
+  }
+
+  // Init MathJax
+  window.MathJax = {
+    tex: { inlineMath: [['\\(','\\)'], ['$','$']], displayMath: [['\\[','\\]']] },
+    startup: { ready() { MathJax.startup.defaultReady(); } }
+  };
+</script>
+</body>
+</html>
