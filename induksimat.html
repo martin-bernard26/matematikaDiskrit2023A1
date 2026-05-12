@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Induksi Matematika — Materi Interaktif</title>
+
+<!-- Brython -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.12.0/brython.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.12.0/brython_stdlib.js"></script>
+
+<!-- KaTeX for math rendering -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Code+Pro:wght@400;600&family=Lato:wght@300;400;700&display=swap');
+
+  :root {
+    --ink:       #1a1a2e;
+    --paper:     #faf7f2;
+    --accent:    #c0392b;
+    --gold:      #d4a017;
+    --teal:      #0d6e6e;
+    --muted:     #7f8c8d;
+    --border:    #d5c9b8;
+    --code-bg:   #1e1e2e;
+    --green:     #27ae60;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent, transparent 40px,
+      rgba(192,57,43,.06) 40px, rgba(192,57,43,.06) 41px
+    );
+  }
+  header .eyebrow {
+    font-family: 'Source Code Pro', monospace;
+    font-size: .75rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: .75rem;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+  }
+  header h1 span { color: var(--accent); }
+  header p.tagline {
+    margin-top: .75rem;
+    font-weight: 300;
+    font-size: 1.05rem;
+    color: rgba(250,247,242,.7);
+    max-width: 540px;
+    margin-inline: auto;
+  }
+
+  /* ── NAV TABS ── */
+  nav.tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    background: #fff;
+    border-bottom: 2px solid var(--border);
+    flex-wrap: wrap;
+  }
+  nav.tabs button {
+    font-family: 'Lato', sans-serif;
+    font-size: .88rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 1rem 1.6rem;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    cursor: pointer;
+    color: var(--muted);
+    transition: color .2s, border-color .2s;
+  }
+  nav.tabs button.active,
+  nav.tabs button:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ── MAIN LAYOUT ── */
+  main { max-width: 860px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+  .tab-panel { display: none; animation: fadeUp .35s ease; }
+  .tab-panel.active { display: block; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+
+  /* ── TYPOGRAPHY ── */
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    border-left: 5px solid var(--accent);
+    padding-left: .9rem;
+    margin: 2rem 0 1rem;
+    line-height: 1.2;
+  }
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--teal);
+    margin: 1.6rem 0 .5rem;
+  }
+  p { line-height: 1.8; margin-bottom: .9rem; color: #333; }
+
+  /* ── CALLOUT BOXES ── */
+  .box {
+    border-radius: 4px;
+    padding: 1.2rem 1.5rem;
+    margin: 1.2rem 0;
+    border-left: 5px solid;
+    font-size: .95rem;
+    line-height: 1.75;
+  }
+  .box.definition { background: #eaf6fb; border-color: #2980b9; }
+  .box.theorem    { background: #fef9ec; border-color: var(--gold); }
+  .box.proof      { background: #eafaf1; border-color: var(--green); }
+  .box.warning    { background: #fdedec; border-color: var(--accent); }
+  .box .label {
+    font-family: 'Source Code Pro', monospace;
+    font-size: .7rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    font-weight: 600;
+    display: block;
+    margin-bottom: .4rem;
+    opacity: .7;
+  }
+
+  /* ── STEPS ── */
+  .steps { counter-reset: step; list-style: none; margin: 1rem 0; }
+  .steps li {
+    counter-increment: step;
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+    align-items: flex-start;
+  }
+  .steps li::before {
+    content: counter(step);
+    min-width: 2rem; height: 2rem;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .9rem;
+    flex-shrink: 0;
+    margin-top: .15rem;
+  }
+  .steps li p { margin: 0; }
+
+  /* ── MATH FORMULA DISPLAY ── */
+  .formula-block {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 6px;
+    padding: 1.2rem 1.5rem;
+    margin: 1rem 0;
+    text-align: center;
+    font-size: 1.15rem;
+    overflow-x: auto;
+  }
+  .formula-block .katex { color: #fff; }
+
+  /* ── INTERACTIVE SECTION ── */
+  .interactive-card {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06);
+  }
+  .interactive-card h3 { margin-top: 0; }
+
+  .input-row {
+    display: flex;
+    gap: .75rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 1rem 0;
+  }
+  .input-row label { font-weight: 700; font-size: .95rem; }
+  .input-row input[type=number] {
+    width: 90px;
+    padding: .5rem .75rem;
+    font-size: 1rem;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    font-family: 'Source Code Pro', monospace;
+    transition: border-color .2s;
+  }
+  .input-row input[type=number]:focus { outline: none; border-color: var(--teal); }
+
+  button.btn {
+    padding: .55rem 1.3rem;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: .9rem;
+    cursor: pointer;
+    transition: background .2s, transform .1s;
+    font-family: 'Lato', sans-serif;
+  }
+  button.btn:hover { background: #a93226; }
+  button.btn:active { transform: scale(.97); }
+  button.btn.teal { background: var(--teal); }
+  button.btn.teal:hover { background: #0a5555; }
+  button.btn.gold { background: var(--gold); color: var(--ink); }
+
+  /* ── OUTPUT AREAS ── */
+  #output-deret, #output-pembuktian, #output-quiz, #output-kalkulator {
+    background: var(--code-bg);
+    color: #cdd6f4;
+    border-radius: 6px;
+    padding: 1.1rem 1.3rem;
+    font-family: 'Source Code Pro', monospace;
+    font-size: .88rem;
+    line-height: 1.7;
+    min-height: 60px;
+    white-space: pre-wrap;
+    margin-top: .75rem;
+  }
+
+  .result-highlight {
+    color: #a6e3a1;
+    font-weight: 600;
+  }
+  .result-error { color: #f38ba8; font-weight: 600; }
+  .result-step  { color: #89dceb; }
+  .result-formula { color: #f9e2af; }
+
+  /* ── QUIZ ── */
+  .quiz-question {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 1.4rem;
+    margin: 1rem 0;
+  }
+  .quiz-question p.q-text {
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: .9rem;
+    color: var(--ink);
+  }
+  .quiz-options { display: flex; flex-direction: column; gap: .5rem; }
+  .quiz-options label {
+    display: flex; align-items: center; gap: .6rem;
+    cursor: pointer;
+    padding: .5rem .75rem;
+    border-radius: 4px;
+    border: 1.5px solid var(--border);
+    transition: background .15s;
+    font-size: .95rem;
+  }
+  .quiz-options label:hover { background: #f0ede8; }
+  .quiz-options input[type=radio] { accent-color: var(--accent); }
+
+  #quiz-feedback {
+    margin-top: .8rem;
+    font-weight: 700;
+    font-size: 1rem;
+  }
+  .feedback-correct { color: var(--green); }
+  .feedback-wrong   { color: var(--accent); }
+
+  /* ── TABLE ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: .93rem;
+  }
+  th {
+    background: var(--ink);
+    color: var(--paper);
+    padding: .65rem 1rem;
+    text-align: left;
+    font-family: 'Source Code Pro', monospace;
+    font-size: .8rem;
+    letter-spacing: .05em;
+  }
+  td { padding: .6rem 1rem; border-bottom: 1px solid var(--border); }
+  tr:nth-child(even) td { background: #f5f1eb; }
+
+  /* ── PROOF ANIMATION ── */
+  .proof-step {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: .8rem 1rem;
+    border-radius: 4px;
+    margin: .4rem 0;
+    opacity: 0;
+    transform: translateX(-16px);
+    transition: opacity .4s, transform .4s;
+    border-left: 3px solid transparent;
+  }
+  .proof-step.visible {
+    opacity: 1;
+    transform: none;
+  }
+  .proof-step .ps-num {
+    font-family: 'Source Code Pro', monospace;
+    font-size: .75rem;
+    background: var(--teal);
+    color: #fff;
+    padding: .15rem .4rem;
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: .2rem;
+  }
+  .proof-step .ps-body { flex: 1; }
+  .proof-step .ps-reason {
+    font-size: .8rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: .2rem;
+  }
+  .proof-step:nth-child(1) { border-left-color: #3498db; background: #eaf6fb44; }
+  .proof-step:nth-child(2) { border-left-color: var(--gold); background: #fef9ec44; }
+  .proof-step:nth-child(3) { border-left-color: #9b59b6; background: #f5eef844; }
+  .proof-step:nth-child(4) { border-left-color: #e67e22; background: #fef5ec44; }
+  .proof-step:nth-child(5) { border-left-color: var(--green); background: #eafaf144; }
+
+  /* ── VISUALISASI BLOK ── */
+  #vis-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+  }
+  .vis-row { display: flex; gap: 4px; align-items: center; }
+  .vis-block {
+    width: 32px; height: 32px;
+    border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .7rem; font-weight: 700;
+    color: #fff;
+    transition: transform .15s;
+  }
+  .vis-block:hover { transform: scale(1.15); z-index:2; }
+  .vis-label {
+    font-family: 'Source Code Pro', monospace;
+    font-size: .78rem;
+    color: var(--muted);
+    margin-left: .5rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: .8rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar-wrap { background: #e0d9ce; border-radius: 999px; height: 8px; margin: .5rem 0 1.2rem; }
+  .progress-bar { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--teal), var(--accent)); transition: width .4s; }
+
+  @media (max-width: 600px) {
+    nav.tabs button { padding: .75rem 1rem; font-size: .78rem; }
+  }
+</style>
+</head>
+<body onload="brython()">
+
+<!-- ══════════════════════════════════════════════════════ HEADER -->
+<header>
+  <div class="eyebrow">Matematika Diskrit · Materi Interaktif</div>
+  <h1>Induksi <span>Matematika</span></h1>
+  <p class="tagline">Pelajari, eksplorasi, dan buktikan secara langsung dengan Python di browser</p>
+</header>
+
+<!-- ══════════════════════════════════════════════════════ TABS -->
+<nav class="tabs" id="tabs">
+  <button class="active" data-tab="materi">📖 Materi</button>
+  <button data-tab="pembuktian">🔍 Pembuktian</button>
+  <button data-tab="interaktif">⚡ Interaktif</button>
+  <button data-tab="visualisasi">🎨 Visualisasi</button>
+  <button data-tab="quiz">🧩 Kuis</button>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════ MAIN -->
+<main>
+
+  <!-- ─── TAB 1: MATERI ─────────────────────────────────────── -->
+  <section class="tab-panel active" id="panel-materi">
+    <h2>Apa itu Induksi Matematika?</h2>
+    <p>
+      <strong>Induksi Matematika</strong> adalah metode pembuktian yang digunakan untuk membuktikan
+      bahwa suatu pernyataan <em>P(n)</em> berlaku untuk <em>semua bilangan asli n</em>.
+      Bayangkan seperti deretan domino — jika domino pertama jatuh dan setiap domino yang jatuh
+      menjatuhkan yang berikutnya, maka <em>semua</em> domino pasti akan jatuh.
+    </p>
+
+    <div class="box definition">
+      <span class="label">📌 Definisi</span>
+      Induksi matematika adalah teknik pembuktian untuk pernyataan berbentuk
+      <em>"untuk semua n ∈ ℕ, P(n) benar"</em>, menggunakan dua langkah: <strong>basis</strong> dan <strong>langkah induktif</strong>.
+    </div>
+
+    <h2>Dua Langkah Utama</h2>
+    <ol class="steps">
+      <li>
+        <p><strong>Basis Induksi (Base Case):</strong> Buktikan bahwa P(1) benar. Ini adalah titik awal yang menjamin rantai induktif dapat dimulai.</p>
+      </li>
+      <li>
+        <p><strong>Langkah Induktif (Inductive Step):</strong> Asumsikan P(k) benar untuk sembarang k ≥ 1 (hipotesis induksi), lalu buktikan bahwa P(k+1) juga benar.</p>
+      </li>
+    </ol>
+
+    <div class="box theorem">
+      <span class="label">📐 Prinsip Induksi</span>
+      Jika <strong>(1)</strong> P(1) benar, dan <strong>(2)</strong> untuk setiap k, P(k) ⟹ P(k+1) benar,
+      maka P(n) benar untuk semua n ∈ ℕ.
+    </div>
+
+    <h2>Contoh Klasik: Jumlah Deret Aritmatika</h2>
+    <p>Kita akan membuktikan rumus jumlah n bilangan asli pertama:</p>
+
+    <div class="formula-block">
+      \[ \sum_{k=1}^{n} k = \frac{n(n+1)}{2} \]
+    </div>
+
+    <h3>Bukti dengan Induksi Matematika</h3>
+
+    <div class="box proof">
+      <span class="label">✅ Basis: n = 1</span>
+      Sisi kiri: \(1\). Sisi kanan: \(\dfrac{1 \cdot 2}{2} = 1\). Kedua sisi sama. ✓
+    </div>
+
+    <div class="box theorem">
+      <span class="label">🔗 Hipotesis Induksi</span>
+      Asumsikan untuk n = k berlaku: \(1 + 2 + \cdots + k = \dfrac{k(k+1)}{2}\)
+    </div>
+
+    <div class="box proof">
+      <span class="label">➡️ Langkah Induktif: Buktikan n = k+1</span>
+      <p style="margin-top:.4rem">
+        \(1 + 2 + \cdots + k + (k+1)\)<br>
+        \(= \dfrac{k(k+1)}{2} + (k+1)\)  &nbsp;&nbsp; ← gunakan hipotesis induksi<br>
+        \(= \dfrac{k(k+1) + 2(k+1)}{2}\)<br>
+        \(= \dfrac{(k+1)(k+2)}{2}\)<br>
+        \(= \dfrac{(k+1)((k+1)+1)}{2}\) &nbsp; ✓
+      </p>
+    </div>
+
+    <h2>Contoh Lain</h2>
+
+    <h3>1. Jumlah deret ganjil</h3>
+    <div class="formula-block">
+      \[ 1 + 3 + 5 + \cdots + (2n-1) = n^2 \]
+    </div>
+
+    <h3>2. Rumus deret geometri</h3>
+    <div class="formula-block">
+      \[ \sum_{k=0}^{n} r^k = \frac{r^{n+1} - 1}{r - 1}, \quad r \neq 1 \]
+    </div>
+
+    <h3>3. Keterbagian (Divisibility)</h3>
+    <div class="formula-block">
+      \[ n^3 - n \text{ habis dibagi } 6, \quad \forall n \in \mathbb{N} \]
+    </div>
+
+    <h2>Kapan Menggunakan Induksi?</h2>
+    <table>
+      <thead>
+        <tr><th>Tipe Pernyataan</th><th>Contoh</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Rumus jumlah deret</td><td>\(\sum k^2 = \frac{n(n+1)(2n+1)}{6}\)</td></tr>
+        <tr><td>Keterbagian</td><td>\(6 \mid (n^3 - n)\)</td></tr>
+        <tr><td>Pertidaksamaan</td><td>\(2^n > n^2\) untuk \(n \geq 5\)</td></tr>
+        <tr><td>Teori graf</td><td>Jumlah rusuk pohon n simpul = n−1</td></tr>
+        <tr><td>Barisan rekursif</td><td>Fibonacci, Menara Hanoi</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ─── TAB 2: PEMBUKTIAN INTERAKTIF ──────────────────────── -->
+  <section class="tab-panel" id="panel-pembuktian">
+    <h2>Pembuktian Langkah demi Langkah</h2>
+    <p>Pilih rumus yang ingin dibuktikan, lalu klik <strong>Tampilkan Bukti</strong> untuk melihat setiap langkah animasi.</p>
+
+    <div class="interactive-card">
+      <div class="input-row">
+        <label for="sel-proof">Pilih rumus:</label>
+        <select id="sel-proof" style="padding:.5rem;border:2px solid var(--border);border-radius:4px;font-size:.95rem;">
+          <option value="sum_n">∑k = n(n+1)/2</option>
+          <option value="sum_odd">∑(2k-1) = n²</option>
+          <option value="sum_sq">∑k² = n(n+1)(2n+1)/6</option>
+          <option value="divisible">6 | (n³ - n)</option>
+        </select>
+        <button class="btn" id="btn-proof">Tampilkan Bukti ▶</button>
+        <button class="btn gold" id="btn-proof-reset">Reset</button>
+      </div>
+      <div id="proof-steps-container"></div>
+    </div>
+  </section>
+
+  <!-- ─── TAB 3: KALKULATOR INTERAKTIF ──────────────────────── -->
+  <section class="tab-panel" id="panel-interaktif">
+    <h2>Kalkulator & Eksplorasi</h2>
+
+    <!-- Kalkulator Deret -->
+    <div class="interactive-card">
+      <h3>🔢 Verifikasi Rumus ∑k = n(n+1)/2</h3>
+      <p>Masukkan nilai n untuk memverifikasi rumus secara numerik:</p>
+      <div class="input-row">
+        <label for="inp-n">n =</label>
+        <input type="number" id="inp-n" value="5" min="1" max="1000"/>
+        <button class="btn" id="btn-hitung">Hitung</button>
+        <button class="btn teal" id="btn-semua">Tampilkan Deret</button>
+      </div>
+      <div id="output-deret">— tekan tombol untuk menghitung —</div>
+    </div>
+
+    <!-- Kalkulator Umum -->
+    <div class="interactive-card">
+      <h3>🧮 Kalkulator Berbagai Rumus Deret</h3>
+      <div class="input-row">
+        <label for="inp-rumus">Rumus:</label>
+        <select id="inp-rumus" style="padding:.5rem;border:2px solid var(--border);border-radius:4px;font-size:.95rem;flex:1;">
+          <option value="sum_n">∑ k = n(n+1)/2</option>
+          <option value="sum_sq">∑ k² = n(n+1)(2n+1)/6</option>
+          <option value="sum_cb">∑ k³ = [n(n+1)/2]²</option>
+          <option value="sum_geo">∑ 2^k = 2^(n+1) - 1</option>
+          <option value="sum_odd">∑ (2k-1) = n²</option>
+        </select>
+        <input type="number" id="inp-nk" value="10" min="1" max="500" style="width:80px;padding:.5rem;border:2px solid var(--border);border-radius:4px;font-size:1rem;font-family:'Source Code Pro',monospace;"/>
+        <button class="btn teal" id="btn-kalk">Hitung</button>
+      </div>
+      <div id="output-kalkulator">—</div>
+    </div>
+
+    <!-- Uji P(k) → P(k+1) -->
+    <div class="interactive-card">
+      <h3>🔬 Uji Langkah Induktif P(k) → P(k+1)</h3>
+      <p>Masukkan nilai k untuk memverifikasi bahwa jika P(k) benar, maka P(k+1) benar:</p>
+      <div class="input-row">
+        <label for="inp-k">k =</label>
+        <input type="number" id="inp-k" value="3" min="1" max="999"/>
+        <button class="btn" id="btn-induktif">Verifikasi</button>
+      </div>
+      <div id="output-pembuktian">—</div>
+    </div>
+  </section>
+
+  <!-- ─── TAB 4: VISUALISASI ────────────────────────────────── -->
+  <section class="tab-panel" id="panel-visualisasi">
+    <h2>Visualisasi Deret</h2>
+    <p>Visualisasi blok menunjukkan secara intuitif mengapa <strong>1 + 2 + … + n = n(n+1)/2</strong>.</p>
+
+    <div class="interactive-card">
+      <h3>🟦 Diagram Tangga Bilangan</h3>
+      <div class="input-row">
+        <label for="inp-vis-n">n =</label>
+        <input type="number" id="inp-vis-n" value="6" min="1" max="15"/>
+        <button class="btn" id="btn-vis">Buat Diagram</button>
+      </div>
+      <div id="vis-container"></div>
+      <div id="vis-formula" style="margin-top:.8rem;font-family:'Source Code Pro',monospace;font-size:.9rem;color:var(--teal);"></div>
+    </div>
+
+    <div class="interactive-card">
+      <h3>📊 Tabel Pertumbuhan</h3>
+      <div class="input-row">
+        <label for="inp-tabel-n">Sampai n =</label>
+        <input type="number" id="inp-tabel-n" value="10" min="1" max="50"/>
+        <button class="btn teal" id="btn-tabel">Buat Tabel</button>
+      </div>
+      <div id="output-tabel"></div>
+    </div>
+  </section>
+
+  <!-- ─── TAB 5: KUIS ───────────────────────────────────────── -->
+  <section class="tab-panel" id="panel-quiz">
+    <h2>Kuis Induksi Matematika</h2>
+    <p>Uji pemahaman Anda dengan 5 soal pilihan ganda. Skor akan dihitung oleh Brython.</p>
+
+    <div id="progress-wrap">
+      <div class="progress-bar-wrap"><div class="progress-bar" id="quiz-progress" style="width:0%"></div></div>
+    </div>
+
+    <div id="quiz-container"></div>
+    <div class="input-row" style="margin-top:1.2rem;">
+      <button class="btn" id="btn-submit-quiz">Nilai Kuis</button>
+      <button class="btn gold" id="btn-reset-quiz">Mulai Ulang</button>
+    </div>
+    <div id="quiz-feedback"></div>
+    <div id="output-quiz" style="margin-top:.5rem;"></div>
+  </section>
+
+</main>
+
+<footer>
+  Dibuat dengan ❤️ menggunakan <strong>Brython</strong> (Python di Browser) · Materi Induksi Matematika Interaktif
+</footer>
+
+<!-- ══════════════════════════════════════════════════════ BRYTHON -->
+<script type="text/python">
+from browser import document, window, html, timer
+import math
+
+# ─────────────────────────────────────────────────────────────────
+# UTILITAS
+# ─────────────────────────────────────────────────────────────────
+COLORS = ["#e74c3c","#e67e22","#f1c40f","#2ecc71","#1abc9c",
+          "#3498db","#9b59b6","#e91e63","#00bcd4","#8bc34a",
+          "#ff5722","#607d8b","#795548","#673ab7","#009688"]
+
+def render_katex():
+    """Re-render KaTeX math in the whole document."""
+    window.renderMathInElement(document.body, {
+        "delimiters": [
+            {"left": r"\[",  "right": r"\]",  "display": True},
+            {"left": r"\(",  "right": r"\)",  "display": False},
+            {"left": "$$",   "right": "$$",   "display": True},
+            {"left": "$",    "right": "$",    "display": False},
+        ]
+    })
+
+# ─────────────────────────────────────────────────────────────────
+# TAB NAVIGATION
+# ─────────────────────────────────────────────────────────────────
+TAB_ORDER = ["materi", "pembuktian", "interaktif", "visualisasi", "quiz"]
+
+def switch_tab(tab_id):
+    for btn in document.select("#tabs button"):
+        if btn.attrs.get("data-tab") == tab_id:
+            btn.classList.add("active")
+        else:
+            btn.classList.remove("active")
+    for panel in document.select(".tab-panel"):
+        panel.classList.remove("active")
+    document[f"panel-{tab_id}"].classList.add("active")
+    timer.set_timeout(render_katex, 80)
+
+for btn in document.select("#tabs button"):
+    def make_handler(tid):
+        def handler(ev): switch_tab(tid)
+        return handler
+    btn.bind("click", make_handler(btn.attrs["data-tab"]))
+
+
+# ─────────────────────────────────────────────────────────────────
+# TAB 3 : KALKULATOR INTERAKTIF (Brython Python)
+# ─────────────────────────────────────────────────────────────────
+
+def hitung_deret(ev):
+    try:
+        n = int(document["inp-n"].value)
+        if n < 1 or n > 1000:
+            document["output-deret"].innerHTML = '<span class="result-error">⚠ Masukkan nilai 1 – 1000</span>'
+            return
+        actual   = sum(range(1, n + 1))
+        formula  = n * (n + 1) // 2
+        match    = "✓ COCOK" if actual == formula else "✗ TIDAK COCOK"
+        out  = f'<span class="result-step">n = {n}</span>\n'
+        out += f'<span class="result-formula">Jumlah langsung : 1 + 2 + … + {n} = {actual}</span>\n'
+        out += f'<span class="result-formula">Rumus n(n+1)/2 : {n}×{n+1}÷2 = {formula}</span>\n'
+        out += f'<span class="result-highlight">{match} — Rumus terbukti benar untuk n={n}</span>'
+        document["output-deret"].innerHTML = out
+    except Exception as e:
+        document["output-deret"].innerHTML = f'<span class="result-error">Error: {e}</span>'
+
+def tampilkan_semua(ev):
+    try:
+        n = int(document["inp-n"].value)
+        if n < 1 or n > 100:
+            document["output-deret"].innerHTML = '<span class="result-error">⚠ Gunakan n ≤ 100 untuk tampilkan deret</span>'
+            return
+        parts = " + ".join(str(i) for i in range(1, n+1))
+        total = n*(n+1)//2
+        out  = f'<span class="result-step">Deret :</span> {parts}\n'
+        out += f'<span class="result-formula">= {total}</span>\n'
+        out += f'<span class="result-highlight">Rumus : {n}×{n+1}÷2 = {total} ✓</span>'
+        document["output-deret"].innerHTML = out
+    except Exception as e:
+        document["output-deret"].innerHTML = f'<span class="result-error">{e}</span>'
+
+document["btn-hitung"].bind("click", hitung_deret)
+document["btn-semua"].bind("click", tampilkan_semua)
+
+# ── Kalkulator berbagai rumus ──
+FORMULAS = {
+    "sum_n":   (lambda n: n*(n+1)//2,            lambda n: sum(range(1,n+1)),        "∑k",         "n(n+1)/2"),
+    "sum_sq":  (lambda n: n*(n+1)*(2*n+1)//6,    lambda n: sum(k*k for k in range(1,n+1)),  "∑k²", "n(n+1)(2n+1)/6"),
+    "sum_cb":  (lambda n: (n*(n+1)//2)**2,        lambda n: sum(k**3 for k in range(1,n+1)), "∑k³", "[n(n+1)/2]²"),
+    "sum_geo": (lambda n: 2**(n+1)-1,             lambda n: sum(2**k for k in range(0,n+1)), "∑2^k","2^(n+1)-1"),
+    "sum_odd": (lambda n: n*n,                    lambda n: sum(2*k-1 for k in range(1,n+1)),"∑(2k-1)","n²"),
+}
+
+def kalkulator(ev):
+    try:
+        key = document["inp-rumus"].value
+        n   = int(document["inp-nk"].value)
+        if n < 1 or n > 500:
+            document["output-kalkulator"].innerHTML = '<span class="result-error">⚠ 1 ≤ n ≤ 500</span>'
+            return
+        f_formula, f_actual, sym, formula_str = FORMULAS[key]
+        val_f  = f_formula(n)
+        val_a  = f_actual(n)
+        match  = "✓ COCOK" if val_f == val_a else "✗ TIDAK COCOK"
+        out  = f'<span class="result-step">Rumus    : {sym}(n={n}) = {formula_str}</span>\n'
+        out += f'<span class="result-formula">Nilai rumus  : {val_f}</span>\n'
+        out += f'<span class="result-formula">Nilai aktual : {val_a}</span>\n'
+        out += f'<span class="result-highlight">{match}</span>'
+        document["output-kalkulator"].innerHTML = out
+    except Exception as e:
+        document["output-kalkulator"].innerHTML = f'<span class="result-error">{e}</span>'
+
+document["btn-kalk"].bind("click", kalkulator)
+
+# ── Uji langkah induktif ──
+def uji_induktif(ev):
+    try:
+        k = int(document["inp-k"].value)
+        if k < 1:
+            document["output-pembuktian"].innerHTML = '<span class="result-error">k harus ≥ 1</span>'
+            return
+        pk  = k*(k+1)//2
+        pk1 = (k+1)*(k+2)//2
+
+        out  = f'<span class="result-step">═══ Verifikasi P({k}) → P({k+1}) ═══</span>\n\n'
+        out += f'<span class="result-formula">Hipotesis P({k}) :</span>\n'
+        out += f'  1 + 2 + … + {k} = {k}×{k+1}÷2 = {pk}\n'
+        out += f'  Verifikasi aktual : {sum(range(1,k+1))}\n\n'
+
+        out += f'<span class="result-formula">Langkah induktif :</span>\n'
+        out += f'  P({k+1}) : 1 + 2 + … + {k} + {k+1}\n'
+        out += f'         = {pk} + {k+1}  (hipotesis induksi)\n'
+        out += f'         = {pk + k + 1}\n'
+        out += f'  Rumus   : ({k+1})×{k+2}÷2 = {pk1}\n\n'
+
+        if pk + k + 1 == pk1:
+            out += f'<span class="result-highlight">✓ P({k+1}) terbukti benar dari P({k})</span>'
+        else:
+            out += f'<span class="result-error">✗ Tidak cocok — periksa rumus</span>'
+
+        document["output-pembuktian"].innerHTML = out
+    except Exception as e:
+        document["output-pembuktian"].innerHTML = f'<span class="result-error">{e}</span>'
+
+document["btn-induktif"].bind("click", uji_induktif)
+
+
+# ─────────────────────────────────────────────────────────────────
+# TAB 2 : PEMBUKTIAN ANIMASI
+# ─────────────────────────────────────────────────────────────────
+PROOFS = {
+    "sum_n": {
+        "judul": "Bukti: ∑k = n(n+1)/2",
+        "langkah": [
+            ("Basis (n=1)",
+             r"LHS = 1, \quad RHS = \frac{1 \cdot 2}{2} = 1",
+             "Keduanya sama → basis terbukti ✓"),
+            ("Hipotesis Induksi",
+             r"Asumsikan: \;1+2+\cdots+k = \frac{k(k+1)}{2}",
+             "Anggap benar untuk n = k"),
+            ("Tambah suku (k+1)",
+             r"1+2+\cdots+k+(k+1) = \frac{k(k+1)}{2} + (k+1)",
+             "Gunakan hipotesis induksi"),
+            ("Sederhanakan",
+             r"= \frac{k(k+1)+2(k+1)}{2} = \frac{(k+1)(k+2)}{2}",
+             "Faktorkan (k+1)"),
+            ("Kesimpulan",
+             r"\frac{(k+1)((k+1)+1)}{2} \;\text{— P(k+1) terbukti ✓}",
+             "Q.E.D. ∎"),
+        ]
+    },
+    "sum_odd": {
+        "judul": "Bukti: ∑(2k-1) = n²",
+        "langkah": [
+            ("Basis (n=1)",
+             r"LHS = 2(1)-1 = 1, \quad RHS = 1^2 = 1",
+             "Basis terbukti ✓"),
+            ("Hipotesis Induksi",
+             r"1+3+\cdots+(2k-1) = k^2",
+             "Asumsikan benar untuk n = k"),
+            ("Tambah suku (2(k+1)-1)",
+             r"k^2 + (2(k+1)-1) = k^2 + 2k + 1",
+             "Gunakan hipotesis"),
+            ("Sederhanakan",
+             r"= (k+1)^2",
+             "Bentuk kuadrat sempurna"),
+            ("Kesimpulan",
+             r"P(k+1): \sum_{i=1}^{k+1}(2i-1) = (k+1)^2 \;\checkmark",
+             "Q.E.D. ∎"),
+        ]
+    },
+    "sum_sq": {
+        "judul": "Bukti: ∑k² = n(n+1)(2n+1)/6",
+        "langkah": [
+            ("Basis (n=1)",
+             r"LHS = 1^2 = 1, \quad RHS = \frac{1\cdot2\cdot3}{6} = 1",
+             "Basis terbukti ✓"),
+            ("Hipotesis Induksi",
+             r"1^2+2^2+\cdots+k^2 = \frac{k(k+1)(2k+1)}{6}",
+             "Asumsikan benar untuk n = k"),
+            ("Tambah suku (k+1)²",
+             r"\frac{k(k+1)(2k+1)}{6} + (k+1)^2",
+             "Gunakan hipotesis"),
+            ("Sederhanakan",
+             r"= \frac{(k+1)(k+2)(2k+3)}{6}",
+             "Faktorkan (k+1)"),
+            ("Kesimpulan",
+             r"= \frac{(k+1)((k+1)+1)(2(k+1)+1)}{6} \;\checkmark",
+             "Q.E.D. ∎"),
+        ]
+    },
+    "divisible": {
+        "judul": "Bukti: 6 | (n³ - n)",
+        "langkah": [
+            ("Basis (n=1)",
+             r"1^3 - 1 = 0 = 6 \times 0",
+             "0 habis dibagi 6 → basis terbukti ✓"),
+            ("Hipotesis Induksi",
+             r"6 \mid (k^3 - k)",
+             "Asumsikan k³ - k habis dibagi 6"),
+            ("Hitung (k+1)³ - (k+1)",
+             r"(k+1)^3-(k+1) = k^3+3k^2+3k+1-k-1",
+             "Ekspansi kubik"),
+            ("Susun ulang",
+             r"= (k^3-k) + 3k(k+1)",
+             "k(k+1) selalu genap → 3k(k+1) habis dibagi 6"),
+            ("Kesimpulan",
+             r"6\mid(k^3-k) \text{ dan } 6\mid 3k(k+1) \;\Rightarrow\; 6\mid((k+1)^3-(k+1))\;\checkmark",
+             "Q.E.D. ∎"),
+        ]
+    },
+}
+
+def tampilkan_bukti(ev):
+    key = document["sel-proof"].value
+    proof = PROOFS[key]
+    container = document["proof-steps-container"]
+    container.innerHTML = f'<h3 style="color:var(--teal);margin-bottom:.8rem;">{proof["judul"]}</h3>'
+
+    def show_step(i):
+        if i >= len(proof["langkah"]):
+            timer.set_timeout(render_katex, 50)
+            return
+        label, formula, reason = proof["langkah"][i]
+        div = html.DIV(Class="proof-step")
+        div.innerHTML = (
+            f'<div class="ps-num">0{i+1}</div>'
+            f'<div class="ps-body">'
+            f'<strong>{label}</strong><br>'
+            f'\\({formula}\\)'
+            f'<div class="ps-reason">{reason}</div>'
+            f'</div>'
+        )
+        container <= div
+        timer.set_timeout(lambda: div.classList.add("visible"), 60)
+        timer.set_timeout(lambda: show_step(i+1), 420)
+
+    show_step(0)
+
+def reset_bukti(ev):
+    document["proof-steps-container"].innerHTML = ""
+
+document["btn-proof"].bind("click", tampilkan_bukti)
+document["btn-proof-reset"].bind("click", reset_bukti)
+
+
+# ─────────────────────────────────────────────────────────────────
+# TAB 4 : VISUALISASI
+# ─────────────────────────────────────────────────────────────────
+def buat_diagram(ev):
+    try:
+        n = int(document["inp-vis-n"].value)
+        if n < 1 or n > 15:
+            document["vis-formula"].innerHTML = "⚠ Gunakan 1 ≤ n ≤ 15"
+            return
+        container = document["vis-container"]
+        container.innerHTML = ""
+        total = 0
+        for row in range(1, n+1):
+            total += row
+            color = COLORS[(row-1) % len(COLORS)]
+            row_div = html.DIV(Class="vis-row")
+            for col in range(row):
+                blk = html.DIV(str(row), Class="vis-block")
+                blk.style.background = color
+                row_div <= blk
+            lbl = html.SPAN(f"  Baris {row}: +{row}  (∑={total})", Class="vis-label")
+            row_div <= lbl
+            container <= row_div
+        formula_str = f"n={n} → n(n+1)/2 = {n}×{n+1}÷2 = {n*(n+1)//2}  ✓"
+        document["vis-formula"].innerHTML = formula_str
+    except Exception as e:
+        document["vis-formula"].innerHTML = str(e)
+
+def buat_tabel(ev):
+    try:
+        n = int(document["inp-tabel-n"].value)
+        if n < 1 or n > 50:
+            document["output-tabel"].innerHTML = "⚠ 1 ≤ n ≤ 50"
+            return
+        tbl = html.TABLE()
+        hdr = html.TR()
+        for h in ["n", "∑k (aktual)", "n(n+1)/2", "∑k² (aktual)", "n(n+1)(2n+1)/6", "cocok?"]:
+            th = html.TH(h); hdr <= th
+        thead = html.THEAD(); thead <= hdr; tbl <= thead
+        tbody = html.TBODY()
+        for i in range(1, n+1):
+            s1 = sum(range(1,i+1)); f1 = i*(i+1)//2
+            s2 = sum(k*k for k in range(1,i+1)); f2 = i*(i+1)*(2*i+1)//6
+            ok = "✓" if s1==f1 and s2==f2 else "✗"
+            tr = html.TR()
+            for val in [i, s1, f1, s2, f2, ok]:
+                td = html.TD(str(val)); tr <= td
+            tbody <= tr
+        tbl <= tbody
+        container = document["output-tabel"]
+        container.innerHTML = ""
+        container <= tbl
+    except Exception as e:
+        document["output-tabel"].innerHTML = str(e)
+
+document["btn-vis"].bind("click", buat_diagram)
+document["btn-tabel"].bind("click", buat_tabel)
+
+# Auto-render visualisasi awal
+timer.set_timeout(lambda: buat_diagram(None), 300)
+
+
+# ─────────────────────────────────────────────────────────────────
+# TAB 5 : KUIS
+# ─────────────────────────────────────────────────────────────────
+SOAL = [
+    {
+        "q": "Apa yang dibuktikan pada langkah BASIS INDUKSI?",
+        "opts": ["P(n) untuk semua n", "P(1) benar", "P(k) → P(k+1)", "P(k) benar"],
+        "ans": 1,
+    },
+    {
+        "q": r"Nilai $\sum_{k=1}^{4} k$ menggunakan rumus $\frac{n(n+1)}{2}$ untuk $n=4$ adalah ...",
+        "opts": ["8", "10", "12", "16"],
+        "ans": 1,
+    },
+    {
+        "q": "Pada langkah induktif, kita asumsikan ...",
+        "opts": ["P(1) benar", "P(n) benar untuk semua n", "P(k) benar (hipotesis induksi)", "P(k+1) benar"],
+        "ans": 2,
+    },
+    {
+        "q": r"Rumus untuk $\sum_{k=1}^{n} k^2$ adalah ...",
+        "opts": [r"$\frac{n(n+1)}{2}$", r"$n^2$", r"$\frac{n(n+1)(2n+1)}{6}$", r"$\frac{n^2(n+1)}{4}$"],
+        "ans": 2,
+    },
+    {
+        "q": "Berapa banyak langkah yang diperlukan dalam induksi matematika standar?",
+        "opts": ["1", "2", "3", "4"],
+        "ans": 1,
+    },
+]
+
+def render_quiz():
+    container = document["quiz-container"]
+    container.innerHTML = ""
+    for i, soal in enumerate(SOAL):
+        qcard = html.DIV(Class="quiz-question")
+        p = html.P(Class="q-text")
+        p.innerHTML = f"Soal {i+1}: {soal['q']}"
+        qcard <= p
+        opts_div = html.DIV(Class="quiz-options")
+        for j, opt in enumerate(soal["opts"]):
+            lbl = html.LABEL()
+            radio = html.INPUT(type="radio", name=f"q{i}", value=str(j))
+            lbl <= radio
+            span = html.SPAN()
+            span.innerHTML = f" {opt}"
+            lbl <= span
+            opts_div <= lbl
+        qcard <= opts_div
+        container <= qcard
+    document["quiz-progress"].style.width = "0%"
+    document["quiz-feedback"].innerHTML = ""
+    document["output-quiz"].innerHTML = ""
+    timer.set_timeout(render_katex, 100)
+
+render_quiz()
+
+def nilai_quiz(ev):
+    skor = 0
+    detail = []
+    for i, soal in enumerate(SOAL):
+        radios = document.select(f'input[name="q{i}"]')
+        jawaban = None
+        for r in radios:
+            if r.checked:
+                jawaban = int(r.value)
+                break
+        if jawaban is None:
+            detail.append(f'<span class="result-error">Soal {i+1}: belum dijawab</span>')
+        elif jawaban == soal["ans"]:
+            skor += 1
+            detail.append(f'<span class="result-highlight">Soal {i+1}: ✓ Benar</span>')
+        else:
+            benar = soal["opts"][soal["ans"]]
+            detail.append(f'<span class="result-error">Soal {i+1}: ✗ Salah — Jawaban: {benar}</span>')
+
+    pct = skor / len(SOAL) * 100
+    document["quiz-progress"].style.width = f"{pct}%"
+
+    if pct == 100:
+        fb = '<span class="feedback-correct">🎉 Sempurna! Skor 5/5 — Anda menguasai induksi matematika!</span>'
+    elif pct >= 60:
+        fb = f'<span class="feedback-correct">👍 Bagus! Skor {skor}/{len(SOAL)} — Terus berlatih!</span>'
+    else:
+        fb = f'<span class="feedback-wrong">📚 Skor {skor}/{len(SOAL)} — Pelajari ulang materinya ya!</span>'
+
+    document["quiz-feedback"].innerHTML = fb
+    document["output-quiz"].innerHTML = "\n".join(detail)
+
+def reset_quiz(ev):
+    render_quiz()
+
+document["btn-submit-quiz"].bind("click", nilai_quiz)
+document["btn-reset-quiz"].bind("click", reset_quiz)
+
+
+# ─────────────────────────────────────────────────────────────────
+# INITIAL RENDER
+# ─────────────────────────────────────────────────────────────────
+timer.set_timeout(render_katex, 200)
+</script>
+</body>
+</html>
