@@ -1,0 +1,840 @@
+
+<style>
+  :root {
+    --c-primary: #1D9E75;
+    --c-primary-light: #E1F5EE;
+    --c-primary-dark: #085041;
+    --c-accent: #534AB7;
+    --c-accent-light: #EEEDFE;
+    --c-amber: #BA7517;
+    --c-amber-light: #FAEEDA;
+    --c-coral: #993C1D;
+    --c-coral-light: #FAECE7;
+    --c-blue: #185FA5;
+    --c-blue-light: #E6F1FB;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans, sans-serif); }
+
+  .container { padding: 1.5rem 0; }
+
+  .hero {
+    background: linear-gradient(135deg, #04342C 0%, #0F6E56 60%, #1D9E75 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 2rem 2rem 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 180px; height: 180px;
+    border: 2px solid rgba(255,255,255,0.08);
+    border-radius: 50%;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 30%;
+    width: 240px; height: 240px;
+    border: 2px solid rgba(255,255,255,0.05);
+    border-radius: 50%;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    color: #9FE1CB;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+  }
+  .hero h1 { color: #fff; font-size: 22px; font-weight: 500; margin-bottom: 0.4rem; }
+  .hero p { color: #9FE1CB; font-size: 14px; line-height: 1.6; }
+  .hero-attr { margin-top: 1rem; padding-top: 1rem; border-top: 0.5px solid rgba(255,255,255,0.15); font-size: 12px; color: rgba(255,255,255,0.5); }
+
+  .nav-pills {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .pill {
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 0.5px solid var(--color-border-tertiary);
+    background: var(--color-background-primary);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .pill:hover { background: var(--color-background-secondary); }
+  .pill.active {
+    background: #04342C;
+    color: #5DCAA5;
+    border-color: #085041;
+  }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .card-title {
+    font-size: 15px; font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: 0.75rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-icon {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+
+  .formula-box {
+    background: var(--c-primary-light);
+    border: 0.5px solid #9FE1CB;
+    border-radius: var(--border-radius-md);
+    padding: 1rem 1.25rem;
+    margin: 0.75rem 0;
+    font-family: var(--font-mono, monospace);
+    font-size: 15px;
+    color: var(--c-primary-dark);
+    text-align: center;
+    font-weight: 500;
+  }
+
+  .accent-box {
+    border-left: 3px solid var(--c-primary);
+    background: var(--color-background-secondary);
+    border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+    padding: 0.75rem 1rem;
+    margin: 0.75rem 0;
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  .vba-box {
+    background: #1e1e2e;
+    border-radius: var(--border-radius-md);
+    padding: 1rem 1.25rem;
+    margin: 0.75rem 0;
+    font-family: var(--font-mono, monospace);
+    font-size: 12px;
+    line-height: 1.7;
+    overflow-x: auto;
+  }
+  .vba-box .kw { color: #569cd6; }
+  .vba-box .fn { color: #dcdcaa; }
+  .vba-box .cm { color: #6a9955; font-style: italic; }
+  .vba-box .st { color: #ce9178; }
+  .vba-box .num { color: #b5cea8; }
+  .vba-box .nm { color: #9cdcfe; }
+
+  .example-steps {
+    counter-reset: step;
+    list-style: none;
+  }
+  .example-steps li {
+    counter-increment: step;
+    display: flex; gap: 12px;
+    margin-bottom: 0.75rem;
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+  .example-steps li::before {
+    content: counter(step);
+    min-width: 22px; height: 22px;
+    background: var(--c-primary-light);
+    color: var(--c-primary-dark);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 500;
+    flex-shrink: 0; margin-top: 2px;
+  }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+
+  .stat-card {
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    text-align: center;
+  }
+  .stat-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; }
+  .stat-value { font-size: 22px; font-weight: 500; color: var(--color-text-primary); }
+
+  .calc-section {
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    margin: 0.75rem 0;
+  }
+  .calc-row {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .calc-label {
+    font-size: 13px; color: var(--color-text-secondary);
+    min-width: 80px;
+  }
+  input[type=range] { flex: 1; min-width: 100px; }
+  .calc-num {
+    font-size: 14px; font-weight: 500; min-width: 30px;
+    color: var(--color-text-primary);
+  }
+  .result-display {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 0.75rem 1rem;
+    text-align: center;
+    margin-top: 0.75rem;
+  }
+  .result-label { font-size: 12px; color: var(--color-text-secondary); }
+  .result-value { font-size: 28px; font-weight: 500; color: var(--c-primary); margin: 4px 0; }
+  .result-formula { font-size: 12px; color: var(--color-text-tertiary); font-family: var(--font-mono); }
+
+  .tag {
+    display: inline-block;
+    font-size: 11px; font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-right: 6px;
+  }
+  .tag-green { background: var(--c-primary-light); color: var(--c-primary-dark); }
+  .tag-purple { background: var(--c-accent-light); color: var(--c-accent); }
+  .tag-amber { background: var(--c-amber-light); color: var(--c-amber); }
+  .tag-coral { background: var(--c-coral-light); color: var(--c-coral); }
+  .tag-blue { background: var(--c-blue-light); color: var(--c-blue); }
+
+  .compare-table { width: 100%; font-size: 13px; border-collapse: collapse; }
+  .compare-table th {
+    background: var(--color-background-secondary);
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+  }
+  .compare-table td {
+    padding: 8px 12px;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    color: var(--color-text-secondary);
+    vertical-align: top;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .diagram-row {
+    display: flex; align-items: center; gap: 8px;
+    flex-wrap: wrap;
+    margin: 0.75rem 0;
+  }
+  .box-item {
+    padding: 6px 14px;
+    border-radius: var(--border-radius-md);
+    font-size: 13px; font-weight: 500;
+  }
+  .arrow { color: var(--color-text-tertiary); font-size: 18px; }
+
+  .visual-boxes { display: flex; gap: 8px; flex-wrap: wrap; margin: 0.75rem 0; }
+  .vbox {
+    width: 44px; height: 44px;
+    border-radius: var(--border-radius-md);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 500;
+    border: 0.5px solid var(--color-border-secondary);
+  }
+
+  .quiz-opt {
+    display: flex; gap: 8px; flex-wrap: wrap; margin: 0.75rem 0;
+  }
+  .opt-btn {
+    padding: 8px 18px;
+    border-radius: var(--border-radius-md);
+    font-size: 13px;
+    border: 0.5px solid var(--color-border-secondary);
+    background: var(--color-background-primary);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .opt-btn:hover { background: var(--color-background-secondary); }
+  .opt-btn.correct { background: var(--c-primary-light); border-color: var(--c-primary); color: var(--c-primary-dark); }
+  .opt-btn.wrong { background: #FAECE7; border-color: #D85A30; color: #4A1B0C; }
+
+  p { font-size: 14px; line-height: 1.7; color: var(--color-text-secondary); }
+  h3 { font-size: 16px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 0.5rem; }
+  h4 { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 0.4rem; }
+
+  @media (max-width: 520px) {
+    .grid2, .grid3 { grid-template-columns: 1fr; }
+    .hero { padding: 1.25rem; }
+  }
+</style>
+
+<div class="container">
+  <div class="hero">
+    <div class="hero-badge">Matematika Diskrit · IKIP Siliwangi</div>
+    <h1>Kombinatorik</h1>
+    <p>Aturan Pencacahan, Permutasi, dan Kombinasi — lengkap dengan implementasi VBA for Excel</p>
+    <div class="hero-attr">Martin Bernard, M.Pd. &nbsp;·&nbsp; Pendidikan Matematika &nbsp;·&nbsp; IKIP Siliwangi, Cimahi</div>
+  </div>
+
+  <div class="nav-pills">
+    <button class="pill active" onclick="showSection('penjumlahan')">Aturan Penjumlahan</button>
+    <button class="pill" onclick="showSection('perkalian')">Aturan Perkalian</button>
+    <button class="pill" onclick="showSection('permutasi')">Permutasi</button>
+    <button class="pill" onclick="showSection('kombinasi')">Kombinasi</button>
+    <button class="pill" onclick="showSection('kalkulator')">Kalkulator</button>
+    <button class="pill" onclick="showSection('ringkasan')">Ringkasan</button>
+  </div>
+
+  <!-- ===== ATURAN PENJUMLAHAN ===== -->
+  <div id="penjumlahan" class="section active">
+    <div class="card">
+      <div class="card-title">
+        <div class="card-icon" style="background:#E1F5EE;"><i class="ti ti-plus" style="color:#0F6E56;font-size:16px;" aria-hidden="true"></i></div>
+        Aturan Penjumlahan (Rule of Sum)
+      </div>
+      <p>Jika suatu kejadian dapat dilakukan dengan cara <strong>A</strong> sebanyak <em>m</em> cara, atau dengan cara <strong>B</strong> sebanyak <em>n</em> cara (saling lepas / mutually exclusive), maka kejadian tersebut dapat dilakukan sebanyak:</p>
+      <div class="formula-box">Total = m + n</div>
+      <div class="accent-box">
+        <strong>Syarat utama:</strong> Cara A dan cara B tidak bisa dilakukan bersamaan — bersifat ATAU (or), bukan DAN (and).
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><i class="ti ti-bulb" style="font-size:16px;color:#BA7517;" aria-hidden="true"></i> Contoh Kontekstual</div>
+      <h4>Contoh 1 — Memilih Menu</h4>
+      <p>Seorang mahasiswa ingin memesan 1 minuman. Tersedia 3 pilihan teh dan 4 pilihan jus. Berapa banyak pilihan yang tersedia?</p>
+      <ul class="example-steps">
+        <li>Identifikasi kejadian: memilih teh ATAU memilih jus (saling lepas)</li>
+        <li>Pilihan teh = 3, pilihan jus = 4</li>
+        <li>Total = 3 + 4 = <strong>7 pilihan</strong></li>
+      </ul>
+
+      <h4 style="margin-top:1rem;">Contoh 2 — Memilih Jalur</h4>
+      <p>Dari kota A ke kota B ada 2 jalur darat dan 3 jalur udara. Berapa cara bisa ditempuh?</p>
+      <div class="diagram-row">
+        <div class="box-item" style="background:#E1F5EE;color:#04342C;">Kota A</div>
+        <div class="arrow">→</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <span class="tag tag-green">Darat: 2 cara</span>
+          <span class="tag tag-blue">Udara: 3 cara</span>
+        </div>
+        <div class="arrow">→</div>
+        <div class="box-item" style="background:#E1F5EE;color:#04342C;">Kota B</div>
+      </div>
+      <p>Total = 2 + 3 = <strong>5 cara</strong></p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><i class="ti ti-brand-windows" style="font-size:16px;color:#185FA5;" aria-hidden="true"></i> Implementasi VBA for Excel</div>
+      <div class="vba-box">
+<span class="cm">' =============================================</span>
+<span class="cm">' Aturan Penjumlahan — Martin Bernard, M.Pd.</span>
+<span class="cm">' IKIP Siliwangi, Cimahi</span>
+<span class="cm">' =============================================</span>
+<span class="kw"><pre>Function</span> <span class="fn">AturanPenjumlahan</span>(<span class="nm">m</span> <span class="kw">As Long</span>, <span class="nm">n</span> <span class="kw">As Long</span>) <span class="kw">As Long</span>
+    <span class="cm">' Menghitung total cara dengan aturan penjumlahan</span>
+    <span class="kw">If</span> <span class="nm">m</span> &lt; <span class="num">0</span> <span class="kw">Or</span> <span class="nm">n</span> &lt; <span class="num">0</span> <span class="kw">Then</span>
+        MsgBox <span class="st">"Nilai harus non-negatif!"</span>, vbExclamation
+        <span class="kw">Exit Function</span>
+    <span class="kw">End If</span>
+    <span class="fn">AturanPenjumlahan</span> = <span class="nm">m</span> + <span class="nm">n</span>
+<span class="kw">End Function</pre></span>
+
+<span class="kw"><pre>Sub</span> <span class="fn">ContohPenjumlahan</span>()
+    <span class="kw">Dim</span> <span class="nm">pilTeh</span> <span class="kw">As Integer</span>, <span class="nm">pilJus</span> <span class="kw">As Integer</span>
+    <span class="nm">pilTeh</span> = <span class="num">3</span> : <span class="nm">pilJus</span> = <span class="num">4</span>
+    MsgBox <span class="st">"Total pilihan = "</span> &amp; <span class="fn">AturanPenjumlahan</span>(<span class="nm">pilTeh</span>, <span class="nm">pilJus</span>), _
+           vbInformation, <span class="st">"Aturan Penjumlahan"</span>
+<span class="kw">End Sub</pre></span></div>
+      <div class="accent-box">Gunakan di Excel: ketik <code>=AturanPenjumlahan(3,4)</code> di sel mana pun untuk langsung mendapat hasilnya.</div>
+    </div>
+  </div>
+
+  <!-- ===== ATURAN PERKALIAN ===== -->
+  <div id="perkalian" class="section">
+    <div class="card">
+      <div class="card-title">
+        <div class="card-icon" style="background:#EEEDFE;"><i class="ti ti-multiplier-2x" style="color:#534AB7;font-size:16px;" aria-hidden="true"></i></div>
+        Aturan Perkalian (Rule of Product)
+      </div>
+      <p>Jika suatu prosedur terdiri dari dua tahap yang dilakukan secara berurutan — tahap pertama dapat dilakukan sebanyak <em>m</em> cara dan tahap kedua sebanyak <em>n</em> cara — maka prosedur tersebut dapat dilakukan sebanyak:</p>
+      <div class="formula-box">Total = m × n</div>
+      <div class="accent-box">
+        <strong>Prinsip DAN (AND):</strong> Semua tahap harus diselesaikan. Ini berbeda dengan aturan penjumlahan (ATAU).
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><i class="ti ti-bulb" style="font-size:16px;color:#BA7517;" aria-hidden="true"></i> Contoh Kontekstual</div>
+      <h4>Contoh 1 — Membuat Password</h4>
+      <p>Password terdiri dari 1 huruf (A–Z) diikuti 1 angka (0–9). Berapa banyak password yang mungkin?</p>
+      <div class="diagram-row">
+        <div class="box-item" style="background:#EEEDFE;color:#26215C;">Huruf: 26</div>
+        <div class="arrow">×</div>
+        <div class="box-item" style="background:#EEEDFE;color:#26215C;">Angka: 10</div>
+        <div class="arrow">=</div>
+        <div class="box-item" style="background:#E1F5EE;color:#04342C;">260 password</div>
+      </div>
+
+      <h4 style="margin-top:1rem;">Contoh 2 — Plat Nomor</h4>
+      <p>Plat nomor terdiri dari 2 huruf (A–Z) diikuti 3 angka (0–9). Berapa kombinasi plat yang mungkin (pengulangan diizinkan)?</p>
+      <ul class="example-steps">
+        <li>Posisi huruf 1: 26 pilihan</li>
+        <li>Posisi huruf 2: 26 pilihan</li>
+        <li>Posisi angka 1, 2, 3: masing-masing 10 pilihan</li>
+        <li>Total = 26 × 26 × 10 × 10 × 10 = <strong>676.000 plat</strong></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><i class="ti ti-brand-windows" style="font-size:16px;color:#185FA5;" aria-hidden="true"></i> Implementasi VBA for Excel</div>
+      <div class="vba-box">
+<span class="cm">' Aturan Perkalian untuk k tahap</span>
+<span class="kw"><pre>Function</span> <span class="fn">AturanPerkalian</span>(<span class="nm">ParamArray</span> <span class="nm">tahap</span>() <span class="kw">As Variant</span>) <span class="kw">As Double</span>
+    <span class="kw">Dim</span> <span class="nm">total</span> <span class="kw">As Double</span>, <span class="nm">i</span> <span class="kw">As Integer</span>
+    <span class="nm">total</span> = <span class="num">1</span>
+    <span class="kw">For</span> <span class="nm">i</span> = <span class="num">0</span> <span class="kw">To</span> <span class="kw">UBound</span>(<span class="nm">tahap</span>)
+        <span class="kw">If</span> <span class="nm">tahap</span>(<span class="nm">i</span>) &lt;= <span class="num">0</span> <span class="kw">Then</span>
+            MsgBox <span class="st">"Nilai tiap tahap harus positif!"</span>
+            <span class="kw">Exit Function</span>
+        <span class="kw">End If</span>
+        <span class="nm">total</span> = <span class="nm">total</span> * <span class="nm">tahap</span>(<span class="nm">i</span>)
+    <span class="kw">Next</span> <span class="nm">i</span>
+    <span class="fn">AturanPerkalian</span> = <span class="nm">total</span>
+<span class="kw">End Function</pre></span>
+
+<span class="kw"><pre>Sub</span> <span class="fn">ContohPlatNomor</span>()
+    <span class="kw">Dim</span> <span class="nm">hasil</span> <span class="kw">As Double</span>
+    <span class="nm">hasil</span> = <span class="fn">AturanPerkalian</span>(<span class="num">26</span>, <span class="num">26</span>, <span class="num">10</span>, <span class="num">10</span>, <span class="num">10</span>)
+    MsgBox <span class="st">"Plat nomor yang mungkin: "</span> &amp; <span class="fn">Format</span>(<span class="nm">hasil</span>, <span class="st">"#,##0"</span>), _
+           vbInformation, <span class="st">"Aturan Perkalian"</span>
+<span class="kw">End Sub</pre></span></div>
+      <div class="accent-box">Penggunaan <code>ParamArray</code> memungkinkan fungsi menerima jumlah argumen yang fleksibel, sangat berguna untuk menghitung produk dari banyak tahap.</div>
+    </div>
+  </div>
+
+  <!-- ===== PERMUTASI ===== -->
+  <div id="permutasi" class="section">
+    <div class="card">
+      <div class="card-title">
+        <div class="card-icon" style="background:#FAEEDA;"><i class="ti ti-arrows-shuffle" style="color:#854F0B;font-size:16px;" aria-hidden="true"></i></div>
+        Permutasi
+      </div>
+      <p>Permutasi adalah susunan atau urutan dari sebagian atau seluruh objek dari suatu himpunan. <strong>Urutan sangat penting</strong> — AB ≠ BA.</p>
+      <div class="grid2" style="margin-top:0.75rem;">
+        <div>
+          <div class="tag tag-amber" style="margin-bottom:6px;">Permutasi Penuh (n dari n)</div>
+          <div class="formula-box" style="font-size:13px;">P(n,n) = n!</div>
+        </div>
+        <div>
+          <div class="tag tag-amber" style="margin-bottom:6px;">Permutasi Sebagian (r dari n)</div>
+          <div class="formula-box" style="font-size:13px;">P(n,r) = n! / (n−r)!</div>
+        </div>
+      </div>
+      <div class="accent-box">
+        <strong>Mengapa urutan penting?</strong> Dalam daftar 1 dari sebuah kelompok, urutan menentukan posisi — jabatan Ketua ≠ Wakil Ketua.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><i class="ti ti-bulb" style="font-size:16px;color:#BA7517;" aria-hidden="true"></i> Contoh dan Visualisasi</div>
+      <h4>Contoh 1 — Antrian Mahasiswa</h4>
+      <p>Ada 4 mahasiswa (A, B, C, D) akan duduk di 2 kursi berbeda. Berapa cara susunan tempat duduk?</p>
+      <div class="visual-boxes">
+        <div class="vbox" style="background:#FAEEDA;color:#633806;">Kursi 1</div>
+        <div class="vbox" style="background:#FAEEDA;color:#633806;">Kursi 2</div>
+      </div>
+      <ul class="example-steps">
+        <li>Kursi 1 dapat diisi oleh salah satu dari 4 mahasiswa → 4 pilihan</li>
+        <li>Kursi 2 dapat diisi oleh salah satu dari sisa 3 mahasiswa → 3 pilihan</li>
+        <li>P(4,2) = 4! / (4−2)! = 4! / 2! = (4×3×2×1)/(2×1) = <strong>12 cara</strong></li>
+      </ul>
+
+      <h4 style="margin-top:1rem;">Contoh 2 — Menyusun Pengurus OSIS</h4>
+      <p>Dari 10 kandidat, akan dipilih Ketua, Wakil Ketua, dan Sekretaris. Berapa susunan yang mungkin?</p>
+      <ul class="example-steps">
+        <li>P(10, 3) = 10! / (10−3)! = 10! / 7!</li>
+        <li>= 10 × 9 × 8 = <strong>720 susunan</strong></li>
+      </ul>
+
+      <h4 style="margin-top:1rem;">Permutasi dengan Pengulangan</h4>
+      <p>Jika ada objek yang sama, rumus menjadi:</p>
+      <div class="formula-box" style="font-size:13px;">P = n! / (n₁! × n₂! × ... × nₖ!)</div>
+      <div class="accent-box">Contoh: Kata "MATEMATIKA" terdiri 10 huruf dengan M muncul 2×, A muncul 3×, T muncul 2×. P = 10! / (2! × 3! × 2!) = 151.200 susunan</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><i class="ti ti-brand-windows" style="font-size:16px;color:#185FA5;" aria-hidden="true"></i> Implementasi VBA for Excel</div>
+      <div class="vba-box"><pre>
+<span class="cm">' Fungsi Faktorial</span>
+<span class="kw">Function</span> <span class="fn">Faktorial</span>(<span class="nm">n</span> <span class="kw">As Long</span>) <span class="kw">As Double</span>
+    <span class="kw">If</span> <span class="nm">n</span> &lt; <span class="num">0</span> <span class="kw">Then</span>
+        MsgBox <span class="st">"n harus ≥ 0"</span> : <span class="kw">Exit Function</span>
+    <span class="kw">ElseIf</span> <span class="nm">n</span> = <span class="num">0</span> <span class="kw">Or</span> <span class="nm">n</span> = <span class="num">1</span> <span class="kw">Then</span>
+        <span class="fn">Faktorial</span> = <span class="num">1</span>
+    <span class="kw">Else</span>
+        <span class="fn">Faktorial</span> = <span class="nm">n</span> * <span class="fn">Faktorial</span>(<span class="nm">n</span> - <span class="num">1</span>)
+    <span class="kw">End If</span>
+<span class="kw">End Function</span></pre>
+
+<pre><span class="cm">' Permutasi P(n,r)</span>
+<span class="kw">Function</span> <span class="fn">Permutasi</span>(<span class="nm">n</span> <span class="kw">As Long</span>, <span class="nm">r</span> <span class="kw">As Long</span>) <span class="kw">As Double</span>
+    <span class="kw">If</span> <span class="nm">r</span> &gt; <span class="nm">n</span> <span class="kw">Or</span> <span class="nm">r</span> &lt; <span class="num">0</span> <span class="kw">Or</span> <span class="nm">n</span> &lt; <span class="num">0</span> <span class="kw">Then</span>
+        MsgBox <span class="st">"Pastikan 0 ≤ r ≤ n"</span>, vbCritical
+        <span class="fn">Permutasi</span> = <span class="num">-1</span> : <span class="kw">Exit Function</span>
+    <span class="kw">End If</span>
+    <span class="fn">Permutasi</span> = <span class="fn">Faktorial</span>(<span class="nm">n</span>) / <span class="fn">Faktorial</span>(<span class="nm">n</span> - <span class="nm">r</span>)
+<span class="kw">End Function</span></pre>
+
+<pre><span class="kw">Sub</span> <span class="fn">ContohPermutasi</span>()
+    <span class="kw">Dim</span> <span class="nm">n</span> <span class="kw">As Integer</span>, <span class="nm">r</span> <span class="kw">As Integer</span>
+    <span class="nm">n</span> = <span class="kw">InputBox</span>(<span class="st">"Masukkan nilai n:"</span>)
+    <span class="nm">r</span> = <span class="kw">InputBox</span>(<span class="st">"Masukkan nilai r:"</span>)
+    MsgBox <span class="st">"P("</span> &amp; <span class="nm">n</span> &amp; <span class="st">","</span> &amp; <span class="nm">r</span> &amp; <span class="st">") = "</span> &amp; _
+           <span class="fn">Format</span>(<span class="fn">Permutasi</span>(<span class="nm">n</span>,<span class="nm">r</span>), <span class="st">"#,##0"</span>), _
+           vbInformation, <span class="st">"Hasil Permutasi"</span>
+<span class="kw">End Sub</span></pre></div>
+      <div class="accent-box">Di sel Excel bisa langsung: <code>=Permutasi(10,3)</code> → hasil 720. Fungsi bawaan Excel adalah <code>=PERMUT(n,r)</code>.</div>
+    </div>
+  </div>
+
+  <!-- ===== KOMBINASI ===== -->
+  <div id="kombinasi" class="section">
+    <div class="card">
+      <div class="card-title">
+        <div class="card-icon" style="background:#FCEBEB;"><i class="ti ti-circles-relation" style="color:#A32D2D;font-size:16px;" aria-hidden="true"></i></div>
+        Kombinasi
+      </div>
+      <p>Kombinasi adalah pemilihan sebagian objek dari suatu himpunan <strong>tanpa memperhatikan urutan</strong>. Berbeda dengan permutasi, {A,B} = {B,A}.</p>
+      <div class="formula-box">C(n,r) = n! / (r! × (n−r)!)</div>
+      <div class="accent-box">
+        Notasi lain: <span style="font-family:var(--font-mono)">C(n,r) = ₙCᵣ = Cₙ,ᵣ = (n r)</span> (koefisien binomial). Berlaku sifat: <strong>C(n,r) = C(n, n−r)</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><i class="ti ti-bulb" style="font-size:16px;color:#BA7517;" aria-hidden="true"></i> Contoh dan Perbandingan</div>
+      <h4>Contoh 1 — Tim Proyek</h4>
+      <p>Dari 8 mahasiswa, akan dipilih tim beranggotakan 3 orang. Berapa banyak tim yang mungkin?</p>
+      <ul class="example-steps">
+        <li>Urutan tidak penting: {Andi, Budi, Cici} = {Budi, Cici, Andi}</li>
+        <li>C(8,3) = 8! / (3! × 5!) = (8×7×6) / (3×2×1)</li>
+        <li>= 336 / 6 = <strong>56 tim</strong></li>
+      </ul>
+
+      <h4 style="margin-top:1rem;">Contoh 2 — Memilih Soal Ujian</h4>
+      <p>Seorang mahasiswa harus menjawab 5 dari 10 soal. Berapa pilihan yang ada?</p>
+      <ul class="example-steps">
+        <li>C(10,5) = 10! / (5! × 5!)</li>
+        <li>= (10×9×8×7×6) / (5×4×3×2×1) = 30.240 / 120 = <strong>252 pilihan</strong></li>
+      </ul>
+
+      <h4 style="margin-top:1rem;">Mengapa C(n,r) = P(n,r) / r! ?</h4>
+      <div class="accent-box">
+        Kombinasi = Permutasi dibagi banyaknya urutan yang mungkin dari r objek (= r!). Karena dalam kombinasi, semua urutan dianggap sama.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><i class="ti ti-brand-windows" style="font-size:16px;color:#185FA5;" aria-hidden="true"></i> Implementasi VBA for Excel</div>
+      <div class="vba-box"><pre>
+<span class="cm">' Kombinasi C(n,r)</span>
+<span class="kw">Function</span> <span class="fn">Kombinasi</span>(<span class="nm">n</span> <span class="kw">As Long</span>, <span class="nm">r</span> <span class="kw">As Long</span>) <span class="kw">As Double</span>
+    <span class="kw">If</span> <span class="nm">r</span> &gt; <span class="nm">n</span> <span class="kw">Or</span> <span class="nm">r</span> &lt; <span class="num">0</span> <span class="kw">Or</span> <span class="nm">n</span> &lt; <span class="num">0</span> <span class="kw">Then</span>
+        MsgBox <span class="st">"Pastikan 0 ≤ r ≤ n"</span>, vbCritical
+        <span class="fn">Kombinasi</span> = <span class="num">-1</span> : <span class="kw">Exit Function</span>
+    <span class="kw">End If</span>
+    <span class="fn">Kombinasi</span> = <span class="fn">Faktorial</span>(<span class="nm">n</span>) / _
+                 (<span class="fn">Faktorial</span>(<span class="nm">r</span>) * <span class="fn">Faktorial</span>(<span class="nm">n</span> - <span class="nm">r</span>))
+<span class="kw">End Function</span>
+
+<span class="cm">' Semua nilai Kombinasi C(n, 0..n) ke worksheet</span>
+<span class="kw">Sub</span> <span class="fn">TabelKombinasi</span>()
+    <span class="kw">Dim</span> <span class="nm">ws</span> <span class="kw">As Worksheet</span>, <span class="nm">n</span> <span class="kw">As Integer</span>, <span class="nm">r</span> <span class="kw">As Integer</span>
+    <span class="nm">n</span> = <span class="kw">InputBox</span>(<span class="st">"Nilai n untuk tabel C(n,r):"</span>)
+    <span class="kw">Set</span> <span class="nm">ws</span> = ThisWorkbook.Sheets(<span class="num">1</span>)
+    <span class="nm">ws</span>.Range(<span class="st">"A1"</span>).Value = <span class="st">"n\r"</span>
+    <span class="kw">For</span> <span class="nm">r</span> = <span class="num">0</span> <span class="kw">To</span> <span class="nm">n</span>
+        <span class="nm">ws</span>.Cells(<span class="num">1</span>, <span class="nm">r</span> + <span class="num">2</span>).Value = <span class="nm">r</span>
+        <span class="nm">ws</span>.Cells(<span class="num">2</span>, <span class="nm">r</span> + <span class="num">2</span>).Value = <span class="fn">Kombinasi</span>(<span class="nm">n</span>, <span class="nm">r</span>)
+    <span class="kw">Next</span> <span class="nm">r</span>
+    <span class="nm">ws</span>.Cells(<span class="num">2</span>, <span class="num">1</span>).Value = <span class="nm">n</span>
+    MsgBox <span class="st">"Tabel C("</span> &amp; <span class="nm">n</span> &amp; <span class="st">",r) telah dibuat!"</span>
+<span class="kw">End Sub</span></div></pre>
+      <div class="accent-box">Fungsi bawaan Excel: <code>=COMBIN(n,r)</code>. Kode di atas juga bisa menulis Segitiga Pascal secara otomatis ke lembar kerja.</div>
+    </div>
+  </div>
+
+  <!-- ===== KALKULATOR ===== -->
+  <div id="kalkulator" class="section">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-calculator" style="font-size:16px;color:#1D9E75;" aria-hidden="true"></i> Kalkulator Interaktif</div>
+      <p>Geser slider untuk mengubah nilai n dan r, lalu lihat hasil kalkulasi secara real-time.</p>
+
+      <div class="calc-section">
+        <div class="calc-row">
+          <span class="calc-label">n (total):</span>
+          <input type="range" id="nVal" min="1" max="20" value="8" step="1" oninput="updateCalc()">
+          <span class="calc-num" id="nDisplay">8</span>
+        </div>
+        <div class="calc-row">
+          <span class="calc-label">r (pilih):</span>
+          <input type="range" id="rVal" min="0" max="8" value="3" step="1" oninput="updateCalc()">
+          <span class="calc-num" id="rDisplay">3</span>
+        </div>
+      </div>
+
+      <div class="grid3" style="margin-top:1rem;">
+        <div class="result-display">
+          <div class="result-label">Permutasi P(n,r)</div>
+          <div class="result-value" id="resP">336</div>
+          <div class="result-formula" id="fP">8! / 5!</div>
+        </div>
+        <div class="result-display">
+          <div class="result-label">Kombinasi C(n,r)</div>
+          <div class="result-value" id="resC" style="color:var(--c-accent);">56</div>
+          <div class="result-formula" id="fC">8! / (3!·5!)</div>
+        </div>
+        <div class="result-display">
+          <div class="result-label">Faktorial n!</div>
+          <div class="result-value" id="resF" style="color:var(--c-amber);">40320</div>
+          <div class="result-formula" id="fF">8!</div>
+        </div>
+      </div>
+
+      <div class="result-display" style="margin-top:0.75rem;">
+        <div class="result-label">Hubungan</div>
+        <div style="font-size:14px;color:var(--color-text-secondary);margin-top:4px;" id="relasi">P(8,3) = 336 = 56 × 3! = C(8,3) × r!</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><i class="ti ti-help" style="font-size:16px;color:#BA7517;" aria-hidden="true"></i> Latihan Soal Interaktif</div>
+      <div id="quiz-area">
+        <p id="quiz-q" style="font-weight:500;color:var(--color-text-primary);margin-bottom:0.75rem;"></p>
+        <div class="quiz-opt" id="quiz-opts"></div>
+        <p id="quiz-feedback" style="font-size:13px;margin-top:0.5rem;min-height:20px;"></p>
+        <button onclick="nextQuiz()" style="margin-top:0.75rem;padding:7px 18px;border-radius:var(--border-radius-md);font-size:13px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);cursor:pointer;">Soal Berikutnya →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RINGKASAN ===== -->
+  <div id="ringkasan" class="section">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-clipboard-list" style="font-size:16px;color:#1D9E75;" aria-hidden="true"></i> Tabel Perbandingan</div>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Konsep</th>
+            <th>Rumus</th>
+            <th>Urutan?</th>
+            <th>Kata Kunci</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-green">Penjumlahan</span></td>
+            <td style="font-family:var(--font-mono);font-size:12px;">m + n</td>
+            <td>—</td>
+            <td>ATAU, alternatif, salah satu</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-purple">Perkalian</span></td>
+            <td style="font-family:var(--font-mono);font-size:12px;">m × n</td>
+            <td>—</td>
+            <td>DAN, berurutan, sekaligus</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-amber">Permutasi</span></td>
+            <td style="font-family:var(--font-mono);font-size:12px;">n!/(n−r)!</td>
+            <td>Ya</td>
+            <td>susunan, jabatan, urutan</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-coral">Kombinasi</span></td>
+            <td style="font-family:var(--font-mono);font-size:12px;">n!/(r!(n−r)!)</td>
+            <td>Tidak</td>
+            <td>kelompok, tim, pilih, subset</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><i class="ti ti-git-branch" style="font-size:16px;color:#185FA5;" aria-hidden="true"></i> Diagram Alur Pengambilan Keputusan</div>
+      <div style="font-size:13px;line-height:2;color:var(--color-text-secondary);">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <div class="box-item" style="background:var(--color-background-secondary);font-size:12px;">Masalah Pencacahan</div>
+        </div>
+        <div style="margin-left:1rem;border-left:2px solid var(--color-border-secondary);padding-left:1rem;">
+          <div>❓ Apakah pemilihan bersifat <strong>alternatif (ATAU)</strong>?</div>
+          <div style="margin-left:1rem;">→ Ya: gunakan <span class="tag tag-green">Aturan Penjumlahan</span></div>
+          <div>❓ Apakah semua tahap harus dijalankan <strong>bersama (DAN)</strong>?</div>
+          <div style="margin-left:1rem;">→ Ya: gunakan <span class="tag tag-purple">Aturan Perkalian</span></div>
+          <div>❓ Apakah melibatkan susunan dari sebagian objek?</div>
+          <div style="margin-left:1rem;">→ <strong>Urutan penting</strong>: gunakan <span class="tag tag-amber">Permutasi</span></div>
+          <div style="margin-left:1rem;">→ <strong>Urutan tidak penting</strong>: gunakan <span class="tag tag-coral">Kombinasi</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><i class="ti ti-brand-windows" style="font-size:16px;color:#185FA5;" aria-hidden="true"></i> Modul VBA Lengkap</div>
+      <div class="vba-box">
+<span class="cm">' ============================================</span>
+<span class="cm">' MODUL KOMBINATORIK — Martin Bernard, M.Pd.</span>
+<span class="cm">' Pendidikan Matematika · IKIP Siliwangi Cimahi</span>
+<span class="cm">' ============================================</span>
+
+<pre><span class="kw">Function</span> <span class="fn">Faktorial</span>(<span class="nm">n</span> <span class="kw">As Long</span>) <span class="kw">As Double</span>
+    <span class="kw">If</span> <span class="nm">n</span> &lt;= <span class="num">1</span> <span class="kw">Then</span> <span class="fn">Faktorial</span> = <span class="num">1</span> <span class="kw">Else</span> <span class="fn">Faktorial</span> = <span class="nm">n</span> * <span class="fn">Faktorial</span>(<span class="nm">n</span>-<span class="num">1</span>)
+<span class="kw">End Function</span></pre>
+
+<pre><span class="kw">Function</span> <span class="fn">Permutasi</span>(<span class="nm">n</span> <span class="kw">As Long</span>, <span class="nm">r</span> <span class="kw">As Long</span>) <span class="kw">As Double</span>
+    <span class="fn">Permutasi</span> = <span class="fn">Faktorial</span>(<span class="nm">n</span>) / <span class="fn">Faktorial</span>(<span class="nm">n</span> - <span class="nm">r</span>)
+<span class="kw">End Function</span></pre>
+
+<pre><span class="kw">Function</span> <span class="fn">Kombinasi</span>(<span class="nm">n</span> <span class="kw">As Long</span>, <span class="nm">r</span> <span class="kw">As Long</span>) <span class="kw">As Double</span>
+    <span class="fn">Kombinasi</span> = <span class="fn">Faktorial</span>(<span class="nm">n</span>) / (<span class="fn">Faktorial</span>(<span class="nm">r</span>) * <span class="fn">Faktorial</span>(<span class="nm">n</span>-<span class="nm">r</span>))
+<span class="kw">End Function</span></pre>
+
+<pre><span class="kw">Function</span> <span class="fn">AturanPenjumlahan</span>(<span class="nm">m</span> <span class="kw">As Long</span>, <span class="nm">n</span> <span class="kw">As Long</span>) <span class="kw">As Long</span>
+    <span class="fn">AturanPenjumlahan</span> = <span class="nm">m</span> + <span class="nm">n</span>
+<span class="kw">End Function</span></pre>
+
+<pre><span class="kw">Function</span> <span class="fn">AturanPerkalian</span>(<span class="nm">ParamArray</span> <span class="nm">tahap</span>() <span class="kw">As Variant</span>) <span class="kw">As Double</span>
+    <span class="kw">Dim</span> <span class="nm">t</span> <span class="kw">As Double</span>, <span class="nm">i</span> <span class="kw">As Integer</span>
+    <span class="nm">t</span> = <span class="num">1</span>
+    <span class="kw">For</span> <span class="nm">i</span> = <span class="num">0</span> <span class="kw">To</span> <span class="kw">UBound</span>(<span class="nm">tahap</span>)
+        <span class="nm">t</span> = <span class="nm">t</span> * <span class="nm">tahap</span>(<span class="nm">i</span>)
+    <span class="kw">Next</span> <span class="nm">i</span>
+    <span class="fn">AturanPerkalian</span> = <span class="nm">t</span>
+<span class="kw">End Function</span></pre></div>
+      <div class="accent-box">Salin seluruh kode ini ke VBA Editor (Alt+F11 → Insert Module). Semua fungsi langsung dapat dipanggil dari sel Excel.</div>
+    </div>
+
+    <div class="grid2">
+      <div class="stat-card">
+        <div class="stat-label">Formula di-cover</div>
+        <div class="stat-value">4</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Contoh soal</div>
+        <div class="stat-value">8</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  if (id === 'kalkulator') { updateCalc(); loadQuiz(); }
+}
+
+function fact(n) {
+  if (n <= 1) return 1;
+  let r = 1;
+  for (let i = 2; i <= n; i++) r *= i;
+  return r;
+}
+
+function updateCalc() {
+  const n = parseInt(document.getElementById('nVal').value);
+  const rSlider = document.getElementById('rVal');
+  rSlider.max = n;
+  if (parseInt(rSlider.value) > n) rSlider.value = n;
+  const r = parseInt(rSlider.value);
+
+  document.getElementById('nDisplay').textContent = n;
+  document.getElementById('rDisplay').textContent = r;
+
+  const fn = fact(n), fr = fact(r), fnr = fact(n - r);
+  const P = fn / fnr;
+  const C = fn / (fr * fnr);
+  const F = fn;
+
+  document.getElementById('resP').textContent = Math.round(P).toLocaleString('id-ID');
+  document.getElementById('resC').textContent = Math.round(C).toLocaleString('id-ID');
+  document.getElementById('resF').textContent = Math.round(F).toLocaleString('id-ID');
+
+  document.getElementById('fP').textContent = n + '! / ' + (n-r) + '!';
+  document.getElementById('fC').textContent = n + '! / (' + r + '!·' + (n-r) + '!)';
+  document.getElementById('fF').textContent = n + '!';
+  document.getElementById('relasi').textContent =
+    'P(' + n + ',' + r + ') = ' + Math.round(P).toLocaleString('id-ID') + ' = ' +
+    Math.round(C).toLocaleString('id-ID') + ' × ' + r + '! = C(' + n + ',' + r + ') × r!';
+}
+
+const quizzes = [
+  { q: 'Dari 6 atlet tersedia, akan dipilih 3 untuk lomba beregu (urutan tidak penting). Berapa cara?', opts: ['20', '60', '120', '216'], ans: 0, exp: 'C(6,3) = 6!/(3!·3!) = 20' },
+  { q: 'Ada 5 buku berbeda. Berapa cara menyusunnya di rak?', opts: ['25', '60', '120', '15'], ans: 2, exp: 'P(5,5) = 5! = 120' },
+  { q: 'Seorang murid memilih 1 dari 4 pilihan ekskul ATAU 1 dari 3 pilihan UKM. Berapa total pilihan?', opts: ['12', '7', '3', '1'], ans: 1, exp: 'Aturan Penjumlahan: 4 + 3 = 7' },
+  { q: 'Kode PIN terdiri dari 4 angka berbeda (0–9). Berapa banyak kode yang mungkin?', opts: ['5040', '210', '10000', '720'], ans: 0, exp: 'P(10,4) = 10×9×8×7 = 5040' },
+  { q: 'Dari 10 mahasiswa dipilih 4 untuk tim debat. Berapa cara pemilihan?', opts: ['5040', '210', '120', '3024'], ans: 1, exp: 'C(10,4) = 10!/(4!·6!) = 210' },
+];
+
+let qIdx = 0;
+function loadQuiz() {
+  if (!quizzes[qIdx]) qIdx = 0;
+  const q = quizzes[qIdx];
+  document.getElementById('quiz-q').textContent = (qIdx+1) + '. ' + q.q;
+  document.getElementById('quiz-feedback').textContent = '';
+  const optsDiv = document.getElementById('quiz-opts');
+  optsDiv.innerHTML = '';
+  q.opts.forEach((o, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.textContent = o;
+    btn.onclick = () => checkAns(i, q.ans, q.exp);
+    optsDiv.appendChild(btn);
+  });
+}
+function checkAns(chosen, correct, exp) {
+  const btns = document.querySelectorAll('.opt-btn');
+  btns.forEach((b, i) => {
+    b.onclick = null;
+    if (i === correct) b.classList.add('correct');
+    else if (i === chosen) b.classList.add('wrong');
+  });
+  const fb = document.getElementById('quiz-feedback');
+  if (chosen === correct) {
+    fb.textContent = '✓ Benar! ' + exp;
+    fb.style.color = 'var(--c-primary)';
+  } else {
+    fb.textContent = '✗ Belum tepat. ' + exp;
+    fb.style.color = '#993C1D';
+  }
+}
+function nextQuiz() {
+  qIdx = (qIdx + 1) % quizzes.length;
+  loadQuiz();
+}
+
+updateCalc();
+</script>
