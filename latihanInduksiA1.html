@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latihan Soal Esai – Induksi Matematika</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['\\(','\\)'],['$','$']], displayMath: [['\\[','\\]']] },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+  :root {
+    --ink:      #0f1117;
+    --ink-soft: #3a3d4a;
+    --page:     #f9f8f5;
+    --rule:     #d6d2c8;
+    --accent:   #1a3a8f;
+    --accent2:  #c0392b;
+    --num-bg:   #1a3a8f;
+    --num-fg:   #ffffff;
+    --serif:    'Source Serif 4', Georgia, serif;
+    --display:  'Playfair Display', Georgia, serif;
+    --mono:     'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--page);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── COVER HEADER ─────────────────────────────────────── */
+  header {
+    border-bottom: 3px solid var(--ink);
+    padding: 56px 64px 40px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: end;
+  }
+
+  .header-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+
+  .header-title {
+    font-family: var(--display);
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--ink);
+  }
+
+  .header-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .header-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 2px;
+    white-space: nowrap;
+    align-self: start;
+  }
+
+  /* ── INFO STRIP ─────────────────────────────────────────── */
+  .info-strip {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .info-cell {
+    padding: 14px 64px 14px 0;
+    margin-left: 64px;
+    border-right: 1px solid var(--rule);
+    padding-right: 40px;
+    margin-right: 0;
+  }
+  .info-cell:first-child { margin-left: 64px; }
+  .info-cell:last-child { border-right: none; }
+  .info-cell strong { color: var(--ink); font-weight: 600; display: block; font-size: 13px; margin-top: 2px; }
+
+  /* ── INSTRUCTION BOX ─────────────────────────────────── */
+  .instruction {
+    margin: 40px 64px 0;
+    padding: 20px 28px;
+    border-left: 4px solid var(--accent2);
+    background: #fff;
+    border-radius: 0 4px 4px 0;
+    font-size: 15px;
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+  .instruction strong { font-style: normal; color: var(--accent2); font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 6px; }
+
+  /* ── SECTION TITLE ─────────────────────────────────────── */
+  .section-label {
+    margin: 48px 64px 0;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* ── QUESTION LIST ─────────────────────────────────────── */
+  .questions {
+    padding: 32px 64px 64px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .question {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 0 20px;
+    align-items: start;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--rule);
+    transition: background 0.15s;
+  }
+  .question:last-child { border-bottom: none; }
+  .question:hover { background: rgba(26,58,143,0.03); border-radius: 6px; margin: 0 -16px; padding: 22px 16px; }
+
+  .q-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: var(--num-bg);
+    color: var(--num-fg);
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 15px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 3px;
+    user-select: none;
+  }
+
+  .q-number.highlight { background: var(--accent2); }
+
+  .q-body {
+    font-size: 16px;
+    color: var(--ink);
+    line-height: 1.8;
+  }
+
+  .q-body .q-tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--ink-soft);
+    padding: 1px 7px;
+    border-radius: 2px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .q-body .q-tag.adv { background: var(--accent2); }
+
+  .answer-space {
+    margin-top: 10px;
+    border: 1.5px dashed var(--rule);
+    border-radius: 4px;
+    height: 72px;
+    width: 100%;
+  }
+
+  /* ── FORMULA HINT ─────────────────────────────────────── */
+  .formula-hint {
+    font-family: var(--mono);
+    font-size: 13px;
+    background: #eef1fb;
+    border-radius: 4px;
+    padding: 8px 14px;
+    margin-top: 8px;
+    display: inline-block;
+    color: var(--accent);
+  }
+
+  /* ── FOOTER ─────────────────────────────────────────────── */
+  footer {
+    border-top: 3px solid var(--ink);
+    padding: 20px 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* ── PRINT STYLES ─────────────────────────────────────── */
+  @media print {
+    body { font-size: 13px; }
+    header { padding: 30px 40px 24px; }
+    .info-strip .info-cell { margin-left: 40px; }
+    .instruction, .section-label { margin-left: 40px; margin-right: 40px; }
+    .questions { padding: 24px 40px 40px; }
+    footer { padding: 16px 40px; }
+    .question:hover { background: none; margin: 0; padding: 22px 0; }
+    .answer-space { height: 60px; }
+  }
+
+  @media (max-width: 680px) {
+    header { padding: 36px 24px 28px; grid-template-columns: 1fr; }
+    .info-cell:first-child { margin-left: 24px; }
+    .info-strip { flex-wrap: wrap; }
+    .instruction, .section-label { margin-left: 24px; margin-right: 24px; }
+    .questions { padding: 24px 24px 48px; }
+    footer { padding: 16px 24px; flex-direction: column; gap: 8px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <div>
+    <div class="header-meta">IKIP Siliwangi · Pendidikan Matematika · Matematika Diskrit</div>
+    <h1 class="header-title">Latihan Soal Esai<br><em>Induksi Matematika</em></h1>
+  </div>
+  <div class="header-badge">20 Soal Esai</div>
+</header>
+
+<!-- ── INFO STRIP ── -->
+<div class="info-strip">
+  <div class="info-cell">Nama<strong>________________________________</strong></div>
+  <div class="info-cell">NIM<strong>____________________</strong></div>
+  <div class="info-cell">Kelas<strong>__________</strong></div>
+  <div class="info-cell">Tanggal<strong>____________________</strong></div>
+</div>
+
+<!-- ── PETUNJUK ── -->
+<div class="instruction">
+  <strong>Petunjuk Pengerjaan</strong>
+  Kerjakan semua soal berikut dengan menuliskan langkah-langkah pembuktian secara lengkap dan sistematis menggunakan prinsip induksi matematika. Tunjukkan langkah <em>basis</em> (dasar induksi) dan langkah <em>induktif</em> (hipotesis induktif dan pembuktian) dengan jelas pada setiap soal.
+</div>
+
+<!-- ── LABEL SEKSI ── -->
+<div class="section-label">Soal Esai &mdash; Induksi Matematika</div>
+
+<!-- ── SOAL ── -->
+<div class="questions">
+
+  <!-- SOAL 1 -->
+  <div class="question">
+    <div class="q-number">1</div>
+    <div class="q-body">
+      Buktikan dengan induksi matematika bahwa untuk setiap bilangan asli \(n \geq 1\), berlaku:
+      \[1 + 2 + 3 + \cdots + n = \frac{n(n+1)}{2}\]
+      <span class="q-tag">Dasar</span>
+      <div class="answer-space"></div>
+    </div>
+  </div>
+
+  <!-- SOAL 2 -->
+  <div class="question">
+    <div class="q-number">2</div>
+    <div class="q-body">
+      Gunakan induksi matematika untuk membuktikan bahwa untuk semua \(n \in \mathbb{N}\):
+      \[1^2 + 2^2 + 3^2 + \cdots + n^2 = \frac{n(n+1)(2n+1)}{6}\]
+      <span class="q-tag">Dasar</span>
+      <div class="answer-space"></div>
+    </div>
+  </div>
+
+  <!-- SOAL 3 -->
+  <div class="question">
+    <div class="q-number">3</div>
+    <div class="q-body">
+      Buktikan dengan induksi matematika bahwa untuk setiap \(n \geq 1\):
+      \[1^3 + 2^3 + 3^3 + \cdots + n^3 = \left[\frac{n(n+1)}{2}\right]^2\]
+      <span class="q-tag">Dasar</span>
+      <div class="answer-space"></div>
+    </div>
+  </div>
+
+  <!-- SOAL 4 -->
+  <div class="question">
+    <div class="q-number">4</div>
+    <div class="q-body">
+      Buktikan dengan induksi matematika bahwa untuk semua \(n \in \mathbb{N}\):
+      \[1 + 3 + 5 + \cdots + (2n-1) = n^2\]
+      Artinya, jumlah \(n\) bilangan ganjil pertama sama dengan \(n^2\).
+      <span class="q-tag">Dasar</span>
+      <div class="answer-space"></div>
+    </div>
+  </div>
+
+  <!-- SOAL 5 -->
+  <div class="question">
+    <div class="q-number">5</div>
+    <div class="q-body">
+      Tunjukkan dengan induksi matematika bahwa untuk setiap bilangan bulat \(n \geq 1\):
+      \[\sum_{k=1}^{n} k \cdot k! = (n+1)! - 1\]
+      <span class="q-tag">Menengah</span>
+      <div class="answer-space"></div>
+    </div>
+  </div>
+
+  <!-- SOAL 6 -->
+  <div class="question">
+    <div class="q-number highlight">6</div>
+    <div class="q-body">
+      Buktikan bahwa untuk setiap \(n \geq 1\), bilangan \(n^3 - n\) habis dibagi 3.
+      <span class="q-tag adv">Keterbagian</span>
+      <div class="answer-space"></div>
+    </div>
+  </div>
+
+  <!-- SOAL 7 -->
+  <div class="question">
+    <div class="q-number">7</div>
+    <div class="q-body">
+      Gunakan induksi matematika untuk membuktikan bahwa \(7^n - 1\) habis dibagi \(6\) untuk setiap bilangan asli \(n\).
+      <span class="q-tag adv">Keterbagian</span>
+      <div class="answer-space"></div>
+    </div>
+  </div>
+
+  <!-- SOAL 8 -->
+  <div class="question">
+    <div class="q-number">8</div>
+    <div class="q-body">
+      Buktikan dengan induksi matematika bahwa untuk setiap \(n \geq 1\):
+      \[\frac{1}{1\cdot2} + \frac{1}{2\cdot3} + \frac{1}{3\cdot4} + \cdots + \frac{1}{n(n+1)} = \frac{n}{n+1}\]
+      <span class="q-tag">Menengah</span>
+      <div class="answer-space"></div>
+    </div>
+  </div>
+
+  <!-- SOAL 9 -->
+  <div class="question">
+    <div class="q-number">9</div>
+    <div class="q-body">
+      Buktikan menggunakan induksi matematika bahwa untuk setiap \(n \geq 0\):
+      \[2^0 + 2^1 + 2^2 + \cdots + 2^n = 2^{n+1} - 1\]
+      <span class="q-tag">Dasar</span>
+      <div class="answer-space"></div>
+    </div>
+  </div>
+
+  <!-- SOAL 10 -->
+  <div class="question">
+    <div class="q-number highlight">10</div>
+    <div class="q-body">
+      Dengan menggunakan prinsip induksi matematika kuat (<em>strong induction</em>), buktikan bahwa setiap bilangan asli \(n \geq 2\) dapat dinyatakan sebagai hasil kali bilangan-bilangan prima.
+      <span class="q-tag adv">Induksi Kuat</span>
+      <div class="answer-space"></div>
+    </div>
+  </div>
+
+  <!-- SOAL 11 -->
+  <div class="question">
+    <div class="q-number">11</div>
+    <div class="q-body">
+      Buktikan dengan induksi matematika bahwa untuk setiap \(n \geq 1\), berlaku ketidaksamaan:
+      \[2^n \geq n + 1\]
+      <span class="q-tag">Pertidaksamaan</span>
+      <div class="answer-space"></div>
+    </div>
+  </div>
+
+  <!-- SOAL 12 -->
+  <div class="question">
+    <div class="q-number">12</div>
+    <div class="q-body">
+      Tunjukkan dengan induksi matematika bahwa untuk setiap bilangan asli \(n \geq 5\):
+      \[2^n > n^2\]
+      <span class="q-tag">Pertidaksamaan</span>
+      <div class="answer-space"></div>
+    </div>
+  </div>
+
+  <!-- SOAL 13 -->
+  <div class="question">
+    <div class="q-number">13</div>
+    <div class="q-body">
+      Buktikan dengan induksi matematika bahwa untuk semua \(n \geq 1\):
+      \[\sum_{k=1}^{n} \frac{1}{k^2} \leq 2 - \frac{1}{n}\]
+      <span class="q-tag">Pertidaksamaan</span>
+      <div class="answer-space"></div>
+    </div>
+  </div>
+
+  <!-- SOAL 14 -->
+  <div class="question">
+    <div class="q-number">14</div>
+    <div class="q-body">
+      Gunakan induksi matematika untuk membuktikan rumus barisan geometri: untuk setiap \(n \geq 1\) dan \(r \neq 1\),
+      \[a + ar + ar^2 + \cdots + ar^{n-1} = \frac{a(r^n - 1)}{r - 1}\]
+      <span class="q-tag">Menengah</span>
+      <div class="answer-space"></div>
+    </div>
+  </div>
+
+  <!-- SOAL 15 -->
+  <div class="question">
+    <div class="q-number highlight">15</div>
+    <div class="q-body">
+      Barisan Fibonacci didefinisikan dengan \(F_1 = 1,\; F_2 = 1,\; F_n = F_{n-1} + F_{n-2}\) untuk \(n \geq 3\). Buktikan dengan induksi kuat bahwa untuk setiap \(n \geq 1\):
+      \[F_n < 2^n\]
+      <span class="q-tag adv">Fibonacci</span>
+      <div class="answer-space"></div>
+    </div>
+  </div>
+
+  <!-- SOAL 16 -->
+  <div class="question">
+    <div class="q-number">16</div>
+    <div class="q-body">
+      Buktikan menggunakan induksi matematika bahwa jumlah sudut dalam suatu poligon cembung bersisi \(n\) (untuk \(n \geq 3\)) adalah:
+      \[(n - 2) \times 180°\]
+      <span class="q-tag">Geometri</span>
+      <div class="answer-space"></div>
+    </div>
+  </div>
+
+  <!-- SOAL 17 -->
+  <div class="question">
+    <div class="q-number">17</div>
+    <div class="q-body">
+      Buktikan dengan induksi matematika bahwa untuk setiap \(n \geq 1\):
+      \[\sum_{k=1}^{n}(2k-1)^2 = \frac{n(2n-1)(2n+1)}{3}\]
+      <span class="q-tag">Menengah</span>
+      <div class="answer-space"></div>
+    </div>
+  </div>
+
+  <!-- SOAL 18 -->
+  <div class="question">
+    <div class="q-number highlight">18</div>
+    <div class="q-body">
+      Sebuah graf lengkap \(K_n\) memiliki \(n\) simpul. Buktikan dengan induksi matematika bahwa banyaknya sisi dalam \(K_n\) adalah:
+      \[\frac{n(n-1)}{2}\]
+      <span class="q-tag adv">Graf</span>
+      <div class="answer-space"></div>
+    </div>
+  </div>
+
+  <!-- SOAL 19 -->
+  <div class="question">
+    <div class="q-number">19</div>
+    <div class="q-body">
+      Diketahui himpunan \(A\) dengan \(|A| = n\). Buktikan dengan induksi matematika bahwa banyaknya himpunan bagian (subset) dari \(A\) adalah \(2^n\).
+      <span class="q-tag">Kombinatorial</span>
+      <div class="answer-space"></div>
+    </div>
+  </div>
+
+  <!-- SOAL 20 -->
+  <div class="question">
+    <div class="q-number highlight">20</div>
+    <div class="q-body">
+      Misalkan \(a \in \mathbb{R}\) dan \(a > -1\). Buktikan <strong>Ketidaksamaan Bernoulli</strong> dengan induksi matematika: untuk setiap bilangan bulat \(n \geq 0\),
+      \[(1 + a)^n \geq 1 + na\]
+      Berikan pula contoh kasus di mana tanda kesamaan berlaku.
+      <span class="q-tag adv">Bernoulli</span>
+      <div class="answer-space"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <span>IKIP Siliwangi &mdash; Pendidikan Matematika</span>
+  <span>Martin Bernard, M.Pd.</span>
+  <span>Matematika Diskrit &mdash; Induksi Matematika</span>
+</footer>
+
+</body>
+</html>
